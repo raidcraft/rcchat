@@ -1,0 +1,7 @@
+main: de.raidcraft.rcchat.RCChatPlugin
+name: RCChat
+version: ${project.version}#${build.number}
+description: Prefix, Suffix and Channel handling.
+author: Strasse36
+website: http://www.raid-craft.de
+depend: [RaidCraft-API]
