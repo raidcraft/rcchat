@@ -21,12 +21,12 @@ public class RCChatPlugin extends BasePlugin {
 
     @Override
     public void disable() {
-        //TODO: implement
     }
 
     @Override
     public void reload() {
-        //TODO: override
+
+        config.reload();
     }
 
     public class LocalConfiguration extends ConfigurationBase<RCChatPlugin> {
