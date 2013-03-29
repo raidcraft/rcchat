@@ -1,4 +1,4 @@
-package de.raidcraft.rcchat;
+package de.raidcraft.rcchat.player;
 
 import org.bukkit.entity.Player;
 
@@ -22,6 +22,7 @@ public class ChatPlayer {
     public boolean isMuted() {
 
         //TODO isMuted
+        return false;
     }
 
 }
