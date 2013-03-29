@@ -16,9 +16,17 @@ public class ChatListener implements Listener {
 
         String message = event.getMessage();
         Channel channel = PlayerManager.INST.getMainChannel(event.getPlayer());
-        message = channel.getPrefix() + message;
+        if(channel == null) {
+            return;
+        }
+        String prefix = channel.getPrefix();
+        if(prefix.length() > 0) {
+            prefix += " ";
+        }
+        message = prefix + message;
 
-        PlayerManager.INST.getMainChannel(event.getPlayer()).sendMessage(message);
+        channel.sendMessage(message);
+        event.setCancelled(true);
     }
 
 }

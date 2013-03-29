@@ -3,8 +3,11 @@ package de.raidcraft.rcchat;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
 import de.raidcraft.rcchat.channel.ChannelManager;
+import de.raidcraft.rcchat.commands.ChatPluginCommands;
 import de.raidcraft.rcchat.listener.ChatListener;
+import de.raidcraft.rcchat.listener.PlayerListener;
 import de.raidcraft.rcchat.tables.ChannelsTable;
+import de.raidcraft.rcchat.tables.PlayersTable;
 
 /**
  * @author Philip
@@ -19,8 +22,11 @@ public class RCChatPlugin extends BasePlugin {
         config = configure(new LocalConfiguration(this));
 
         registerEvents(new ChatListener());
+        registerEvents(new PlayerListener());
+        registerCommands(ChatPluginCommands.class);
 
         registerTable(ChannelsTable.class, new ChannelsTable());
+        registerTable(PlayersTable.class, new PlayersTable());
 
         reload();
     }

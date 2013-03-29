@@ -43,6 +43,9 @@ public class ChannelManager {
     public void registerChannel(Channel channel) {
 
         channels.put(channel.getName().toLowerCase(), channel);
+        for(String alias : channel.getAliases()) {
+            channels.put(alias, channel);
+        }
     }
 
     public Channel getDefaultChannel() {

@@ -5,8 +5,11 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
+import de.raidcraft.rcchat.channel.Channel;
+import de.raidcraft.rcchat.channel.ChannelManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * Author: Philip
@@ -22,7 +25,7 @@ public class ChatPluginCommands {
     @Command(
             aliases = {"ch", "chat", "rcchat"},
             desc = "Main command"
-    )
+            )
     public void rcchat(CommandContext context, CommandSender sender) throws CommandException {
 
         // list channels
@@ -42,6 +45,16 @@ public class ChatPluginCommands {
         }
 
         // look if first argument is channel
-        //TODO switch channel
+        Channel channel = ChannelManager.INST.getChannel(context.getString(0));
+        if(channel == null) {
+            throw new CommandException("Unbekannter Channel '" + context.getString(0) + "' oder falscher Parameter!");
+        }
+
+        if(channel.hasPermission() && !sender.hasPermission(channel.getPermission())) {
+            throw new CommandException("Du hast keine Rechte um diesen Channel zu betreten!");
+        }
+
+        channel.join((Player)sender);
+        sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
     }
 }

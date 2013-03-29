@@ -2,7 +2,9 @@ package de.raidcraft.rcchat.channel;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.ChatPlayer;
+import de.raidcraft.rcchat.player.PlayerManager;
 import de.raidcraft.rcchat.tables.PlayersTable;
+import de.raidcraft.util.SignUtil;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -27,7 +29,12 @@ public class Channel {
 
         this.name = name;
         this.permission = permission;
-        this.prefix = prefix;
+        if(prefix != null) {
+            this.prefix = SignUtil.parseColor(prefix);
+        } else {
+            this.prefix = "";
+        }
+
         for(String alias : aliases) {
             this.aliases.add(alias);
         }
@@ -50,10 +57,14 @@ public class Channel {
 
     public void join(Player player) {
 
-        if(members.containsKey(player.getName())) return;
-        members.put(player.getName(), new ChatPlayer(player));
-
-        RaidCraft.getTable(PlayersTable.class).addChannel(player, this);
+        if(!members.containsKey(player.getName())) {
+            members.put(player.getName(), new ChatPlayer(player));
+        }
+        Channel main = PlayerManager.INST.getMainChannel(player);
+        if(main == null || !main.getName().equalsIgnoreCase(name)) {
+            PlayerManager.INST.setMainChannel(player, this);
+            RaidCraft.getTable(PlayersTable.class).addChannel(player, this);
+        }
     }
 
     public void leave(Player player) {

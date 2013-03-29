@@ -28,7 +28,7 @@ public class ChannelsTable extends Table {
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`name` VARCHAR( 32 ) NOT NULL, " +
                             "`permission` VARCHAR( 64 ) DEFAULT NULL, " +
-                            "`prefix` VARCHAR ( 32 ) NOT NULL, " +
+                            "`prefix` VARCHAR ( 32 ) DEFAULT NULL, " +
                             "`aliases` VARCHAR ( 128 ) NOT NULL, " +
                             "`type` VARCHAR ( 32 ) NOT NULL, " +
                             "PRIMARY KEY ( `id` )" +

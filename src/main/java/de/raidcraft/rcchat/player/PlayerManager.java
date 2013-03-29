@@ -34,7 +34,9 @@ public class PlayerManager {
         }
 
         if(!hasMain) {
-            ChannelManager.INST.getDefaultChannel().join(player);
+            Channel defaultChannel = ChannelManager.INST.getDefaultChannel();
+            defaultChannel.join(player);
+            mainChannels.put(player.getName(), defaultChannel);
         }
     }
 
@@ -51,8 +53,11 @@ public class PlayerManager {
             return mainChannels.get(player.getName());
         }
 
-        // should never be reached but reload and do a second try
-        loadPlayer(player);
-        return mainChannels.get(player.getName());
+        return null;
+    }
+
+    public void setMainChannel(Player player, Channel channel) {
+
+        mainChannels.put(player.getName(), channel);
     }
 }
