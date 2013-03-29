@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * @author Philip
  */
-public class PlayersTable extends Table {
+public class PlayersChannelTable extends Table {
 
-    public PlayersTable() {
+    public PlayersChannelTable() {
 
-        super("players", "rcchat_");
+        super("players_channel", "rcchat_");
     }
 
     @Override

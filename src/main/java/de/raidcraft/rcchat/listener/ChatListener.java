@@ -1,6 +1,7 @@
 package de.raidcraft.rcchat.listener;
 
 import de.raidcraft.rcchat.channel.Channel;
+import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.PlayerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,15 +16,20 @@ public class ChatListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
 
         String message = event.getMessage();
-        Channel channel = PlayerManager.INST.getMainChannel(event.getPlayer());
+        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(event.getPlayer());
+        Channel channel = chatPlayer.getMainChannel();
         if(channel == null) {
             return;
         }
-        String prefix = channel.getPrefix();
-        if(prefix.length() > 0) {
-            prefix += " ";
+        String channelPrefix = channel.getPrefix();
+        if(channelPrefix.length() > 0) {
+            channelPrefix += " ";
         }
-        message = prefix + message;
+
+        String prefix = chatPlayer.getPrefix();
+        String suffix = "";
+
+        message = channelPrefix + prefix + message + suffix + ":";
 
         channel.sendMessage(message);
         event.setCancelled(true);

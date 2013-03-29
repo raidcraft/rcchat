@@ -3,7 +3,7 @@ package de.raidcraft.rcchat.channel;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.PlayerManager;
-import de.raidcraft.rcchat.tables.PlayersTable;
+import de.raidcraft.rcchat.tables.PlayersChannelTable;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.entity.Player;
 
@@ -47,8 +47,6 @@ public class Channel {
 
             ChatPlayer chatPlayer = entry.getValue();
 
-            if(chatPlayer.isMuted()) return;
-
             if(chatPlayer.getPlayer().isOnline()) {
                 chatPlayer.getPlayer().sendMessage(message);
             }
@@ -57,20 +55,26 @@ public class Channel {
 
     public void join(Player player) {
 
-        if(!members.containsKey(player.getName())) {
-            members.put(player.getName(), new ChatPlayer(player));
+        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
+        join(chatPlayer);
+    }
+
+    public void join(ChatPlayer chatPlayer) {
+
+        if(!members.containsKey(chatPlayer.getName())) {
+            members.put(chatPlayer.getName(), chatPlayer);
         }
-        Channel main = PlayerManager.INST.getMainChannel(player);
+        Channel main = chatPlayer.getMainChannel();
         if(main == null || !main.getName().equalsIgnoreCase(name)) {
-            PlayerManager.INST.setMainChannel(player, this);
-            RaidCraft.getTable(PlayersTable.class).addChannel(player, this);
+            chatPlayer.setMainChannel(this);
+            RaidCraft.getTable(PlayersChannelTable.class).addChannel(chatPlayer.getPlayer(), this);
         }
     }
 
     public void leave(Player player) {
 
         logout(player);
-        RaidCraft.getTable(PlayersTable.class).removeChannel(player, this);
+        RaidCraft.getTable(PlayersChannelTable.class).removeChannel(player, this);
     }
 
     public void logout(Player player) {

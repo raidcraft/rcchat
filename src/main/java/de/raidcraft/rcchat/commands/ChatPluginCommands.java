@@ -54,7 +54,8 @@ public class ChatPluginCommands {
             throw new CommandException("Du hast keine Rechte um diesen Channel zu betreten!");
         }
 
-        channel.join((Player)sender);
+        Player player = (Player)sender;
+        channel.join(player);
         sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
     }
 }

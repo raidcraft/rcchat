@@ -6,8 +6,10 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.commands.ChatPluginCommands;
 import de.raidcraft.rcchat.listener.ChatListener;
 import de.raidcraft.rcchat.listener.PlayerListener;
+import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcchat.tables.ChannelsTable;
-import de.raidcraft.rcchat.tables.PlayersTable;
+import de.raidcraft.rcchat.tables.PlayersChannelTable;
+import de.raidcraft.rcchat.tables.PrefixTable;
 
 /**
  * @author Philip
@@ -26,7 +28,8 @@ public class RCChatPlugin extends BasePlugin {
         registerCommands(ChatPluginCommands.class);
 
         registerTable(ChannelsTable.class, new ChannelsTable());
-        registerTable(PlayersTable.class, new PlayersTable());
+        registerTable(PlayersChannelTable.class, new PlayersChannelTable());
+        registerTable(PrefixTable.class, new PrefixTable());
 
         reload();
     }
@@ -40,6 +43,7 @@ public class RCChatPlugin extends BasePlugin {
 
         config.reload();
         ChannelManager.INST.reload();
+        PrefixManager.INST.reload();
     }
 
     public class LocalConfiguration extends ConfigurationBase<RCChatPlugin> {

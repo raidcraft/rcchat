@@ -3,8 +3,6 @@ package de.raidcraft.rcchat.channel;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.PlayerManager;
 import de.raidcraft.rcchat.tables.ChannelsTable;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,9 +33,7 @@ public class ChannelManager {
             RaidCraft.LOGGER.info("[RCChat] Load channel '" + channel.getName() + "'");
         }
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            PlayerManager.INST.loadPlayer(player);
-        }
+        PlayerManager.INST.reload();
     }
 
     public void registerChannel(Channel channel) {
