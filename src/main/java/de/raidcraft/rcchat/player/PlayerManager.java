@@ -56,6 +56,7 @@ public class PlayerManager {
         for(Channel channel : ChannelManager.INST.getChannels()) {
             channel.logout(player);
         }
+        players.remove(player.getName());
     }
 
     public ChatPlayer getPlayer(Player player) {

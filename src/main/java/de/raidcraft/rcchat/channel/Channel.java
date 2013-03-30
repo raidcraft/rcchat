@@ -92,7 +92,7 @@ public class Channel {
 
     public boolean hasPermission() {
 
-        return (permission != null) ? false : true;
+        return (permission != null) ? true : false;
     }
 
     public String getName() {

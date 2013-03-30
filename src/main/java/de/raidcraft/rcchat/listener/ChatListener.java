@@ -3,6 +3,7 @@ package de.raidcraft.rcchat.listener;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.PlayerManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,7 +34,7 @@ public class ChatListener implements Listener {
         String nameColor = chatPlayer.getNameColor();
         String channelColor = channel.getColor();
 
-        message = channelPrefix + prefix + nameColor + player.getName() + suffix + ": " + channelColor + message;
+        message = channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor + player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         channel.sendMessage(message);
         event.setCancelled(true);

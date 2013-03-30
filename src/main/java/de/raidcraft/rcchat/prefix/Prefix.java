@@ -35,7 +35,7 @@ public class Prefix {
 
     public boolean hasPermission() {
 
-        return (permission != null) ? false : true;
+        return (permission != null) ? true : false;
     }
 
     public String getPermission() {
