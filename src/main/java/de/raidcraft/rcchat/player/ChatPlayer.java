@@ -1,9 +1,12 @@
 package de.raidcraft.rcchat.player;
 
+import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
+import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.util.SignUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -48,6 +51,20 @@ public class ChatPlayer {
             prefix = SignUtil.parseColor(PrefixManager.INST.getPrefix(player));
         }
         return prefix;
+    }
+
+    public String getSuffix() {
+
+        if(suffix == null) {
+            if(player.hasPermission("rcchat.suffix.admin")) {
+                suffix = ChatColor.GREEN + "#";
+            }
+            else {
+                int heroLevel = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player).getAttachedLevel().getLevel();
+                suffix = "[" + ChatColor.YELLOW + heroLevel + ChatColor.RESET + "]";
+            }
+        }
+        return suffix;
     }
 
     public String getNameColor() {

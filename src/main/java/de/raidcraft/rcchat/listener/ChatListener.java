@@ -30,7 +30,7 @@ public class ChatListener implements Listener {
         }
 
         String prefix = chatPlayer.getPrefix();
-        String suffix = "";
+        String suffix = chatPlayer.getSuffix();
         String nameColor = chatPlayer.getNameColor();
         String channelColor = channel.getColor();
 
