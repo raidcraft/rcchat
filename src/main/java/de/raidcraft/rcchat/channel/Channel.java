@@ -20,12 +20,13 @@ public class Channel {
     private String name;
     private String permission;
     private String prefix;
+    private String color;
     private List<String> aliases = new ArrayList<>();
     private ChannelType type;
 
     private Map<String, ChatPlayer> members = new HashMap<>();
 
-    public Channel(String name, String permission, String prefix, String[] aliases, String type) {
+    public Channel(String name, String permission, String prefix, String color, String[] aliases, String type) {
 
         this.name = name;
         this.permission = permission;
@@ -33,6 +34,13 @@ public class Channel {
             this.prefix = SignUtil.parseColor(prefix);
         } else {
             this.prefix = "";
+        }
+
+        if(color != null) {
+            this.color = SignUtil.parseColor(color);
+        }
+        else {
+            this.color = "";
         }
 
         for(String alias : aliases) {
@@ -100,6 +108,11 @@ public class Channel {
     public String getPrefix() {
 
         return prefix;
+    }
+
+    public String getColor() {
+
+        return color;
     }
 
     public List<String> getAliases() {

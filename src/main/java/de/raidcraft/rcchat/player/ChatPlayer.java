@@ -1,7 +1,9 @@
 package de.raidcraft.rcchat.player;
 
 import de.raidcraft.rcchat.channel.Channel;
+import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
+import de.raidcraft.util.SignUtil;
 import org.bukkit.entity.Player;
 
 /**
@@ -13,6 +15,7 @@ public class ChatPlayer {
     private Channel mainChannel;
     private String prefix;
     private String suffix;
+    private String nameColor;
 
     public ChatPlayer(Player player) {
 
@@ -42,8 +45,16 @@ public class ChatPlayer {
     public String getPrefix() {
 
         if(prefix == null) {
-            prefix = PrefixManager.INST.getPrefix(player);
+            prefix = SignUtil.parseColor(PrefixManager.INST.getPrefix(player));
         }
         return prefix;
+    }
+
+    public String getNameColor() {
+
+        if(nameColor == null) {
+            nameColor = NameColorManager.getColor(player);
+        }
+        return nameColor;
     }
 }

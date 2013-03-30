@@ -29,6 +29,7 @@ public class ChannelsTable extends Table {
                             "`name` VARCHAR( 32 ) NOT NULL, " +
                             "`permission` VARCHAR( 64 ) DEFAULT NULL, " +
                             "`prefix` VARCHAR ( 32 ) DEFAULT NULL, " +
+                            "`color` VARCHAR ( 32 ) DEFAULT NULL," +
                             "`aliases` VARCHAR ( 128 ) NOT NULL, " +
                             "`type` VARCHAR ( 32 ) NOT NULL, " +
                             "PRIMARY KEY ( `id` )" +
@@ -53,6 +54,7 @@ public class ChannelsTable extends Table {
                     resultSet.getString("name"),
                     resultSet.getString("permission"),
                     resultSet.getString("prefix"),
+                    resultSet.getString("color"),
                     aliases,
                     resultSet.getString("type")
                 );
