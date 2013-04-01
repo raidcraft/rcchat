@@ -48,6 +48,9 @@ public class PlayerManager {
 
         if(!hasMain) {
             Channel defaultChannel = ChannelManager.INST.getDefaultChannel();
+            if(defaultChannel == null) {
+                return;
+            }
             defaultChannel.join(chatPlayer);
         }
     }
