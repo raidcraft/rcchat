@@ -38,6 +38,7 @@ public class PlayerManager {
         for(ChannelAssignment assignment : channels) {
 
             Channel channel = ChannelManager.INST.getChannel(assignment.getChannel());
+            if(channel == null) continue;
             channel.join(chatPlayer);
             if(assignment.getType() == AssignmentType.MAIN) {
                 chatPlayer.setMainChannel(channel);
