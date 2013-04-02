@@ -1,5 +1,6 @@
 package de.raidcraft.rcchat.listener;
 
+import de.raidcraft.rcchat.bungeecord.BungeeCordManager;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.PlayerManager;
@@ -40,6 +41,8 @@ public class ChatListener implements Listener {
         message = channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor + player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         channel.sendMessage(message);
+        BungeeCordManager.INST.sendMessage(player, channel, message, BungeeCordManager.MessageType.CHAT_MESSAGE);
+
         event.setCancelled(true);
     }
 

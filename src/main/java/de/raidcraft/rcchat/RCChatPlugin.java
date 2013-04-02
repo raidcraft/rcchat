@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
  */
 public class RCChatPlugin extends BasePlugin {
 
+    public final static String BUNGEECORD_CHANNEL = "RCChat";
     public LocalConfiguration config;
 
     @Override

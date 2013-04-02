@@ -136,4 +136,9 @@ public class Channel {
 
         return type;
     }
+
+    public List<String> getWorlds() {
+
+        return worlds;
+    }
 }
