@@ -23,10 +23,11 @@ public class Channel {
     private String color;
     private List<String> aliases = new ArrayList<>();
     private ChannelType type;
+    private List<String> worlds;
 
     private Map<String, ChatPlayer> members = new HashMap<>();
 
-    public Channel(String name, String permission, String prefix, String color, String[] aliases, String type) {
+    public Channel(String name, String permission, String prefix, String color, String[] aliases, String type, List<String> worlds) {
 
         this.name = name;
         this.permission = permission;
@@ -47,6 +48,7 @@ public class Channel {
             this.aliases.add(alias);
         }
         this.type = ChannelType.valueOf(type);
+        this.worlds = worlds;
     }
 
     public void sendMessage(String message) {
@@ -93,6 +95,16 @@ public class Channel {
     public boolean hasPermission() {
 
         return (permission != null) ? true : false;
+    }
+
+    public boolean isCorrectWorld(Player player) {
+
+        if(worlds.contains(player.getLocation().getWorld().getName().toLowerCase())) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public String getName() {

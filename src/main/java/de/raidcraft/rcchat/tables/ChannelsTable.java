@@ -3,8 +3,6 @@ package de.raidcraft.rcchat.tables;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.database.Table;
 import de.raidcraft.rcchat.channel.Channel;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,20 +47,6 @@ public class ChannelsTable extends Table {
                     "SELECT * FROM " + getTableName() + ";").executeQuery();
 
             while (resultSet.next()) {
-
-                // load only channels for this server (world)
-                boolean found = false;
-                List<World> bukkitWorlds = Bukkit.getWorlds();
-                List<String> channelWorlds = RaidCraft.getTable(ChannelWorldsTable.class).getWorlds(resultSet.getInt("id"));
-                for(World world : bukkitWorlds) {
-                    if(channelWorlds.contains(world.getName())) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if(!found) continue;
-
                 String[] aliases = resultSet.getString("aliases").split(",");
 
                 Channel channel = new Channel(
@@ -71,7 +55,8 @@ public class ChannelsTable extends Table {
                     resultSet.getString("prefix"),
                     resultSet.getString("color"),
                     aliases,
-                    resultSet.getString("type")
+                    resultSet.getString("type"),
+                    RaidCraft.getTable(ChannelWorldsTable.class).getWorlds(resultSet.getInt("id"))
                 );
                 channels.add(channel);
             }

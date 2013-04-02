@@ -9,6 +9,7 @@ import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.channel.ChannelManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -44,17 +45,26 @@ public class ChatPluginCommands {
             return;
         }
 
+        if(sender instanceof ConsoleCommandSender) {
+            throw new CommandException("For non admin commands (e.g. channel changes) a player context is required!");
+        }
+
+        Player player = (Player)sender;
+
         // look if first argument is channel
         Channel channel = ChannelManager.INST.getChannel(context.getString(0));
         if(channel == null) {
             throw new CommandException("Unbekannter Channel '" + context.getString(0) + "' oder falscher Parameter!");
         }
 
+        if(!channel.isCorrectWorld(player)) {
+            throw new CommandException("Der gewählte Channel ist auf dieser Welt nicht verfügbar!");
+        }
+
         if(channel.hasPermission() && !sender.hasPermission(channel.getPermission())) {
             throw new CommandException("Du hast keine Rechte um diesen Channel zu betreten!");
         }
 
-        Player player = (Player)sender;
         channel.join(player);
         sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
     }
