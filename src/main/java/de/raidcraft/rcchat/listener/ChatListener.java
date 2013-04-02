@@ -23,6 +23,8 @@ public class ChatListener implements Listener {
         ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
         Channel channel = chatPlayer.getMainChannel();
         if(channel == null) {
+            player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel");
+            event.setCancelled(true);
             return;
         }
         String channelPrefix = channel.getPrefix();
