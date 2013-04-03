@@ -60,8 +60,13 @@ public class ChatPlayer {
                 suffix = ChatColor.GREEN + "#";
             }
             else {
-                int heroLevel = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player).getAttachedLevel().getLevel();
-                suffix = "[" + ChatColor.YELLOW + heroLevel + ChatColor.RESET + "]";
+                try {
+                    int heroLevel = 0;
+                    heroLevel = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player).getAttachedLevel().getLevel();
+                    suffix = "[" + ChatColor.YELLOW + heroLevel + ChatColor.RESET + "]";
+                } catch (Throwable e) {
+                    suffix = "";
+                }
             }
         }
         return suffix;

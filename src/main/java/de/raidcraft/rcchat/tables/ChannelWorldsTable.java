@@ -1,6 +1,5 @@
 package de.raidcraft.rcchat.tables;
 
-import de.raidcraft.RaidCraft;
 import de.raidcraft.api.database.Table;
 
 import java.sql.ResultSet;
@@ -30,7 +29,7 @@ public class ChannelWorldsTable extends Table {
                             "PRIMARY KEY ( `id` )" +
                             ")").execute();
         } catch (SQLException e) {
-            RaidCraft.LOGGER.warning(e.getMessage());
+            e.printStackTrace();
         }
     }
 

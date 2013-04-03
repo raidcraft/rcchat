@@ -16,7 +16,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  */
 public class ChatListener implements Listener {
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
 
         String message = event.getMessage();

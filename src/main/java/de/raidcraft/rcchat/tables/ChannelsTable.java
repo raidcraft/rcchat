@@ -35,7 +35,7 @@ public class ChannelsTable extends Table {
                             "PRIMARY KEY ( `id` )" +
                             ")").execute();
         } catch (SQLException e) {
-            RaidCraft.LOGGER.warning(e.getMessage());
+            e.printStackTrace();
         }
     }
 

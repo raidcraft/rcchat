@@ -1,6 +1,5 @@
 package de.raidcraft.rcchat.tables;
 
-import de.raidcraft.RaidCraft;
 import de.raidcraft.api.database.Table;
 import de.raidcraft.rcchat.prefix.Prefix;
 
@@ -32,7 +31,7 @@ public class PrefixTable extends Table {
                             "PRIMARY KEY ( `id` )" +
                             ")").execute();
         } catch (SQLException e) {
-            RaidCraft.LOGGER.warning(e.getMessage());
+            e.printStackTrace();
         }
     }
 
