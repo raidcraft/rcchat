@@ -2,6 +2,7 @@ package de.raidcraft.rcchat;
 
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
+import de.raidcraft.api.config.Setting;
 import de.raidcraft.rcchat.bungeecord.BungeeListener;
 import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.commands.ChatPluginCommands;
@@ -58,5 +59,7 @@ public class RCChatPlugin extends BasePlugin {
 
             super(plugin, "config.yml");
         }
+
+        @Setting("use-colored-names") public boolean coloredNames = false;
     }
 }

@@ -1,6 +1,7 @@
 package de.raidcraft.rcchat.player;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
@@ -75,7 +76,12 @@ public class ChatPlayer {
     public String getNameColor() {
 
         if(nameColor == null) {
-            nameColor = NameColorManager.getColor(player);
+            if(RaidCraft.getComponent(RCChatPlugin.class).config.coloredNames) {
+                nameColor = NameColorManager.getColor(player);
+            }
+            else {
+                nameColor = "";
+            }
         }
         return nameColor;
     }
