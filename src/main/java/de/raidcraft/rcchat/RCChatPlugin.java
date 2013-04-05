@@ -8,6 +8,7 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.commands.ChatPluginCommands;
 import de.raidcraft.rcchat.listener.ChatListener;
 import de.raidcraft.rcchat.listener.PlayerListener;
+import de.raidcraft.rcchat.player.PlayerManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcchat.tables.*;
 import org.bukkit.Bukkit;
@@ -52,6 +53,7 @@ public class RCChatPlugin extends BasePlugin {
         config.reload();
         ChannelManager.INST.reload();
         PrefixManager.INST.reload();
+        PlayerManager.INST.reload();
     }
 
     public class LocalConfiguration extends ConfigurationBase<RCChatPlugin> {
