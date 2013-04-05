@@ -29,6 +29,7 @@ public class PrefixManager {
             playerPrefixes.put(playerPrefix.getId(), playerPrefix);
         }
 
+        worldPrefixes.clear();
         List<WorldPrefix> worldPrefixList = RaidCraft.getTable(WorldPrefixTable.class).getPrefixes();
         for(WorldPrefix worldPrefix : worldPrefixList) {
             worldPrefixes.put(worldPrefix.getWorld().toLowerCase(), worldPrefix);
