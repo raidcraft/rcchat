@@ -46,7 +46,7 @@ public class PlayerPrefixTable extends Table {
 
                 PlayerPrefix playerPrefix = new PlayerPrefix(
                     resultSet.getInt("id"),
-                    resultSet.getString("playerPrefix"),
+                    resultSet.getString("prefix"),
                     resultSet.getString("permission"),
                     resultSet.getInt("priority")
                 );
