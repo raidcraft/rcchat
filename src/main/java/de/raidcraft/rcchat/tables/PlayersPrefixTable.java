@@ -2,7 +2,7 @@ package de.raidcraft.rcchat.tables;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.database.Table;
-import de.raidcraft.rcchat.prefix.Prefix;
+import de.raidcraft.rcchat.prefix.PlayerPrefix;
 import de.raidcraft.rcchat.prefix.PrefixManager;
 import org.bukkit.entity.Player;
 
@@ -35,7 +35,7 @@ public class PlayersPrefixTable extends Table {
         }
     }
 
-    public Prefix getPrefix(Player player) {
+    public PlayerPrefix getPrefix(Player player) {
 
         try {
             ResultSet resultSet = getConnection().prepareStatement(
@@ -51,14 +51,14 @@ public class PlayersPrefixTable extends Table {
     }
 
 
-    public void savePrefix(Player player, Prefix prefix) {
+    public void savePrefix(Player player, PlayerPrefix playerPrefix) {
 
         removePlayer(player);
         try {
             getConnection().prepareStatement("INSERT INTO " + getTableName() + " (player, prefix) " +
                     "VALUES (" +
                     "'" + player.getName() + "'" + "," +
-                    "'" + prefix.getId() + "'" +
+                    "'" + playerPrefix.getId() + "'" +
                     ");").executeUpdate();
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());

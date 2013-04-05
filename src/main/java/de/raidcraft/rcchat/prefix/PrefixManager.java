@@ -1,8 +1,9 @@
 package de.raidcraft.rcchat.prefix;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.rcchat.tables.PlayerPrefixTable;
 import de.raidcraft.rcchat.tables.PlayersPrefixTable;
-import de.raidcraft.rcchat.tables.PrefixTable;
+import de.raidcraft.rcchat.tables.WorldPrefixTable;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -17,45 +18,59 @@ public class PrefixManager {
 
     public final static PrefixManager INST = new PrefixManager();
 
-    private Map<Integer, Prefix> prefixes = new HashMap<>();
+    private Map<Integer, PlayerPrefix> playerPrefixes = new HashMap<>();
+    private Map<String, WorldPrefix> worldPrefixes = new HashMap<>();
 
     public void reload() {
 
-        prefixes.clear();
-        List<Prefix> prefixList = RaidCraft.getTable(PrefixTable.class).getPrefixes();
-        for(Prefix prefix : prefixList) {
-            prefixes.put(prefix.getId(), prefix);
+        playerPrefixes.clear();
+        List<PlayerPrefix> playerPrefixList = RaidCraft.getTable(PlayerPrefixTable.class).getPrefixes();
+        for(PlayerPrefix playerPrefix : playerPrefixList) {
+            playerPrefixes.put(playerPrefix.getId(), playerPrefix);
+        }
+
+        List<WorldPrefix> worldPrefixList = RaidCraft.getTable(WorldPrefixTable.class).getPrefixes();
+        for(WorldPrefix worldPrefix : worldPrefixList) {
+            worldPrefixes.put(worldPrefix.getWorld().toLowerCase(), worldPrefix);
         }
     }
 
-    public Prefix getPrefix(int id) {
+    public PlayerPrefix getPrefix(int id) {
 
-        return prefixes.get(id);
+        return playerPrefixes.get(id);
     }
 
     public String getPrefix(Player player) {
 
-        Prefix savedPrefix = RaidCraft.getTable(PlayersPrefixTable.class).getPrefix(player);
+        PlayerPrefix savedPlayerPrefix = RaidCraft.getTable(PlayersPrefixTable.class).getPrefix(player);
 
-        if(savedPrefix != null && player.hasPermission(savedPrefix.getPermission())) {
-            return savedPrefix.getPrefix();
+        if(savedPlayerPrefix != null && player.hasPermission(savedPlayerPrefix.getPermission())) {
+            return savedPlayerPrefix.getPrefix();
         }
 
-        Prefix newPrefix = null;
-        for(Map.Entry<Integer, Prefix> entry : prefixes.entrySet()) {
+        PlayerPrefix newPlayerPrefix = null;
+        for(Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
 
-            Prefix prefix = entry.getValue();
-            if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) continue;
+            PlayerPrefix playerPrefix = entry.getValue();
+            if(playerPrefix.hasPermission() && !player.hasPermission(playerPrefix.getPermission())) continue;
 
-            if(newPrefix == null || prefix.getPriority() > newPrefix.getPriority()) {
-                newPrefix = prefix;
+            if(newPlayerPrefix == null || playerPrefix.getPriority() > newPlayerPrefix.getPriority()) {
+                newPlayerPrefix = playerPrefix;
             }
         }
 
-        if(newPrefix == null) {
+        if(newPlayerPrefix == null) {
             return "[" + ChatColor.GRAY + "Gast" + ChatColor.WHITE + "]";
         }
-        RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, newPrefix);
-        return newPrefix.getPrefix();
+        RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, newPlayerPrefix);
+        return newPlayerPrefix.getPrefix();
+    }
+
+    public String getWorldPrefix(String worldName) {
+        worldName = worldName.toLowerCase();
+        if(worldPrefixes.containsKey(worldName)) {
+            return worldPrefixes.get(worldName).getPrefix();
+        }
+        return "";
     }
 }

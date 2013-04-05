@@ -3,14 +3,14 @@ package de.raidcraft.rcchat.prefix;
 /**
  * @author Philip
  */
-public class Prefix {
+public class PlayerPrefix {
 
     private int id;
     private String prefix;
     private String permission;
     private int priority;
 
-    public Prefix(int id, String prefix, String permission, int priority) {
+    public PlayerPrefix(int id, String prefix, String permission, int priority) {
 
         this.id = id;
         this.prefix = prefix;

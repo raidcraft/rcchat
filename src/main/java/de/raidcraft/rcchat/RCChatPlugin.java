@@ -31,7 +31,8 @@ public class RCChatPlugin extends BasePlugin {
 
         registerTable(ChannelsTable.class, new ChannelsTable());
         registerTable(PlayersChannelTable.class, new PlayersChannelTable());
-        registerTable(PrefixTable.class, new PrefixTable());
+        registerTable(PlayerPrefixTable.class, new PlayerPrefixTable());
+        registerTable(WorldPrefixTable.class, new WorldPrefixTable());
         registerTable(PlayersPrefixTable.class, new PlayersPrefixTable());
         registerTable(ChannelWorldsTable.class, new ChannelWorldsTable());
 

@@ -4,6 +4,7 @@ import de.raidcraft.rcchat.bungeecord.BungeeCordManager;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.PlayerManager;
+import de.raidcraft.rcchat.prefix.PrefixManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,12 +34,14 @@ public class ChatListener implements Listener {
             channelPrefix += " ";
         }
 
+        String worldPrefix = PrefixManager.INST.getWorldPrefix(player.getLocation().getWorld().getName());
         String prefix = chatPlayer.getPrefix();
         String suffix = chatPlayer.getSuffix();
         String nameColor = chatPlayer.getNameColor();
         String channelColor = channel.getColor();
 
-        message = channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor + player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
+        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
+                player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         channel.sendMessage(message);
         BungeeCordManager.INST.sendMessage(player, channel, message, BungeeCordManager.MessageType.CHAT_MESSAGE);

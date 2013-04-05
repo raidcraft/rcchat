@@ -27,7 +27,7 @@ public class BungeeListener implements PluginMessageListener {
         content = SignUtil.parseColor(content);
 
         // broadcast incoming chat message
-        if(type == BungeeCordManager.MessageType.CHAT_MESSAGE) {
+        if(type == BungeeCordManager.MessageType.CHAT_MESSAGE && Bukkit.getOnlinePlayers().length > 0) {
             Bukkit.broadcastMessage(content);
             return;
         }
