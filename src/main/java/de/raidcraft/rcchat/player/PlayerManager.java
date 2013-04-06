@@ -33,7 +33,7 @@ public class PlayerManager {
         ChatPlayer chatPlayer = new ChatPlayer(player);
         players.put(player.getName(), chatPlayer);
 
-        boolean hasMain = false;
+        Channel mainChannel = null;
         List<ChannelAssignment> channels = RaidCraft.getTable(PlayersChannelTable.class).getChannels(player);
         for(ChannelAssignment assignment : channels) {
 
@@ -41,12 +41,13 @@ public class PlayerManager {
             if(channel == null) continue;
             channel.join(chatPlayer);
             if(assignment.getType() == AssignmentType.MAIN) {
-                chatPlayer.setMainChannel(channel);
-                hasMain = true;
+                mainChannel = channel;
             }
         }
-
-        if(!hasMain) {
+        if(mainChannel != null) {
+            chatPlayer.setMainChannel(mainChannel);
+        }
+        else {
             Channel defaultChannel = ChannelManager.INST.getDefaultChannel();
             if(defaultChannel == null) {
                 return;
