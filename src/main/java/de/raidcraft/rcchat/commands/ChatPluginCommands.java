@@ -7,6 +7,9 @@ import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.channel.ChannelManager;
+import de.raidcraft.rcchat.player.ChatPlayer;
+import de.raidcraft.rcchat.player.PlayerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -67,5 +70,33 @@ public class ChatPluginCommands {
 
         channel.join(player);
         sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
+    }
+
+    @Command(
+            aliases = {"tell", "@"},
+            desc = "Private chat command"
+    )
+    public void tell(CommandContext context, CommandSender sender) throws CommandException {
+
+        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer((Player)sender);
+
+        if(context.argsLength() == 0) {
+            chatPlayer.leavePrivateChat();
+            sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" +
+                    ChatColor.YELLOW + chatPlayer.getMainChannel().getName() + ChatColor.GREEN + "'");
+            return;
+        }
+
+        Player recipient = Bukkit.getPlayer(context.getString(0));
+        if(recipient == null) {
+            throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
+        }
+
+        chatPlayer.enterPrivateChat(recipient);
+        chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipient.getName() + "'");
+
+        if(context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
+            chatPlayer.sendMessageToPartner(context.getString(1));
+        }
     }
 }

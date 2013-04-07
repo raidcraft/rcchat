@@ -20,6 +20,7 @@ public class ChatPlayer {
     private String prefix;
     private String suffix;
     private String nameColor;
+    private Player chatPartner = null;
 
     public ChatPlayer(Player player) {
 
@@ -84,5 +85,34 @@ public class ChatPlayer {
             }
         }
         return nameColor;
+    }
+
+    public boolean hasPrivateChat() {
+        if(chatPartner != null && chatPartner.isOnline()) {
+            return true;
+        }
+        else {
+            chatPartner = null;
+            return false;
+        }
+    }
+
+    public void enterPrivateChat(Player recipient) {
+        chatPartner = recipient;
+    }
+
+    public void leavePrivateChat() {
+        chatPartner = null;
+    }
+
+    public Player getChatPartner() {
+        return chatPartner;
+    }
+
+    public void sendMessageToPartner(String message) {
+        if(!hasPrivateChat()) {
+            return;
+        }
+        getChatPartner().sendMessage(ChatColor.DARK_PURPLE + "Von " + getName() + ": " + ChatColor.LIGHT_PURPLE + message);
     }
 }

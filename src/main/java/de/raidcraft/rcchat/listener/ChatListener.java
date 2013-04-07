@@ -5,6 +5,7 @@ import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.PlayerManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
+import de.raidcraft.util.SignUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,9 +21,16 @@ public class ChatListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
 
-        String message = event.getMessage();
+        String message = SignUtil.parseColor(event.getMessage());
         Player player = event.getPlayer();
         ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
+
+        if(chatPlayer.hasPrivateChat()) {
+            chatPlayer.sendMessageToPartner(message);
+            event.setCancelled(true);
+            return;
+        }
+
         Channel channel = chatPlayer.getMainChannel();
         if(channel == null) {
             player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel");
