@@ -113,7 +113,7 @@ public class ChatPlayer {
         if(!hasPrivateChat()) {
             return;
         }
-        RaidCraft.LOGGER.info(getName() + " -> " + chatPartner.getName() + ": " + message);
+        RaidCraft.LOGGER.info(getName() + " -> " + chatPartner.getName() + ": " + ChatColor.stripColor(message));
         getChatPartner().sendMessage(ChatColor.DARK_PURPLE + "Von " + getName() + ": " + ChatColor.LIGHT_PURPLE + message);
         getPlayer().sendMessage(ChatColor.DARK_PURPLE + "An " + getChatPartner().getName() + ": " + ChatColor.LIGHT_PURPLE + message);
     }
