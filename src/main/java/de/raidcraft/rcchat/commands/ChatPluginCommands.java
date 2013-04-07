@@ -93,10 +93,14 @@ public class ChatPluginCommands {
         }
 
         chatPlayer.enterPrivateChat(recipient);
-        chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipient.getName() + "'");
+
+        if(context.argsLength() < 2) {
+            chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipient.getName() + "'");
+        }
 
         if(context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
             chatPlayer.sendMessageToPartner(context.getString(1));
+            chatPlayer.leavePrivateChat();
         }
     }
 }
