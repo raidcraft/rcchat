@@ -17,9 +17,13 @@ public class ChatListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
 
-        String message = SignUtil.parseColor(event.getMessage());
         Player player = event.getPlayer();
         ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
+
+        String message = event.getMessage();
+        if(player.hasPermission("rcchat.colorize")) {
+            message = SignUtil.parseColor(event.getMessage());
+        }
 
         if(chatPlayer.hasPrivateChat()) {
             chatPlayer.sendMessageToPartner(message);
