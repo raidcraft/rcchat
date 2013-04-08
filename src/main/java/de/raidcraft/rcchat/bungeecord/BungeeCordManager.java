@@ -21,7 +21,8 @@ public class BungeeCordManager {
         for(String world : channel.getWorlds()) {
             if(world.equalsIgnoreCase(player.getLocation().getWorld().getName())) continue;
 
-            BungeeCordUtil.sendPluginMessage(player, world, RCChatPlugin.BUNGEECORD_CHANNEL, type.name() + MESSAGE_DELIMITER + message);
+            String decoded = type.name() + MESSAGE_DELIMITER + System.currentTimeMillis() + MESSAGE_DELIMITER + message;
+            BungeeCordUtil.sendPluginMessage(player, world, RCChatPlugin.BUNGEECORD_CHANNEL, decoded);
         }
     }
 

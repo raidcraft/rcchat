@@ -23,7 +23,14 @@ public class BungeeListener implements PluginMessageListener {
         String[] parts = message.split(BungeeCordManager.MESSAGE_DELIMITER);
 
         BungeeCordManager.MessageType type = BungeeCordManager.MessageType.valueOf(parts[0]);
-        String content = parts[1];
+        String timestampString = parts[1];
+        String content = parts[2];
+
+        long timestamp = Long.parseLong(timestampString);
+        // check for timeout
+        if(System.currentTimeMillis() - timestamp > 3*1000) {
+            return;
+        }
         content = SignUtil.parseColor(content);
 
         // broadcast incoming chat message
