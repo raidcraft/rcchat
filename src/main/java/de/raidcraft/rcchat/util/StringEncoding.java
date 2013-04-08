@@ -33,13 +33,13 @@ public class StringEncoding {
 
     public enum SPECIAL_CHARACTER {
 
-        AE_S("#@#ae#@#", "ä"),
-        OE_S("#@#oe#@#", "ö"),
-        UE_S("#@#ue#@#", "ü"),
-        AE_B("#@#AE#@#", "Ä"),
-        OE_B("#@#OE#@#", "Ö"),
-        UE_B("#@#UE#@#", "Ü"),
-        SS("#@#SS#@#", "ß");
+        AE_S("@ae@", "ä"),
+        OE_S("@oe@", "ö"),
+        UE_S("@ue@", "ü"),
+        AE_B("@AE@", "Ä"),
+        OE_B("@OE@", "Ö"),
+        UE_B("@UE@", "Ü"),
+        SS("@SS@", "ß");
 
         private String encoded;
         private String decoded;
