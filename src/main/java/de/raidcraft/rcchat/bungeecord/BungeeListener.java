@@ -1,8 +1,8 @@
 package de.raidcraft.rcchat.bungeecord;
 
 import de.raidcraft.rcchat.RCChatPlugin;
+import de.raidcraft.rcchat.util.StringEncoding;
 import de.raidcraft.util.BungeeCordUtil;
-import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -31,7 +31,8 @@ public class BungeeListener implements PluginMessageListener {
         if(System.currentTimeMillis() - timestamp > 3*1000) {
             return;
         }
-        content = SignUtil.parseColor(content);
+
+        content = StringEncoding.decode(content);
 
         // broadcast incoming chat message
         if(type == BungeeCordManager.MessageType.CHAT_MESSAGE && Bukkit.getOnlinePlayers().length > 0) {
