@@ -53,6 +53,7 @@ public class ChatPluginCommands {
         }
 
         Player player = (Player)sender;
+        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
 
         // look if first argument is channel
         Channel channel = ChannelManager.INST.getChannel(context.getString(0));
@@ -68,8 +69,16 @@ public class ChatPluginCommands {
             throw new CommandException("Du hast keine Rechte um diesen Channel zu betreten!");
         }
 
+        Channel oldChannel = chatPlayer.getMainChannel();
         channel.join(player);
-        sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
+        if(context.argsLength() > 1) {
+            chatPlayer.sendMessage(context.getJoinedStrings(1));
+            oldChannel.join(player);
+        }
+        else {
+            sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
+        }
+
     }
 
     @Command(

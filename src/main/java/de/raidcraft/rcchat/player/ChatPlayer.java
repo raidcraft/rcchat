@@ -2,6 +2,7 @@ package de.raidcraft.rcchat.player;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
+import de.raidcraft.rcchat.bungeecord.BungeeCordManager;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
@@ -116,5 +117,30 @@ public class ChatPlayer {
         RaidCraft.LOGGER.info(getName() + " -> " + chatPartner.getName() + ": " + ChatColor.stripColor(message));
         getChatPartner().sendMessage(ChatColor.DARK_PURPLE + "Von " + getName() + ": " + ChatColor.LIGHT_PURPLE + message);
         getPlayer().sendMessage(ChatColor.DARK_PURPLE + "An " + getChatPartner().getName() + ": " + ChatColor.LIGHT_PURPLE + message);
+    }
+
+    public void sendMessage(String message) {
+
+        if(getMainChannel() == null) {
+            player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel");
+            return;
+        }
+        String channelPrefix = mainChannel.getPrefix();
+        if(channelPrefix.length() > 0) {
+            channelPrefix += " ";
+        }
+
+        String worldPrefix = PrefixManager.INST.getWorldPrefix(player.getLocation().getWorld().getName());
+        String prefix = getPrefix();
+        String suffix = getSuffix();
+        String nameColor = getNameColor();
+        String channelColor = mainChannel.getColor();
+
+        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
+                player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
+
+        RaidCraft.LOGGER.info(ChatColor.stripColor(message));
+        mainChannel.sendMessage(message);
+        BungeeCordManager.INST.sendMessage(player, mainChannel, message, BungeeCordManager.MessageType.CHAT_MESSAGE);
     }
 }
