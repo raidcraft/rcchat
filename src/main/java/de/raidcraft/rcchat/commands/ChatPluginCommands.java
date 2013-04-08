@@ -99,7 +99,7 @@ public class ChatPluginCommands {
         }
 
         if(context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
-            chatPlayer.sendMessageToPartner(context.getString(1));
+            chatPlayer.sendMessageToPartner(context.getJoinedStrings(1));
             chatPlayer.leavePrivateChat();
         }
     }
