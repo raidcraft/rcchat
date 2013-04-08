@@ -3,7 +3,6 @@ package de.raidcraft.rcchat;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
 import de.raidcraft.api.config.Setting;
-import de.raidcraft.rcchat.bungeecord.BungeeListener;
 import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.commands.ChatPluginCommands;
 import de.raidcraft.rcchat.listener.ChatListener;
@@ -11,7 +10,6 @@ import de.raidcraft.rcchat.listener.PlayerListener;
 import de.raidcraft.rcchat.player.PlayerManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcchat.tables.*;
-import org.bukkit.Bukkit;
 
 /**
  * @author Philip
@@ -36,9 +34,6 @@ public class RCChatPlugin extends BasePlugin {
         registerTable(WorldPrefixTable.class, new WorldPrefixTable());
         registerTable(PlayersPrefixTable.class, new PlayersPrefixTable());
         registerTable(ChannelWorldsTable.class, new ChannelWorldsTable());
-
-        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeListener());
 
         reload();
     }
