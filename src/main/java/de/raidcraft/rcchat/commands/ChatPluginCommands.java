@@ -69,6 +69,7 @@ public class ChatPluginCommands {
             throw new CommandException("Du hast keine Rechte um diesen Channel zu betreten!");
         }
 
+        chatPlayer.leavePrivateChat();
         Channel oldChannel = chatPlayer.getMainChannel();
         channel.join(player);
         if(context.argsLength() > 1) {
