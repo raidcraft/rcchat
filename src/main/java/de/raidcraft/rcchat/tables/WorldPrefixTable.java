@@ -22,13 +22,13 @@ public class WorldPrefixTable extends Table {
     public void createTable() {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`world` VARCHAR( 32 ) NOT NULL, " +
                             "`prefix` VARCHAR( 32 ) DEFAULT NULL, " +
                             "PRIMARY KEY ( `id` )" +
-                            ")").execute();
+                            ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,8 +38,8 @@ public class WorldPrefixTable extends Table {
 
         List<WorldPrefix> worldPrefixes = new ArrayList<>();
         try {
-            ResultSet resultSet = getConnection().prepareStatement(
-                    "SELECT * FROM " + getTableName() + ";").executeQuery();
+            ResultSet resultSet = executeQuery(
+                    "SELECT * FROM " + getTableName() + ";");
 
             while (resultSet.next()) {
 

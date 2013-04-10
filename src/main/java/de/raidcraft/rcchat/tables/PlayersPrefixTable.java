@@ -23,13 +23,13 @@ public class PlayersPrefixTable extends Table {
     public void createTable() {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`player` VARCHAR( 32 ) NOT NULL, " +
                             "`prefix` INT( 11 ) NOT NULL, " +
                             "PRIMARY KEY ( `id` )" +
-                            ")").execute();
+                            ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,8 +38,8 @@ public class PlayersPrefixTable extends Table {
     public PlayerPrefix getPrefix(Player player) {
 
         try {
-            ResultSet resultSet = getConnection().prepareStatement(
-                    "SELECT * FROM " + getTableName() + " WHERE player = '" + player.getName() + "';").executeQuery();
+            ResultSet resultSet = executeQuery(
+                    "SELECT * FROM " + getTableName() + " WHERE player = '" + player.getName() + "';");
 
             while (resultSet.next()) {
                 return PrefixManager.INST.getPrefix(resultSet.getInt("prefix"));
@@ -55,11 +55,11 @@ public class PlayersPrefixTable extends Table {
 
         removePlayer(player);
         try {
-            getConnection().prepareStatement("INSERT INTO " + getTableName() + " (player, prefix) " +
+            executeUpdate("INSERT INTO " + getTableName() + " (player, prefix) " +
                     "VALUES (" +
                     "'" + player.getName() + "'" + "," +
                     "'" + playerPrefix.getId() + "'" +
-                    ");").executeUpdate();
+                    ");");
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());
             e.printStackTrace();
@@ -69,8 +69,8 @@ public class PlayersPrefixTable extends Table {
     public void removePlayer(Player player) {
 
         try {
-            getConnection().prepareStatement(
-                    "DELETE FROM " + getTableName() + " WHERE player = '" + player.getName() + "';").execute();
+            executeUpdate(
+                    "DELETE FROM " + getTableName() + " WHERE player = '" + player.getName() + "';");
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());
             e.printStackTrace();

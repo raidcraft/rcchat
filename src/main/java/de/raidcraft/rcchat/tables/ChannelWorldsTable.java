@@ -21,13 +21,13 @@ public class ChannelWorldsTable extends Table {
     public void createTable() {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`channel` INT( 11 ) NOT NULL, " +
                             "`world` VARCHAR( 32 ) DEFAULT NULL, " +
                             "PRIMARY KEY ( `id` )" +
-                            ")").execute();
+                            ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,8 +37,8 @@ public class ChannelWorldsTable extends Table {
 
         List<String> worlds = new ArrayList<>();
         try {
-            ResultSet resultSet = getConnection().prepareStatement(
-                    "SELECT * FROM " + getTableName() + " WHERE channel = '" + channelId + "';").executeQuery();
+            ResultSet resultSet = executeQuery(
+                    "SELECT * FROM " + getTableName() + " WHERE channel = '" + channelId + "';");
 
             while (resultSet.next()) {
 

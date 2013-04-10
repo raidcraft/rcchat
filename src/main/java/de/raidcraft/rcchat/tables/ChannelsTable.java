@@ -23,7 +23,7 @@ public class ChannelsTable extends Table {
     public void createTable() {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`name` VARCHAR( 32 ) NOT NULL, " +
@@ -33,7 +33,7 @@ public class ChannelsTable extends Table {
                             "`aliases` VARCHAR ( 128 ) NOT NULL, " +
                             "`type` VARCHAR ( 32 ) NOT NULL, " +
                             "PRIMARY KEY ( `id` )" +
-                            ")").execute();
+                            ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,8 +43,8 @@ public class ChannelsTable extends Table {
 
         List<Channel> channels = new ArrayList<>();
         try {
-            ResultSet resultSet = getConnection().prepareStatement(
-                    "SELECT * FROM " + getTableName() + ";").executeQuery();
+            ResultSet resultSet = executeQuery(
+                    "SELECT * FROM " + getTableName() + ";");
 
             while (resultSet.next()) {
                 String[] aliases = resultSet.getString("aliases").split(",");

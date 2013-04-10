@@ -22,14 +22,14 @@ public class PlayerPrefixTable extends Table {
     public void createTable() {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`prefix` VARCHAR( 32 ) NOT NULL, " +
                             "`permission` VARCHAR( 64 ) DEFAULT NULL, " +
                             "`priority` INT( 11 ) DEFAULT 0, " +
                             "PRIMARY KEY ( `id` )" +
-                            ")").execute();
+                            ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -39,8 +39,8 @@ public class PlayerPrefixTable extends Table {
 
         List<PlayerPrefix> playerPrefixes = new ArrayList<>();
         try {
-            ResultSet resultSet = getConnection().prepareStatement(
-                    "SELECT * FROM " + getTableName() + ";").executeQuery();
+            ResultSet resultSet = executeQuery(
+                    "SELECT * FROM " + getTableName() + ";");
 
             while (resultSet.next()) {
 

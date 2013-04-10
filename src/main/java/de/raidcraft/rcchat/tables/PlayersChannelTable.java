@@ -26,14 +26,14 @@ public class PlayersChannelTable extends Table {
     public void createTable() {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`player` VARCHAR( 32 ) NOT NULL, " +
                             "`channel` VARCHAR( 64 ) DEFAULT NULL, " +
                             "`type` VARCHAR( 32 ) NOT NULL, " +
                             "PRIMARY KEY ( `id` )" +
-                            ")").execute();
+                            ")");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -44,8 +44,8 @@ public class PlayersChannelTable extends Table {
         List<ChannelAssignment> channels = new ArrayList<>();
 
         try {
-            ResultSet resultSet = getConnection().prepareStatement(
-                    "SELECT * FROM " + getTableName() + " WHERE player = '" + player.getName() + "';").executeQuery();
+            ResultSet resultSet = executeQuery(
+                    "SELECT * FROM " + getTableName() + " WHERE player = '" + player.getName() + "';");
 
             while (resultSet.next()) {
 
@@ -63,12 +63,12 @@ public class PlayersChannelTable extends Table {
         removeMainTag(player);
 
         try {
-            getConnection().prepareStatement("INSERT INTO " + getTableName() + " (player, channel, type) " +
+            executeUpdate("INSERT INTO " + getTableName() + " (player, channel, type) " +
                     "VALUES (" +
                     "'" + player.getName() + "'" + "," +
                     "'" + channel.getName() + "'" + "," +
                     "'" + AssignmentType.MAIN.name() + "'" +
-                    ");").executeUpdate();
+                    ");");
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());
             e.printStackTrace();
@@ -78,8 +78,8 @@ public class PlayersChannelTable extends Table {
     public void removeChannel(Player player, Channel channel) {
 
         try {
-            getConnection().prepareStatement(
-                    "DELETE FROM " + getTableName() + " WHERE player = '" + player.getName() + "' AND channel = '" + channel.getName() + "';").execute();
+            executeUpdate(
+                    "DELETE FROM " + getTableName() + " WHERE player = '" + player.getName() + "' AND channel = '" + channel.getName() + "';");
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());
             e.printStackTrace();
@@ -89,9 +89,9 @@ public class PlayersChannelTable extends Table {
     public void removeMainTag(Player player) {
 
         try {
-            getConnection().prepareStatement(
+            executeUpdate(
                     "UPDATE " + getTableName() + " SET type = '" + AssignmentType.NORMAL.name() + "' " +
-                            "WHERE player = '" + player.getName() + "' AND type = '" + AssignmentType.MAIN.name() + "';").execute();
+                            "WHERE player = '" + player.getName() + "' AND type = '" + AssignmentType.MAIN.name() + "';");
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());
             e.printStackTrace();
