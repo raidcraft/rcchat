@@ -1,6 +1,8 @@
 package de.raidcraft.rcchat.bungeecord;
 
 import de.raidcraft.rcchat.RCChatPlugin;
+import de.raidcraft.rcchat.channel.Channel;
+import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.util.StringEncoding;
 import de.raidcraft.util.BungeeCordUtil;
 import org.bukkit.Bukkit;
@@ -13,9 +15,9 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 public class BungeeListener implements PluginMessageListener {
 
     @Override
-    public void onPluginMessageReceived(String channel, Player player, byte[] encoded) {
+    public void onPluginMessageReceived(String messageChannel, Player player, byte[] encoded) {
 
-        if(!channel.equals("BungeeCord")) return;
+        if(!messageChannel.equals("BungeeCord")) return;
 
         String message = BungeeCordUtil.decodeMessage(encoded, RCChatPlugin.BUNGEECORD_CHANNEL);
         if(message == null) return;
@@ -24,7 +26,8 @@ public class BungeeListener implements PluginMessageListener {
 
         BungeeCordManager.MessageType type = BungeeCordManager.MessageType.valueOf(parts[0]);
         String timestampString = parts[1];
-        String content = parts[2];
+        String channelName = parts[2];
+        String content = parts[3];
 
         long timestamp = Long.parseLong(timestampString);
         // check for timeout
@@ -34,9 +37,12 @@ public class BungeeListener implements PluginMessageListener {
 
         content = StringEncoding.decode(content);
 
-        // broadcast incoming chat message
+        // send incoming chat message
         if(type == BungeeCordManager.MessageType.CHAT_MESSAGE && Bukkit.getOnlinePlayers().length > 0) {
-            Bukkit.broadcastMessage(content);
+            Channel channel = ChannelManager.INST.getChannel(channelName);
+            if(channel != null) {
+                channel.sendMessage(content);
+            }
             return;
         }
     }
