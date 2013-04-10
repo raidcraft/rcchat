@@ -55,6 +55,19 @@ public class ChatPluginCommands {
         Player player = (Player)sender;
         ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
 
+        if(context.getString(0).equalsIgnoreCase("leave")) {
+            Channel channel = null;
+            if(context.argsLength() > 1) {
+                channel = ChannelManager.INST.getChannel(context.getString(1));
+            }
+            if(channel == null) {
+                channel = chatPlayer.getMainChannel();
+            }
+            channel.leave(player);
+            player.sendMessage(ChatColor.GREEN + "Du hast den Channel " + channel.getName() + " verlassen!");
+            return;
+        }
+
         // look if first argument is channel
         Channel channel = ChannelManager.INST.getChannel(context.getString(0));
         if(channel == null) {
