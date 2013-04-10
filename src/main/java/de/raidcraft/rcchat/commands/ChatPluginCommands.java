@@ -63,8 +63,8 @@ public class ChatPluginCommands {
             if(channel == null) {
                 channel = chatPlayer.getMainChannel();
             }
-            channel.leave(player);
-            player.sendMessage(ChatColor.GREEN + "Du hast den Channel " + channel.getName() + " verlassen!");
+            channel.leave(chatPlayer);
+            player.sendMessage(ChatColor.GREEN + "Du hast den Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "' verlassen!");
             return;
         }
 

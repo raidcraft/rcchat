@@ -122,7 +122,7 @@ public class ChatPlayer {
     public void sendMessage(String message) {
 
         if(getMainChannel() == null) {
-            player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel");
+            player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel!");
             return;
         }
         String channelPrefix = mainChannel.getPrefix();

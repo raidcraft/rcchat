@@ -81,15 +81,31 @@ public class Channel {
         }
     }
 
-    public void leave(Player player) {
+    public void leave(ChatPlayer chatPlayer) {
 
-        logout(player);
-        RaidCraft.getTable(PlayersChannelTable.class).removeChannel(player, this);
+        logout(chatPlayer.getPlayer());
+        RaidCraft.getTable(PlayersChannelTable.class).removeChannel(chatPlayer.getPlayer(), this);
+
+        // set new main channel if player has other channels
+        for(Channel channel : ChannelManager.INST.getChannels()) {
+            if(channel.isMember(chatPlayer)) {
+                channel.join(chatPlayer);
+            }
+        }
     }
 
     public void logout(Player player) {
 
         members.remove(player.getName());
+    }
+
+    public boolean isMember(ChatPlayer chatPlayer) {
+        if(members.containsKey(chatPlayer.getName())) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean hasPermission() {
