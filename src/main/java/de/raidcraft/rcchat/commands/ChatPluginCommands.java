@@ -64,13 +64,20 @@ public class ChatPluginCommands {
                 channel = chatPlayer.getMainChannel();
             }
             channel.leave(chatPlayer);
-            // set new main channel if player has other channels
-            for(Channel ch : ChannelManager.INST.getChannels()) {
-                if(ch.isMember(chatPlayer)) {
-                    ch.join(chatPlayer);
+            player.sendMessage(ChatColor.GREEN + "Du hast den Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "' verlassen!");
+            if(channel == chatPlayer.getMainChannel()) {
+                chatPlayer.setMainChannel(null);
+                for(Channel ch : ChannelManager.INST.getChannels()) {
+                    if(ch.isMember(chatPlayer)) {
+                        ch.join(chatPlayer);
+                        player.sendMessage(ChatColor.GRAY + "Neuer Hauptchannel: " + chatPlayer.getMainChannel().getName());
+                    }
+                }
+                if(chatPlayer.getMainChannel() == null) {
+                    player.sendMessage(ChatColor.GRAY + "Du schreibst nun in keinem Channel mehr!");
                 }
             }
-            player.sendMessage(ChatColor.GREEN + "Du hast den Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "' verlassen!");
+            // set new main channel if player has other channels
             return;
         }
 
