@@ -57,7 +57,9 @@ public class ChannelManager {
 
         List<Channel> channelList = new ArrayList<>();
         for(Map.Entry<String, Channel> entry : channels.entrySet()) {
-            channelList.add(entry.getValue());
+            if(!channelList.contains(entry.getValue())) {
+                channelList.add(entry.getValue());
+            }
         }
         return channelList;
     }

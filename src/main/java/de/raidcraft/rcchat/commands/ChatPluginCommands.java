@@ -34,7 +34,24 @@ public class ChatPluginCommands {
 
         // list channels
         if(context.argsLength() == 0) {
-            //TODO list channels
+            if(sender instanceof ConsoleCommandSender) {
+                throw new CommandException("For non admin commands (e.g. channel changes) a player context is required!");
+            }
+            ChatPlayer cp = PlayerManager.INST.getPlayer((Player)sender);
+            cp.getPlayer().sendMessage(ChatColor.YELLOW + "Du schreibst in folgenden Channeln:");
+            String channelNames = "";
+            for(Channel ch : ChannelManager.INST.getChannels()) {
+                if(ch.isMember(cp)) {
+                    channelNames += ch.getName() + ", ";
+                }
+            }
+            if(channelNames.length() == 0) {
+                cp.getPlayer().sendMessage(ChatColor.YELLOW + "~ Keine Channel gefunden ~");
+            }
+            else {
+                cp.getPlayer().sendMessage(ChatColor.YELLOW + channelNames);
+            }
+            return;
         }
 
         String arg = context.getString(0);
