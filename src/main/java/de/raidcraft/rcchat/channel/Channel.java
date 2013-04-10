@@ -85,13 +85,6 @@ public class Channel {
 
         logout(chatPlayer.getPlayer());
         RaidCraft.getTable(PlayersChannelTable.class).removeChannel(chatPlayer.getPlayer(), this);
-
-        // set new main channel if player has other channels
-        for(Channel channel : ChannelManager.INST.getChannels()) {
-            if(channel.isMember(chatPlayer)) {
-                channel.join(chatPlayer);
-            }
-        }
     }
 
     public void logout(Player player) {

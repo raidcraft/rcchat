@@ -64,6 +64,12 @@ public class ChatPluginCommands {
                 channel = chatPlayer.getMainChannel();
             }
             channel.leave(chatPlayer);
+            // set new main channel if player has other channels
+            for(Channel ch : ChannelManager.INST.getChannels()) {
+                if(ch.isMember(chatPlayer)) {
+                    ch.join(chatPlayer);
+                }
+            }
             player.sendMessage(ChatColor.GREEN + "Du hast den Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "' verlassen!");
             return;
         }
