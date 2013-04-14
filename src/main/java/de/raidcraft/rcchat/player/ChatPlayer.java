@@ -2,10 +2,12 @@ package de.raidcraft.rcchat.player;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
-import de.raidcraft.rcchat.bungeecord.BungeeCordManager;
+import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
+import de.raidcraft.rcmultiworld.BungeeManager;
+import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.ChatColor;
@@ -141,6 +143,8 @@ public class ChatPlayer {
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
         mainChannel.sendMessage(message);
-        BungeeCordManager.INST.sendMessage(player, mainChannel, message, BungeeCordManager.MessageType.CHAT_MESSAGE);
+
+        BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
+        bungeeManager.sendMessage(player, new ChannelChatMessage(mainChannel.getName(), message));
     }
 }
