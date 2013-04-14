@@ -168,4 +168,27 @@ public class ChatPluginCommands {
             chatPlayer.leavePrivateChat();
         }
     }
+
+    @Command(
+            aliases = {"r"},
+            desc = "Answer private chat command"
+    )
+    public void answer(CommandContext context, CommandSender sender) throws CommandException {
+
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player)sender);
+
+        String lastPrivateSender = chatPlayer.getLastPrivateSender();
+        PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
+
+        if(lastPrivateSender == null) {
+            throw new CommandException("Du hast keine Nachricht zum beantworten!");
+        }
+        if(!playerManager.isOnline(lastPrivateSender)) {
+            throw new CommandException("Dein Chatpartner ist offline!");
+        }
+
+        chatPlayer.enterPrivateChat(lastPrivateSender);
+        chatPlayer.sendMessageToPartner(context.getJoinedStrings(0));
+        chatPlayer.leavePrivateChat();
+    }
 }

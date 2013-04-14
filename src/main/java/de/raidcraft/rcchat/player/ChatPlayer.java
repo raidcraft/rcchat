@@ -26,6 +26,7 @@ public class ChatPlayer {
     private String suffix;
     private String nameColor;
     private String chatPartner = null;
+    private String lastPrivateSender = null;
 
     public ChatPlayer(Player player) {
 
@@ -129,6 +130,15 @@ public class ChatPlayer {
         getPlayer().sendMessage(ChatColor.DARK_PURPLE + "An " + chatPartner + ": " + ChatColor.LIGHT_PURPLE + message);
     }
 
+    public void setLastPrivateSender(String sender) {
+
+        lastPrivateSender = sender;
+    }
+
+    public String getLastPrivateSender() {
+        return lastPrivateSender;
+    }
+
     public void sendMessage(String message) {
 
         if(getMainChannel() == null) {
@@ -163,5 +173,7 @@ public class ChatPlayer {
 
         RaidCraft.LOGGER.info(sender + " -> " + recipient.getName() + ": " + ChatColor.stripColor(message));
         recipient.sendMessage(ChatColor.DARK_PURPLE + "Von " + sender + ": " + ChatColor.LIGHT_PURPLE + message);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(recipient);
+
     }
 }

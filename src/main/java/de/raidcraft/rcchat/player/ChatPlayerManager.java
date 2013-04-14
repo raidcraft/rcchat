@@ -7,6 +7,7 @@ import de.raidcraft.rcchat.tables.PlayersChannelTable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,5 +68,14 @@ public class ChatPlayerManager {
     public ChatPlayer getPlayer(Player player) {
 
         return players.get(player.getName());
+    }
+
+    public List<ChatPlayer> getPlayers() {
+
+        List<ChatPlayer> playerList = new ArrayList<>();
+        for(Map.Entry<String, ChatPlayer> entry : players.entrySet()) {
+            playerList.add(entry.getValue());
+        }
+        return playerList;
     }
 }
