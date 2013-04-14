@@ -14,12 +14,10 @@ import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcchat.tables.*;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
-import de.raidcraft.rcmultiworld.bungeecord.messages.MessageName;
 
 /**
  * @author Philip
  */
-@MessageName("CHANNEL_CHAT_MESSAGE")
 public class RCChatPlugin extends BasePlugin {
 
     public final static String BUNGEECORD_CHANNEL = "RCChat";
