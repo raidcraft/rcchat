@@ -10,6 +10,7 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
+import de.raidcraft.rcmultiworld.players.MultiWorldPlayer;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -150,7 +151,10 @@ public class ChatPluginCommands {
             recipientFullName = Bukkit.getPlayer(recipient).getName();
         }
         else if(playerManager.isOnline(recipient)) {
-            recipientFullName = playerManager.getPlayer(recipient);
+            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(recipient);
+            if(multiWorldPlayer != null) {
+                recipientFullName = multiWorldPlayer.getName();
+            }
         }
 
         if(recipientFullName == null) {
