@@ -174,6 +174,6 @@ public class ChatPlayer {
         RaidCraft.LOGGER.info(sender + " -> " + recipient.getName() + ": " + ChatColor.stripColor(message));
         recipient.sendMessage(ChatColor.DARK_PURPLE + "Von " + sender + ": " + ChatColor.LIGHT_PURPLE + message);
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(recipient);
-
+        chatPlayer.setLastPrivateSender(sender);
     }
 }
