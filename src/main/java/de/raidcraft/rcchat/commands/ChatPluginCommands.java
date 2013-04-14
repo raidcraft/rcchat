@@ -144,14 +144,23 @@ public class ChatPluginCommands {
 
         PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
         String recipient = context.getString(0);
-        if(Bukkit.getPlayer(recipient) == null && !playerManager.isOnline(recipient)) {
+
+        String recipientFullName = null;
+        if(Bukkit.getPlayer(recipient) != null) {
+            recipientFullName = Bukkit.getPlayer(recipient).getName();
+        }
+        else if(playerManager.isOnline(recipient)) {
+            recipientFullName = playerManager.getPlayer(recipient);
+        }
+
+        if(recipientFullName == null) {
             throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
         }
 
-        chatPlayer.enterPrivateChat(recipient);
+        chatPlayer.enterPrivateChat(recipientFullName);
 
         if(context.argsLength() < 2) {
-            chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipient + "'");
+            chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipientFullName + "'");
         }
 
         if(context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
