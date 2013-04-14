@@ -5,11 +5,12 @@ import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
 import de.raidcraft.api.config.Setting;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
+import de.raidcraft.rcchat.bungeecord.messages.PrivateChatMessage;
 import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.commands.ChatPluginCommands;
 import de.raidcraft.rcchat.listener.ChatListener;
 import de.raidcraft.rcchat.listener.PlayerListener;
-import de.raidcraft.rcchat.player.PlayerManager;
+import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcchat.tables.*;
 import de.raidcraft.rcmultiworld.BungeeManager;
@@ -41,6 +42,7 @@ public class RCChatPlugin extends BasePlugin {
 
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
         bungeeManager.registerBungeeMessage(ChannelChatMessage.class);
+        bungeeManager.registerBungeeMessage(PrivateChatMessage.class);
 
         reload();
     }
@@ -55,7 +57,7 @@ public class RCChatPlugin extends BasePlugin {
         config.reload();
         ChannelManager.INST.reload();
         PrefixManager.INST.reload();
-        PlayerManager.INST.reload();
+        ChatPlayerManager.INST.reload();
     }
 
     public class LocalConfiguration extends ConfigurationBase<RCChatPlugin> {

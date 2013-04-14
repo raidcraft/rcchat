@@ -2,7 +2,7 @@ package de.raidcraft.rcchat.channel;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.ChatPlayer;
-import de.raidcraft.rcchat.player.PlayerManager;
+import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.PlayersChannelTable;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.entity.Player;
@@ -65,7 +65,7 @@ public class Channel {
 
     public void join(Player player) {
 
-        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
         join(chatPlayer);
     }
 

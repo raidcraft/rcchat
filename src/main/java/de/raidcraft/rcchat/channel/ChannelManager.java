@@ -1,7 +1,7 @@
 package de.raidcraft.rcchat.channel;
 
 import de.raidcraft.RaidCraft;
-import de.raidcraft.rcchat.player.PlayerManager;
+import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.ChannelsTable;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class ChannelManager {
             RaidCraft.LOGGER.info("[RCChat] Load channel '" + channel.getName() + "'");
         }
 
-        PlayerManager.INST.reload();
+        ChatPlayerManager.INST.reload();
     }
 
     public void registerChannel(Channel channel) {

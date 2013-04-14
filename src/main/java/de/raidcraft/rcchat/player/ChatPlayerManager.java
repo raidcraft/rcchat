@@ -14,9 +14,9 @@ import java.util.Map;
 /**
  * @author Philip
  */
-public class PlayerManager {
+public class ChatPlayerManager {
 
-    public final static PlayerManager INST = new PlayerManager();
+    public final static ChatPlayerManager INST = new ChatPlayerManager();
 
     private Map<String, ChatPlayer> players = new HashMap<>();
 

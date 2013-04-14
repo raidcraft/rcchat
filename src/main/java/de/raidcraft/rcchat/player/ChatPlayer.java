@@ -3,6 +3,7 @@ package de.raidcraft.rcchat.player;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
+import de.raidcraft.rcchat.bungeecord.messages.PrivateChatMessage;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
@@ -10,6 +11,7 @@ import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.util.SignUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -23,7 +25,7 @@ public class ChatPlayer {
     private String prefix;
     private String suffix;
     private String nameColor;
-    private Player chatPartner = null;
+    private String chatPartner = null;
 
     public ChatPlayer(Player player) {
 
@@ -91,7 +93,7 @@ public class ChatPlayer {
     }
 
     public boolean hasPrivateChat() {
-        if(chatPartner != null && chatPartner.isOnline()) {
+        if(chatPartner != null) {
             return true;
         }
         else {
@@ -100,7 +102,7 @@ public class ChatPlayer {
         }
     }
 
-    public void enterPrivateChat(Player recipient) {
+    public void enterPrivateChat(String recipient) {
         chatPartner = recipient;
     }
 
@@ -108,7 +110,7 @@ public class ChatPlayer {
         chatPartner = null;
     }
 
-    public Player getChatPartner() {
+    public String getChatPartner() {
         return chatPartner;
     }
 
@@ -116,9 +118,15 @@ public class ChatPlayer {
         if(!hasPrivateChat()) {
             return;
         }
-        RaidCraft.LOGGER.info(getName() + " -> " + chatPartner.getName() + ": " + ChatColor.stripColor(message));
-        getChatPartner().sendMessage(ChatColor.DARK_PURPLE + "Von " + getName() + ": " + ChatColor.LIGHT_PURPLE + message);
-        getPlayer().sendMessage(ChatColor.DARK_PURPLE + "An " + getChatPartner().getName() + ": " + ChatColor.LIGHT_PURPLE + message);
+        Player recipient = Bukkit.getPlayer(chatPartner);
+        if(recipient == null) {
+            BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
+            bungeeManager.sendMessage(player, new PrivateChatMessage(getName(), chatPartner, message));
+        }
+        else {
+            sendPrivateMessage(recipient, getName(), message);
+        }
+        getPlayer().sendMessage(ChatColor.DARK_PURPLE + "An " + chatPartner + ": " + ChatColor.LIGHT_PURPLE + message);
     }
 
     public void sendMessage(String message) {
@@ -146,5 +154,14 @@ public class ChatPlayer {
 
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
         bungeeManager.sendMessage(player, new ChannelChatMessage(mainChannel.getName(), message));
+    }
+
+    /*
+     * Static method because of incoming Bungee private messages
+     */
+    public static void sendPrivateMessage(Player recipient, String sender, String message) {
+
+        RaidCraft.LOGGER.info(sender + " -> " + recipient.getName() + ": " + ChatColor.stripColor(message));
+        recipient.sendMessage(ChatColor.DARK_PURPLE + "Von " + sender + ": " + ChatColor.LIGHT_PURPLE + message);
     }
 }

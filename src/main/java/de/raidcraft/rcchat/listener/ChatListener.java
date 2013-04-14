@@ -1,7 +1,7 @@
 package de.raidcraft.rcchat.listener;
 
 import de.raidcraft.rcchat.player.ChatPlayer;
-import de.raidcraft.rcchat.player.PlayerManager;
+import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,11 +18,11 @@ public class ChatListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
 
         Player player = event.getPlayer();
-        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
 
         String message = event.getMessage();
-        if(player.hasPermission("rcchat.colorize")) {
-            message = SignUtil.parseColor(event.getMessage());
+        if(!player.hasPermission("rcchat.colorize")) {
+            message = SignUtil.destroyColor(event.getMessage());
         }
 
         if(chatPlayer.hasPrivateChat()) {

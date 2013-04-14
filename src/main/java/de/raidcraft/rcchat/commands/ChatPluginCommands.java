@@ -8,7 +8,9 @@ import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.player.ChatPlayer;
-import de.raidcraft.rcchat.player.PlayerManager;
+import de.raidcraft.rcchat.player.ChatPlayerManager;
+import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
+import de.raidcraft.rcmultiworld.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +39,7 @@ public class ChatPluginCommands {
             if(sender instanceof ConsoleCommandSender) {
                 throw new CommandException("For non admin commands (e.g. channel changes) a player context is required!");
             }
-            ChatPlayer cp = PlayerManager.INST.getPlayer((Player)sender);
+            ChatPlayer cp = ChatPlayerManager.INST.getPlayer((Player)sender);
             cp.getPlayer().sendMessage(ChatColor.YELLOW + "Du schreibst in folgenden Channeln:");
             String channelNames = "";
             for(Channel ch : ChannelManager.INST.getChannels()) {
@@ -70,7 +72,7 @@ public class ChatPluginCommands {
         }
 
         Player player = (Player)sender;
-        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer(player);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
 
         if(context.getString(0).equalsIgnoreCase("leave")) {
             Channel channel = null;
@@ -126,12 +128,12 @@ public class ChatPluginCommands {
     }
 
     @Command(
-            aliases = {"tell", "@"},
+            aliases = {"tell"},
             desc = "Private chat command"
     )
     public void tell(CommandContext context, CommandSender sender) throws CommandException {
 
-        ChatPlayer chatPlayer = PlayerManager.INST.getPlayer((Player)sender);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player)sender);
 
         if(context.argsLength() == 0) {
             chatPlayer.leavePrivateChat();
@@ -140,15 +142,16 @@ public class ChatPluginCommands {
             return;
         }
 
-        Player recipient = Bukkit.getPlayer(context.getString(0));
-        if(recipient == null) {
+        PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
+        String recipient = context.getString(0);
+        if(Bukkit.getPlayer(recipient) == null && !playerManager.isOnline(recipient)) {
             throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
         }
 
         chatPlayer.enterPrivateChat(recipient);
 
         if(context.argsLength() < 2) {
-            chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipient.getName() + "'");
+            chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipient + "'");
         }
 
         if(context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
