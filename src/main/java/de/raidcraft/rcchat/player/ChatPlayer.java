@@ -56,6 +56,14 @@ public class ChatPlayer {
         this.mainChannel = mainChannel;
     }
 
+    public PlayerPrefix getPrefix() {
+
+        if(prefix == null) {
+            this.prefix = PrefixManager.INST.getPrefix(player);
+        }
+        return prefix;
+    }
+
     public void setPrefix(PlayerPrefix prefix) {
 
         this.prefix = prefix;
@@ -65,9 +73,9 @@ public class ChatPlayer {
 
         if(suffix == null) {
                 try {
-                    if(prefix.hasPermission()) {
+                    if(getPrefix().hasPermission()) {
                         Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
-                        String[] professionName = prefix.getPermission().split(".");
+                        String[] professionName = getPrefix().getPermission().split(".");
                         Profession profession = hero.getProfession(professionName[professionName.length - 1]);
                         if(profession != null) {
 
@@ -159,7 +167,7 @@ public class ChatPlayer {
         }
 
         String worldPrefix = PrefixManager.INST.getWorldPrefix(player.getLocation().getWorld().getName());
-        String prefix = this.prefix.getParsedPrefix();
+        String prefix = this.getPrefix().getParsedPrefix();
         String suffix = getSuffix();
         String nameColor = getNameColor();
         String channelColor = mainChannel.getColor();
