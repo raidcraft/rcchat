@@ -40,9 +40,9 @@ public class PrefixCommands {
         int i = 0;
         for(PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
             i++;
-            player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + SignUtil.parseColor(prefix.getPrefix()));
+            player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + SignUtil.parseColor(prefix.getPrefix()));
         }
-        player.sendMessage(ChatColor.GREEN + "Wähle dein Wunschprefix mit /prefix change <nummer>");
+        player.sendMessage(ChatColor.GREEN + "Wähle dein Wunschprefix mit /prefix change <ID>");
     }
 
     public static class NestedPrefixCommands {
@@ -70,21 +70,11 @@ public class PrefixCommands {
                 i++;
                 if(i == context.getInteger(0)) {
                     PrefixManager.INST.setPlayerPrefix(player, prefix);
-                    player.sendMessage(ChatColor.GREEN + "Prefix erfolgreich geändert! Neues Prefix: " + SignUtil.parseColor(prefix.getPrefix()));
+                    player.sendMessage(ChatColor.GREEN + "Prefix erfolgreich geändert! Neues Prefix: " + ChatColor.WHITE + SignUtil.parseColor(prefix.getPrefix()));
                     return;
                 }
             }
             throw new CommandException("Falsche Prefix-ID gewählt! (/prefix zeigt dir alle verfügbaren an)");
-        }
-
-        @Command(
-                aliases = {"set"},
-                desc = "Set prefix",
-                min = 2
-        )
-        @CommandPermissions("rcchat.prefix.set")
-        public void set(CommandContext context, CommandSender sender) throws CommandException {
-
         }
     }
 }

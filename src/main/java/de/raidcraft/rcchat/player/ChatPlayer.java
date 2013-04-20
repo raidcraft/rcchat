@@ -61,6 +61,11 @@ public class ChatPlayer {
         return prefix;
     }
 
+    public void setPrefix(String prefix) {
+
+        this.prefix = SignUtil.parseColor(prefix);
+    }
+
     public String getSuffix() {
 
         if(suffix == null) {
