@@ -1,10 +1,12 @@
 package de.raidcraft.rcchat.commands;
 
-import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.NestedCommand;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.prefix.PlayerPrefix;
 import de.raidcraft.rcchat.prefix.PrefixManager;
-import de.raidcraft.util.SignUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -40,7 +42,7 @@ public class PrefixCommands {
         int i = 0;
         for(PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
             i++;
-            player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + SignUtil.parseColor(prefix.getPrefix()));
+            player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + prefix.getParsedPrefix());
         }
         player.sendMessage(ChatColor.GREEN + "Wähle dein Wunschprefix mit /prefix change <ID>");
     }
@@ -70,7 +72,7 @@ public class PrefixCommands {
                 i++;
                 if(i == context.getInteger(0)) {
                     PrefixManager.INST.setPlayerPrefix(player, prefix);
-                    player.sendMessage(ChatColor.GREEN + "Prefix erfolgreich geändert! Neues Prefix: " + ChatColor.WHITE + SignUtil.parseColor(prefix.getPrefix()));
+                    player.sendMessage(ChatColor.GREEN + "Prefix erfolgreich geändert! Neues Prefix: " + ChatColor.WHITE + prefix.getParsedPrefix());
                     return;
                 }
             }

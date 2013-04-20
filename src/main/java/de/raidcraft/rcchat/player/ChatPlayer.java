@@ -6,11 +6,13 @@ import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
 import de.raidcraft.rcchat.bungeecord.messages.PrivateChatMessage;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
+import de.raidcraft.rcchat.prefix.PlayerPrefix;
 import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
-import de.raidcraft.util.SignUtil;
+import de.raidcraft.skills.api.hero.Hero;
+import de.raidcraft.skills.api.profession.Profession;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,7 +24,7 @@ public class ChatPlayer {
 
     private Player player;
     private Channel mainChannel;
-    private String prefix;
+    private PlayerPrefix prefix;
     private String suffix;
     private String nameColor;
     private String chatPartner = null;
@@ -53,34 +55,30 @@ public class ChatPlayer {
         this.mainChannel = mainChannel;
     }
 
-    public String getPrefix() {
+    public void setPrefix(PlayerPrefix prefix) {
 
-        if(prefix == null) {
-            prefix = SignUtil.parseColor(PrefixManager.INST.getPrefix(player));
-        }
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-
-        this.prefix = SignUtil.parseColor(prefix);
+        this.prefix = prefix;
     }
 
     public String getSuffix() {
 
         if(suffix == null) {
-            if(player.hasPermission("rcchat.suffix.admin")) {
-                suffix = ChatColor.GREEN + "#";
-            }
-            else {
                 try {
-                    int heroLevel = 0;
-                    heroLevel = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player).getAttachedLevel().getLevel();
-                    suffix = "[" + ChatColor.YELLOW + heroLevel + ChatColor.RESET + "]";
+                    if(prefix.hasPermission()) {
+                        Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
+                        String[] professionName = prefix.getPermission().split(".");
+                        Profession profession = hero.getProfession(professionName[professionName.length - 1]);
+                        if(profession != null) {
+
+                            int level = profession.getAttachedLevel().getLevel();
+                            suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
+                        }
+                    }
                 } catch (Throwable e) {
-                    suffix = "";
                 }
             }
+        if(suffix == null) {
+            suffix = ChatColor.GREEN + "#";
         }
         return suffix;
     }
@@ -156,7 +154,7 @@ public class ChatPlayer {
         }
 
         String worldPrefix = PrefixManager.INST.getWorldPrefix(player.getLocation().getWorld().getName());
-        String prefix = getPrefix();
+        String prefix = this.prefix.getParsedPrefix();
         String suffix = getSuffix();
         String nameColor = getNameColor();
         String channelColor = mainChannel.getColor();

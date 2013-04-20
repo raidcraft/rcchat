@@ -1,5 +1,7 @@
 package de.raidcraft.rcchat.prefix;
 
+import de.raidcraft.util.SignUtil;
+
 /**
  * @author Philip
  */
@@ -23,9 +25,9 @@ public class PlayerPrefix {
         return id;
     }
 
-    public String getPrefix() {
+    public String getParsedPrefix() {
 
-        return prefix;
+        return SignUtil.parseColor(prefix);
     }
 
     public int getPriority() {

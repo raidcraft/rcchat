@@ -5,7 +5,6 @@ import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.PlayerPrefixTable;
 import de.raidcraft.rcchat.tables.PlayersPrefixTable;
 import de.raidcraft.rcchat.tables.WorldPrefixTable;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -43,12 +42,12 @@ public class PrefixManager {
         return playerPrefixes.get(id);
     }
 
-    public String getPrefix(Player player) {
+    public PlayerPrefix getPrefix(Player player) {
 
         PlayerPrefix savedPlayerPrefix = RaidCraft.getTable(PlayersPrefixTable.class).getPrefix(player);
 
         if(savedPlayerPrefix != null && player.hasPermission(savedPlayerPrefix.getPermission())) {
-            return savedPlayerPrefix.getPrefix();
+            return savedPlayerPrefix;
         }
 
         PlayerPrefix newPlayerPrefix = null;
@@ -63,10 +62,10 @@ public class PrefixManager {
         }
 
         if(newPlayerPrefix == null) {
-            return "[" + ChatColor.GRAY + "Gast" + ChatColor.WHITE + "]";
+            return null;
         }
         RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, newPlayerPrefix);
-        return newPlayerPrefix.getPrefix();
+        return newPlayerPrefix;
     }
 
     public List<PlayerPrefix> getPossiblePrefixes(Player player) {
@@ -85,7 +84,7 @@ public class PrefixManager {
     public void setPlayerPrefix(Player player, PlayerPrefix prefix) {
 
         RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, prefix);
-        ChatPlayerManager.INST.getPlayer(player).setPrefix(prefix.getPrefix());
+        ChatPlayerManager.INST.getPlayer(player).setPrefix(prefix);
     }
 
     public String getWorldPrefix(String worldName) {
