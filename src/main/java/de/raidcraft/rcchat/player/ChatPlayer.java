@@ -13,6 +13,7 @@ import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.skills.api.hero.Hero;
 import de.raidcraft.skills.api.profession.Profession;
+import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -143,6 +144,10 @@ public class ChatPlayer {
     }
 
     public void sendMessage(String message) {
+
+        if(player.hasPermission("rcchat.message.colorized")) {
+            message = SignUtil.parseColor(message);
+        }
 
         if(getMainChannel() == null) {
             player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel!");
