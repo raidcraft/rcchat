@@ -7,6 +7,7 @@ import de.raidcraft.rcchat.tables.WorldPrefixTable;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,24 @@ public class PrefixManager {
         }
         RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, newPlayerPrefix);
         return newPlayerPrefix.getPrefix();
+    }
+
+    public List<PlayerPrefix> getPossiblePrefixes(Player player) {
+
+        List<PlayerPrefix> possiblePrefixList = new ArrayList<>();
+        for(Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
+
+            PlayerPrefix playerPrefix = entry.getValue();
+            if(playerPrefix.hasPermission() && !player.hasPermission(playerPrefix.getPermission())) continue;
+
+            possiblePrefixList.add(entry.getValue());
+        }
+        return possiblePrefixList;
+    }
+
+    public void setPlayerPrefix(Player player, PlayerPrefix prefix) {
+
+
     }
 
     public String getWorldPrefix(String worldName) {
