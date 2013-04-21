@@ -84,6 +84,7 @@ public class ChatPlayer {
                         }
                     }
                 } catch (Throwable e) {
+                    e.printStackTrace();
                 }
             }
         if(suffix == null) {
@@ -121,10 +122,6 @@ public class ChatPlayer {
 
     public void leavePrivateChat() {
         chatPartner = null;
-    }
-
-    public String getChatPartner() {
-        return chatPartner;
     }
 
     public void sendMessageToPartner(String message) {
