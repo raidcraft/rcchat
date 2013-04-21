@@ -192,7 +192,13 @@ public class ChatPluginCommands {
         }
 
         chatPlayer.enterPrivateChat(lastPrivateSender);
-        chatPlayer.sendMessageToPartner(context.getJoinedStrings(0));
-        chatPlayer.leavePrivateChat();
+
+        if(context.argsLength() > 0) {
+            chatPlayer.sendMessageToPartner(context.getJoinedStrings(0));
+            chatPlayer.leavePrivateChat();
+        }
+        else {
+            chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + lastPrivateSender + "'");
+        }
     }
 }
