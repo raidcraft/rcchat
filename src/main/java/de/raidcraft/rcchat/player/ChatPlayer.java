@@ -75,7 +75,7 @@ public class ChatPlayer {
                 try {
                     if(getPrefix().hasPermission()) {
                         Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
-                        String[] professionName = getPrefix().getPermission().split(".");
+                        String[] professionName = getPrefix().getPermission().split("\\.");
                         Profession profession = hero.getProfession(professionName[professionName.length - 1]);
                         if(profession != null) {
 
