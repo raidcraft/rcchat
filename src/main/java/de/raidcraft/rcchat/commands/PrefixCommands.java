@@ -40,16 +40,10 @@ public class PrefixCommands {
 
         player.sendMessage(ChatColor.GREEN + "Verfügbare Präfixe:");
         int i = 0;
-        String format;
         for(PlayerPrefix prefix : PrefixManager.INST.getAllPrefixes()) {
             i++;
-            if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) {
-                format = ChatColor.STRIKETHROUGH.toString();
-            }
-            else {
-                format = "";
-            }
-            player.sendMessage(format + ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + prefix.getParsedPrefix());
+            if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) continue;
+            player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + prefix.getParsedPrefix());
         }
         player.sendMessage(ChatColor.GREEN + "Wähle dein Wunschpräfix mit /prefix change <ID>");
     }
