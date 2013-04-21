@@ -50,7 +50,7 @@ public class ChatPlayerManager {
             channel.join(player);
         }
         if(mainChannel != null) {
-            chatPlayer.setMainChannel(mainChannel);
+            mainChannel.join(player);
         }
         else {
             Channel defaultChannel = ChannelManager.INST.getDefaultChannel();
