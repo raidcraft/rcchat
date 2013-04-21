@@ -40,9 +40,8 @@ public class PrefixCommands {
 
         player.sendMessage(ChatColor.GREEN + "Verfügbare Präfixe:");
         int i = 0;
-        for(PlayerPrefix prefix : PrefixManager.INST.getAllPrefixes()) {
+        for(PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
             i++;
-            if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) continue;
             player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + prefix.getParsedPrefix());
         }
         player.sendMessage(ChatColor.GREEN + "Wähle dein Wunschpräfix mit /prefix change <ID>");
@@ -69,12 +68,9 @@ public class PrefixCommands {
             }
             Player player = (Player)sender;
             int i = 0;
-            for(PlayerPrefix prefix : PrefixManager.INST.getAllPrefixes()) {
+            for(PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
                 i++;
                 if(i == context.getInteger(0)) {
-                    if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) {
-                        throw new CommandException("Du kannst dieses Präfix nicht auswählen!");
-                    }
                     PrefixManager.INST.setPlayerPrefix(player, prefix);
                     player.sendMessage(ChatColor.GREEN + "Präfix erfolgreich geändert! Neues Präfix: " + ChatColor.WHITE + prefix.getParsedPrefix());
                     return;

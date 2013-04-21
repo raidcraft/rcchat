@@ -69,11 +69,13 @@ public class PrefixManager {
         return newPlayerPrefix;
     }
 
-    public List<PlayerPrefix> getAllPrefixes() {
+    public List<PlayerPrefix> getPossiblePrefixes(Player player) {
 
         List<PlayerPrefix> possiblePrefixList = new ArrayList<>();
         for(Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
 
+            PlayerPrefix prefix = entry.getValue();
+            if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) continue;
             possiblePrefixList.add(entry.getValue());
         }
         return possiblePrefixList;
