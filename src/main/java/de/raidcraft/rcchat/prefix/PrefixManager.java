@@ -1,6 +1,7 @@
 package de.raidcraft.rcchat.prefix;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.PlayerPrefixTable;
 import de.raidcraft.rcchat.tables.PlayersPrefixTable;
@@ -84,7 +85,9 @@ public class PrefixManager {
     public void setPlayerPrefix(Player player, PlayerPrefix prefix) {
 
         RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, prefix);
-        ChatPlayerManager.INST.getPlayer(player).setPrefix(prefix);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
+        chatPlayer.setPrefix(prefix);
+        chatPlayer.setSuffix(null); // delete old prefix
     }
 
     public String getWorldPrefix(String worldName) {

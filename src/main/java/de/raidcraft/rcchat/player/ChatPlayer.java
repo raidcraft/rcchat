@@ -84,13 +84,18 @@ public class ChatPlayer {
                         }
                     }
                 } catch (Throwable e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         if(suffix == null) {
             suffix = ChatColor.GREEN + "#";
         }
         return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+
+        this.suffix = suffix;
     }
 
     public String getNameColor() {
