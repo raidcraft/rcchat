@@ -61,6 +61,9 @@ public class ChatPlayer {
         if(prefix == null) {
             this.prefix = PrefixManager.INST.getPrefix(player);
         }
+        if(prefix == null) {
+            return PrefixManager.GUEST_PREFIX;
+        }
         return prefix;
     }
 
