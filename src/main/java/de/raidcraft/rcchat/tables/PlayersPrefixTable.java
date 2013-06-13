@@ -53,7 +53,7 @@ public class PlayersPrefixTable extends Table {
 
     public void savePrefix(Player player, PlayerPrefix playerPrefix) {
 
-        removePlayer(player);
+        removePrefix(player);
         try {
             executeUpdate("INSERT INTO " + getTableName() + " (player, prefix) " +
                     "VALUES (" +
@@ -66,7 +66,7 @@ public class PlayersPrefixTable extends Table {
         }
     }
 
-    public void removePlayer(Player player) {
+    public void removePrefix(Player player) {
 
         try {
             executeUpdate(
