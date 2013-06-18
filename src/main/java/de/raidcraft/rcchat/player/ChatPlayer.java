@@ -59,7 +59,7 @@ public class ChatPlayer {
     public PlayerPrefix getPrefix() {
 
         Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
-        if(prefix == null && hero.getAttachedLevel().getLevel() >= 5) {
+        if(prefix == null && !player.hasPermission("rcchat.admin") && hero.getAttachedLevel().getLevel() >= 5) {
             this.prefix = PrefixManager.INST.getPrefix(player);
         }
         if(prefix == null) {
