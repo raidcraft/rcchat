@@ -173,10 +173,17 @@ public class ChatPlayer {
         }
 
         String worldPrefix = PrefixManager.INST.getWorldPrefix(player.getLocation().getWorld().getName());
-        String prefix = this.getPrefix().getParsedPrefix();
-        String suffix = getSuffix();
-        String nameColor = getNameColor();
-        String channelColor = mainChannel.getColor();
+        String prefix = PrefixManager.GUEST_PREFIX.getParsedPrefix();
+        String suffix = "";
+        String nameColor = ChatColor.DARK_GRAY.toString();
+        String channelColor = ChatColor.DARK_GRAY.toString();
+
+        if(player.hasPermission("raidcraft.player")) {
+            prefix = getPrefix().getParsedPrefix();
+            suffix = getSuffix();
+            nameColor = getNameColor();
+            channelColor = mainChannel.getColor();
+        }
 
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
