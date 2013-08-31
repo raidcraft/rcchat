@@ -165,7 +165,7 @@ public class ChatPlayer {
             message = WeblinkUtil.obfuscateWeblinks(message);
         }
 
-        if(player.hasPermission("rcchat.message.colorized") && !WeblinkUtil.hasWeblink(message)) {
+        if(player.hasPermission("rcchat.message.colorized")) {
             message = SignUtil.parseColor(message);
         }
 
