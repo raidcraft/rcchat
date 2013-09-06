@@ -8,7 +8,6 @@ import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.block.CommandBlock;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,7 +34,7 @@ public class SayCommands {
         if(sender instanceof BlockCommandSender) {
 
             if(context.argsLength() < 2) return;
-            CommandBlock commandBlock = (CommandBlock)sender;
+            BlockCommandSender commandBlock = (BlockCommandSender)sender;
             String senderName = SignUtil.parseColor(commandBlock.getName());
             Player player = Bukkit.getPlayer(context.getString(0));
             if(player == null) return;
