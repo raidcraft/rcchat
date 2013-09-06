@@ -142,7 +142,7 @@ public class ChatPluginCommands {
             BlockCommandSender commandBlock = (BlockCommandSender)sender;
             String senderName = commandBlock.getName();
             if(senderName.equalsIgnoreCase("@")) {
-                senderName = ChatColor.LIGHT_PURPLE + "**SERVER**";
+                senderName = ChatColor.LIGHT_PURPLE + "From Server:";
             }
             else {
                 senderName = SignUtil.parseColor(senderName);
@@ -151,7 +151,7 @@ public class ChatPluginCommands {
             Player player = Bukkit.getPlayer(context.getString(0));
             if(player == null) return;
 
-            player.sendMessage(senderName + " " + context.getJoinedStrings(1));
+            player.sendMessage(senderName + " " + SignUtil.parseColor(context.getJoinedStrings(1)));
             return;
         }
 
