@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * Author: Philip
@@ -33,12 +32,16 @@ public class SayCommands {
 
         if(sender instanceof BlockCommandSender) {
 
-            if(context.argsLength() < 2) return;
             BlockCommandSender commandBlock = (BlockCommandSender)sender;
-            String senderName = SignUtil.parseColor(commandBlock.getName());
-            Player player = Bukkit.getPlayer(context.getString(0));
-            if(player == null) return;
-            player.sendMessage(senderName + " " + SignUtil.parseColor(context.getString(1)));
+            String senderName = commandBlock.getName();
+            if(senderName.equalsIgnoreCase("@")) {
+                senderName = ChatColor.LIGHT_PURPLE + "**SERVER**";
+            }
+            else {
+                senderName = SignUtil.parseColor(senderName);
+            }
+
+            Bukkit.broadcastMessage(senderName + " " + SignUtil.parseColor(context.getJoinedStrings(0)));
             return;
         }
 
