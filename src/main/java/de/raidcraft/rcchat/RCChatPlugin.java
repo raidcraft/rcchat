@@ -9,6 +9,7 @@ import de.raidcraft.rcchat.bungeecord.messages.PrivateChatMessage;
 import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.commands.ChatPluginCommands;
 import de.raidcraft.rcchat.commands.PrefixCommands;
+import de.raidcraft.rcchat.commands.SayCommands;
 import de.raidcraft.rcchat.listener.ApiListener;
 import de.raidcraft.rcchat.listener.ChatListener;
 import de.raidcraft.rcchat.listener.PlayerListener;
@@ -36,6 +37,7 @@ public class RCChatPlugin extends BasePlugin {
         registerEvents(new ApiListener());
         registerCommands(ChatPluginCommands.class);
         registerCommands(PrefixCommands.class);
+        registerCommands(SayCommands.class);
 
         registerTable(ChannelsTable.class, new ChannelsTable());
         registerTable(PlayersChannelTable.class, new PlayersChannelTable());
