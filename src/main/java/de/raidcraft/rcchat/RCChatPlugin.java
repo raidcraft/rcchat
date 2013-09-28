@@ -71,6 +71,9 @@ public class RCChatPlugin extends BasePlugin {
             super(plugin, "config.yml");
         }
 
-        @Setting("use-colored-names") public boolean coloredNames = false;
+        @Setting("use-colored-names")
+        public boolean coloredNames = false;
+        @Setting("display-guest-prefix")
+        public boolean displayGuestPrefix = false;
     }
 }

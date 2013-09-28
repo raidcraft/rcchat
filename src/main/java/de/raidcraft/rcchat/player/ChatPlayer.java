@@ -61,7 +61,7 @@ public class ChatPlayer {
         if(prefix == null) {
             this.prefix = PrefixManager.INST.getPrefix(player);
         }
-        if(prefix == null) {
+        if(prefix == null && RaidCraft.getComponent(RCChatPlugin.class).config.displayGuestPrefix) {
             return PrefixManager.GUEST_PREFIX;
         }
         return prefix;

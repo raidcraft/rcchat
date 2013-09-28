@@ -37,7 +37,7 @@ public class PlayerPrefix {
 
     public boolean hasPermission() {
 
-        return (permission != null) ? true : false;
+        return (permission != null);
     }
 
     public String getPermission() {
