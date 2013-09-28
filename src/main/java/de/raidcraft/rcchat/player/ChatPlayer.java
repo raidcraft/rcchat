@@ -183,7 +183,7 @@ public class ChatPlayer {
         String channelColor = ChatColor.DARK_GRAY.toString();
 
         if(player.hasPermission("raidcraft.player")) {
-            prefix = getPrefix().getParsedPrefix();
+            prefix = (getPrefix() != null ? getPrefix().getParsedPrefix() : "");
             suffix = getSuffix();
             nameColor = getNameColor();
             channelColor = mainChannel.getColor();

@@ -103,17 +103,12 @@ public class Channel {
 
     public boolean hasPermission() {
 
-        return (permission != null) ? true : false;
+        return (permission != null);
     }
 
     public boolean isCorrectWorld(Player player) {
 
-        if(worlds.contains(player.getLocation().getWorld().getName().toLowerCase())) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return worlds.contains(player.getLocation().getWorld().getName().toLowerCase());
     }
 
     public String getName() {
