@@ -12,8 +12,10 @@ import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.rcmultiworld.players.MultiWorldPlayer;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
+import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -133,6 +135,25 @@ public class ChatPluginCommands {
             desc = "Private chat command"
     )
     public void tell(CommandContext context, CommandSender sender) throws CommandException {
+
+        if(sender instanceof BlockCommandSender) {
+
+            if(context.argsLength() < 2) return;
+            BlockCommandSender commandBlock = (BlockCommandSender)sender;
+            String senderName = commandBlock.getName();
+            if(senderName.equalsIgnoreCase("@")) {
+                senderName = ChatColor.LIGHT_PURPLE + "From Server:";
+            }
+            else {
+                senderName = SignUtil.parseColor(senderName);
+            }
+
+            Player player = Bukkit.getPlayer(context.getString(0));
+            if(player == null) return;
+
+            player.sendMessage(senderName + " " + SignUtil.parseColor(context.getJoinedStrings(1)));
+            return;
+        }
 
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player)sender);
 

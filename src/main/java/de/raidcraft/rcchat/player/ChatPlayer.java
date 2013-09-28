@@ -158,6 +158,11 @@ public class ChatPlayer {
 
     public void sendMessage(String message) {
 
+//        if(!player.hasPermission("raidcraft.player")) {
+//
+//            message = WeblinkUtil.obfuscateWeblinks(message);
+//        }
+
         if(player.hasPermission("rcchat.message.colorized")) {
             message = SignUtil.parseColor(message);
         }
