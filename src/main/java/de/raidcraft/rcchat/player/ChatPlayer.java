@@ -58,7 +58,6 @@ public class ChatPlayer {
 
     public PlayerPrefix getPrefix() {
 
-        Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
         if(prefix == null) {
             this.prefix = PrefixManager.INST.getPrefix(player);
         }
@@ -77,7 +76,7 @@ public class ChatPlayer {
 
         if(suffix == null) {
                 try {
-                    if(getPrefix().hasPermission()) {
+                    if(getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
                         Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
                         String[] professionName = getPrefix().getPermission().split("\\.");
                         Profession profession = hero.getProfession(professionName[professionName.length - 1]);
