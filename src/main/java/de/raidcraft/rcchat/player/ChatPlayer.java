@@ -81,9 +81,7 @@ public class ChatPlayer {
                         String[] professionName = getPrefix().getPermission().split("\\.");
                         Profession profession = hero.getProfession(professionName[professionName.length - 1]);
                         if(profession != null) {
-
-                            int level = profession.getAttachedLevel().getLevel();
-                            suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
+                            suffix = "[" + ChatColor.YELLOW + profession.getTotalLevel() + ChatColor.RESET + "]";
                         }
                     }
                 } catch (Throwable e) {
