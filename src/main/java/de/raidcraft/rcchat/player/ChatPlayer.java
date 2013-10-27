@@ -12,7 +12,6 @@ import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.skills.api.hero.Hero;
-import de.raidcraft.skills.api.profession.Profession;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -78,13 +77,7 @@ public class ChatPlayer {
                 try {
                     if(getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
                         Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
-                        String[] professionName = getPrefix().getPermission().split("\\.");
-                        Profession profession = hero.getProfession(professionName[professionName.length - 1]);
-                        if(profession != null) {
-
-                            int level = profession.getAttachedLevel().getLevel();
-                            suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
-                        }
+                        suffix = "[" + ChatColor.YELLOW + hero.getPlayerLevel() + ChatColor.RESET + "]";
                     }
                 } catch (Throwable e) {
 //                    e.printStackTrace();
