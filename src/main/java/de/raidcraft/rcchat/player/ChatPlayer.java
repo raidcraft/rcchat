@@ -75,16 +75,16 @@ public class ChatPlayer {
 
     public String getSuffix() {
 
-        if(suffix == null) {
-                try {
-                    if(getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
-                        Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
-                        suffix = "[" + ChatColor.YELLOW + hero.getPlayerLevel() + ChatColor.RESET + "]";
-                    }
-                } catch (Throwable e) {
-//                    e.printStackTrace();
+        if(suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
+            try {
+                if(getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
+                    Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
+                    suffix = "[" + ChatColor.YELLOW + hero.getPlayerLevel() + ChatColor.RESET + "]";
                 }
+            } catch (Throwable e) {
+//                    e.printStackTrace();
             }
+        }
         if(suffix == null) {
             suffix = ChatColor.GREEN + "#";
         }
