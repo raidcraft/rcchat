@@ -5,6 +5,7 @@ import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
 import de.raidcraft.rcchat.bungeecord.messages.PrivateChatMessage;
 import de.raidcraft.rcchat.channel.Channel;
+import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PlayerPrefix;
 import de.raidcraft.rcchat.prefix.PrefixManager;
@@ -47,6 +48,7 @@ public class ChatPlayer {
 
     public Channel getMainChannel() {
 
+        if(mainChannel == null) mainChannel = ChannelManager.INST.getDefaultChannel();
         return mainChannel;
     }
 
@@ -164,7 +166,7 @@ public class ChatPlayer {
             player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel!");
             return;
         }
-        String channelPrefix = mainChannel.getPrefix();
+        String channelPrefix = getMainChannel().getPrefix();
         if(channelPrefix.length() > 0) {
             channelPrefix += " ";
         }
@@ -179,17 +181,17 @@ public class ChatPlayer {
             prefix = (getPrefix() != null ? getPrefix().getParsedPrefix() : "");
             suffix = getSuffix();
             nameColor = getNameColor();
-            channelColor = mainChannel.getColor();
+            channelColor = getMainChannel().getColor();
         }
 
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
-        mainChannel.sendMessage(message);
+        getMainChannel().sendMessage(message);
 
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
-        bungeeManager.sendMessage(player, new ChannelChatMessage(mainChannel.getName(), message));
+        bungeeManager.sendMessage(player, new ChannelChatMessage(getMainChannel().getName(), message));
     }
 
     /*

@@ -125,6 +125,7 @@ public class ChatPluginCommands {
             oldChannel.join(player);
         }
         else {
+            chatPlayer.setMainChannel(channel);
             sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
         }
 
