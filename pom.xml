@@ -24,7 +24,7 @@
     <name>RCChat</name>
 
     <scm>
-        <developerConnection>scm:git:ssh://git@git.raid-craft.de:22109/rcchat.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@git.raid-craft.de:22109/raid-craft-de/rcchat.git</developerConnection>
     </scm>
 
 
@@ -42,11 +42,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>de.raidcraft</groupId>
-            <artifactId>raidcraft-api</artifactId>
-            <version>${rc.version}</version>
-        </dependency>
         <dependency>
             <groupId>de.raidcraft</groupId>
             <artifactId>skills</artifactId>
