@@ -1,6 +1,7 @@
 package de.raidcraft.rcchat.channel;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.ChannelsTable;
 
@@ -30,7 +31,7 @@ public class ChannelManager {
             if(channel.getType() == ChannelType.DEFAULT) {
                 defaultChannel = channel;
             }
-            RaidCraft.LOGGER.info("[RCChat] Load channel '" + channel.getName() + "'");
+            RaidCraft.getComponent(RCChatPlugin.class).info("[RCChat] Load channel '" + channel.getName() + "'");
         }
 
         ChatPlayerManager.INST.reload();
