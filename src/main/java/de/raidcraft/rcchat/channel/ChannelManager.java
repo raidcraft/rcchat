@@ -26,9 +26,9 @@ public class ChannelManager {
 
         List<Channel> databaseChannels = RaidCraft.getTable(ChannelsTable.class).getChannels();
 
-        for(Channel channel : databaseChannels) {
+        for (Channel channel : databaseChannels) {
             registerChannel(channel);
-            if(channel.getType() == ChannelType.DEFAULT) {
+            if (channel.getType() == ChannelType.DEFAULT) {
                 defaultChannel = channel;
             }
             RaidCraft.getComponent(RCChatPlugin.class).info("[RCChat] Load channel '" + channel.getName() + "'");
@@ -40,14 +40,14 @@ public class ChannelManager {
     public void registerChannel(Channel channel) {
 
         channels.put(channel.getName().toLowerCase(), channel);
-        for(String alias : channel.getAliases()) {
+        for (String alias : channel.getAliases()) {
             channels.put(alias, channel);
         }
     }
 
     public Channel getDefaultChannel() {
 
-        if(defaultChannel == null) {
+        if (defaultChannel == null) {
             RaidCraft.LOGGER.warning("[RCChat] No default channel configured!");
             return null;
         }
@@ -57,8 +57,8 @@ public class ChannelManager {
     public List<Channel> getChannels() {
 
         List<Channel> channelList = new ArrayList<>();
-        for(Map.Entry<String, Channel> entry : channels.entrySet()) {
-            if(!channelList.contains(entry.getValue())) {
+        for (Map.Entry<String, Channel> entry : channels.entrySet()) {
+            if (!channelList.contains(entry.getValue())) {
                 channelList.add(entry.getValue());
             }
         }

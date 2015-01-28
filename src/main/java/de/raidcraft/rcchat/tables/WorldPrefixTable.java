@@ -44,8 +44,8 @@ public class WorldPrefixTable extends Table {
             while (resultSet.next()) {
 
                 WorldPrefix worldPrefix = new WorldPrefix(
-                    resultSet.getString("prefix"),
-                    resultSet.getString("world")
+                        resultSet.getString("prefix"),
+                        resultSet.getString("world")
                 );
                 worldPrefixes.add(worldPrefix);
             }

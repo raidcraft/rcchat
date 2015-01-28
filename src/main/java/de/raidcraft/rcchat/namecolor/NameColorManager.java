@@ -11,17 +11,17 @@ public class NameColorManager {
     public static String getColor(Player player) {
 
         NameColor newNameColor = null;
-        for(NameColor nameColor : NameColor.values()) {
+        for (NameColor nameColor : NameColor.values()) {
 
-            if(!player.hasPermission("rcchat.namecolor." + nameColor.getColor().name().toLowerCase())) continue;
+            if (!player.hasPermission("rcchat.namecolor." + nameColor.getColor().name().toLowerCase())) continue;
 
-            if(newNameColor == null || newNameColor.getPriority() < nameColor.getPriority()) {
+            if (newNameColor == null || newNameColor.getPriority() < nameColor.getPriority()) {
                 newNameColor = nameColor;
             }
 
         }
 
-        if(newNameColor == null) {
+        if (newNameColor == null) {
             return "";
         }
         return newNameColor.getColor().toString();

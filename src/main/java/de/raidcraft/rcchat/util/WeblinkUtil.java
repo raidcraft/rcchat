@@ -20,9 +20,9 @@ public class WeblinkUtil {
     public static String obfuscateWeblinks(String text) {
 
         String newText = "";
-        for(String word : text.split(" ")) {
+        for (String word : text.split(" ")) {
 
-            if(isWeblink(word) || isIP(word)) {
+            if (isWeblink(word) || isIP(word)) {
                 word = "**********";
             }
             newText += word + " ";
@@ -32,9 +32,9 @@ public class WeblinkUtil {
 
     public static boolean hasWeblink(String text) {
 
-        for(String word : text.split(" ")) {
+        for (String word : text.split(" ")) {
 
-            if(isWeblink(word)) {
+            if (isWeblink(word)) {
                 return true;
             }
         }
@@ -44,18 +44,18 @@ public class WeblinkUtil {
     public static boolean isWeblink(String word) {
 
         word = word.trim();
-        if(word.length() < 6) return false;
+        if (word.length() < 6) return false;
 
-        if(word.endsWith(".") || word.startsWith(".")) {
+        if (word.endsWith(".") || word.startsWith(".")) {
             return false;
         }
 
-        if(word.startsWith("http://") || word.startsWith("www.")) {
+        if (word.startsWith("http://") || word.startsWith("www.")) {
             return true;
         }
 
         int dotCount = word.split("\\.").length;
-        if(dotCount > 0 && dotCount < 3) {
+        if (dotCount > 0 && dotCount < 3) {
             return true;
         }
 

@@ -49,7 +49,7 @@ public class ChatPlayer {
 
     public Channel getMainChannel() {
 
-        if(mainChannel == null) mainChannel = ChannelManager.INST.getDefaultChannel();
+        if (mainChannel == null) mainChannel = ChannelManager.INST.getDefaultChannel();
         return mainChannel;
     }
 
@@ -60,10 +60,10 @@ public class ChatPlayer {
 
     public PlayerPrefix getPrefix() {
 
-        if(prefix == null) {
+        if (prefix == null) {
             this.prefix = PrefixManager.INST.getPrefix(player);
         }
-        if(prefix == null && RaidCraft.getComponent(RCChatPlugin.class).config.displayGuestPrefix) {
+        if (prefix == null && RaidCraft.getComponent(RCChatPlugin.class).config.displayGuestPrefix) {
             return PrefixManager.GUEST_PREFIX;
         }
         return prefix;
@@ -76,9 +76,9 @@ public class ChatPlayer {
 
     public String getSuffix() {
 
-        if(suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
+        if (suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
             try {
-                if(getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
+                if (getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
                     Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
                     // lets try to parse the profession from the prefix permission
                     String[] split = getPrefix().getPermission().split("\\.");
@@ -93,10 +93,10 @@ public class ChatPlayer {
                     suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
                 }
             } catch (Throwable e) {
-//                    e.printStackTrace();
+                //                    e.printStackTrace();
             }
         }
-        if(suffix == null) {
+        if (suffix == null) {
             suffix = ChatColor.GREEN + "#";
         }
         return suffix;
@@ -109,11 +109,10 @@ public class ChatPlayer {
 
     public String getNameColor() {
 
-        if(nameColor == null) {
-            if(RaidCraft.getComponent(RCChatPlugin.class).config.coloredNames) {
+        if (nameColor == null) {
+            if (RaidCraft.getComponent(RCChatPlugin.class).config.coloredNames) {
                 nameColor = NameColorManager.getColor(player);
-            }
-            else {
+            } else {
                 nameColor = "";
             }
         }
@@ -121,10 +120,9 @@ public class ChatPlayer {
     }
 
     public boolean hasPrivateChat() {
-        if(chatPartner != null) {
+        if (chatPartner != null) {
             return true;
-        }
-        else {
+        } else {
             chatPartner = null;
             return false;
         }
@@ -139,15 +137,14 @@ public class ChatPlayer {
     }
 
     public void sendMessageToPartner(String message) {
-        if(!hasPrivateChat()) {
+        if (!hasPrivateChat()) {
             return;
         }
         Player recipient = Bukkit.getPlayer(chatPartner);
-        if(recipient == null) {
+        if (recipient == null) {
             BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
             bungeeManager.sendMessage(player, new PrivateChatMessage(getName(), chatPartner, message));
-        }
-        else {
+        } else {
             sendPrivateMessage(recipient, getName(), message);
         }
         getPlayer().sendMessage(ChatColor.DARK_PURPLE + "An " + chatPartner + ": " + ChatColor.LIGHT_PURPLE + message);
@@ -164,21 +161,21 @@ public class ChatPlayer {
 
     public void sendMessage(String message) {
 
-//        if(!player.hasPermission("raidcraft.player")) {
-//
-//            message = WeblinkUtil.obfuscateWeblinks(message);
-//        }
+        //        if(!player.hasPermission("raidcraft.player")) {
+        //
+        //            message = WeblinkUtil.obfuscateWeblinks(message);
+        //        }
 
-        if(player.hasPermission("rcchat.message.colorized")) {
+        if (player.hasPermission("rcchat.message.colorized")) {
             message = SignUtil.parseColor(message);
         }
 
-        if(getMainChannel() == null) {
+        if (getMainChannel() == null) {
             player.sendMessage(ChatColor.RED + "Du schreibst in keinem Channel!");
             return;
         }
         String channelPrefix = getMainChannel().getPrefix();
-        if(channelPrefix.length() > 0) {
+        if (channelPrefix.length() > 0) {
             channelPrefix += " ";
         }
 
@@ -188,14 +185,14 @@ public class ChatPlayer {
         String nameColor = ChatColor.DARK_GRAY.toString();
         String channelColor = ChatColor.DARK_GRAY.toString();
 
-        if(player.hasPermission("raidcraft.player")) {
+        if (player.hasPermission("raidcraft.player")) {
             prefix = (getPrefix() != null ? getPrefix().getParsedPrefix() : "");
             suffix = getSuffix();
             nameColor = getNameColor();
             channelColor = getMainChannel().getColor();
         }
 
-        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
+        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));

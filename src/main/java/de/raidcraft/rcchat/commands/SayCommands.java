@@ -30,14 +30,13 @@ public class SayCommands {
     @CommandPermissions("rcchat.say")
     public void say(CommandContext context, CommandSender sender) throws CommandException {
 
-        if(sender instanceof BlockCommandSender) {
+        if (sender instanceof BlockCommandSender) {
 
-            BlockCommandSender commandBlock = (BlockCommandSender)sender;
+            BlockCommandSender commandBlock = (BlockCommandSender) sender;
             String senderName = commandBlock.getName();
-            if(senderName.equalsIgnoreCase("@")) {
+            if (senderName.equalsIgnoreCase("@")) {
                 senderName = ChatColor.LIGHT_PURPLE + "**SERVER**";
-            }
-            else {
+            } else {
                 senderName = SignUtil.parseColor(senderName);
             }
 
