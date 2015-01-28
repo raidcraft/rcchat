@@ -10,7 +10,6 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
-import de.raidcraft.rcmultiworld.players.MultiWorldPlayer;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
@@ -168,12 +167,14 @@ public class ChatPluginCommands {
         String recipientFullName = null;
         if (Bukkit.getPlayer(recipient) != null) {
             recipientFullName = Bukkit.getPlayer(recipient).getName();
-        } else if (playerManager.isOnline(recipient)) {
-            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(recipient);
-            if (multiWorldPlayer != null) {
-                recipientFullName = multiWorldPlayer.getName();
-            }
         }
+        // TODO: implement multi server chat support
+        //        } else if (playerManager.isOnline(recipient)) {
+        //            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(recipient);
+        //            if (multiWorldPlayer != null) {
+        //                recipientFullName = multiWorldPlayer.getName();
+        //            }
+        //        }
 
         if (recipientFullName == null) {
             throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
@@ -205,9 +206,10 @@ public class ChatPluginCommands {
         if (lastPrivateSender == null) {
             throw new CommandException("Du hast keine Nachricht zum beantworten!");
         }
-        if (!playerManager.isOnline(lastPrivateSender)) {
-            throw new CommandException("Dein Chatpartner ist offline!");
-        }
+        // TODO: implement multi server chat support
+        //        if (!playerManager.isOnline(lastPrivateSender)) {
+        //            throw new CommandException("Dein Chatpartner ist offline!");
+        //        }
 
         chatPlayer.enterPrivateChat(lastPrivateSender);
 
