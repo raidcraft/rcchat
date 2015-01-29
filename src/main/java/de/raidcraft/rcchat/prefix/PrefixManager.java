@@ -28,13 +28,13 @@ public class PrefixManager {
 
         playerPrefixes.clear();
         List<PlayerPrefix> playerPrefixList = RaidCraft.getTable(PlayerPrefixTable.class).getPrefixes();
-        for(PlayerPrefix playerPrefix : playerPrefixList) {
+        for (PlayerPrefix playerPrefix : playerPrefixList) {
             playerPrefixes.put(playerPrefix.getId(), playerPrefix);
         }
 
         worldPrefixes.clear();
         List<WorldPrefix> worldPrefixList = RaidCraft.getTable(WorldPrefixTable.class).getPrefixes();
-        for(WorldPrefix worldPrefix : worldPrefixList) {
+        for (WorldPrefix worldPrefix : worldPrefixList) {
             worldPrefixes.put(worldPrefix.getWorld().toLowerCase(), worldPrefix);
         }
     }
@@ -48,22 +48,22 @@ public class PrefixManager {
 
         PlayerPrefix savedPlayerPrefix = RaidCraft.getTable(PlayersPrefixTable.class).getPrefix(player);
 
-        if(savedPlayerPrefix != null && player.hasPermission(savedPlayerPrefix.getPermission())) {
+        if (savedPlayerPrefix != null && player.hasPermission(savedPlayerPrefix.getPermission())) {
             return savedPlayerPrefix;
         }
 
         PlayerPrefix newPlayerPrefix = null;
-        for(Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
+        for (Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
 
             PlayerPrefix playerPrefix = entry.getValue();
-            if(playerPrefix.hasPermission() && !player.hasPermission(playerPrefix.getPermission())) continue;
+            if (playerPrefix.hasPermission() && !player.hasPermission(playerPrefix.getPermission())) continue;
 
-            if(newPlayerPrefix == null || playerPrefix.getPriority() > newPlayerPrefix.getPriority()) {
+            if (newPlayerPrefix == null || playerPrefix.getPriority() > newPlayerPrefix.getPriority()) {
                 newPlayerPrefix = playerPrefix;
             }
         }
 
-        if(newPlayerPrefix == null) {
+        if (newPlayerPrefix == null) {
             return null;
         }
         RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, newPlayerPrefix);
@@ -73,10 +73,10 @@ public class PrefixManager {
     public List<PlayerPrefix> getPossiblePrefixes(Player player) {
 
         List<PlayerPrefix> possiblePrefixList = new ArrayList<>();
-        for(Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
+        for (Map.Entry<Integer, PlayerPrefix> entry : playerPrefixes.entrySet()) {
 
             PlayerPrefix prefix = entry.getValue();
-            if(prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) continue;
+            if (prefix.hasPermission() && !player.hasPermission(prefix.getPermission())) continue;
             possiblePrefixList.add(entry.getValue());
         }
         return possiblePrefixList;
@@ -92,7 +92,7 @@ public class PrefixManager {
 
     public String getWorldPrefix(String worldName) {
         worldName = worldName.toLowerCase();
-        if(worldPrefixes.containsKey(worldName)) {
+        if (worldPrefixes.containsKey(worldName)) {
             return worldPrefixes.get(worldName).getPrefix();
         }
         return "";

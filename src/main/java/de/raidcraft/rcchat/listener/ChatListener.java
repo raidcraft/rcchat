@@ -21,11 +21,11 @@ public class ChatListener implements Listener {
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
 
         String message = event.getMessage();
-        if(!player.hasPermission("rcchat.colorize")) {
+        if (!player.hasPermission("rcchat.colorize")) {
             message = SignUtil.destroyColor(event.getMessage());
         }
 
-        if(chatPlayer.hasPrivateChat()) {
+        if (chatPlayer.hasPrivateChat()) {
             chatPlayer.sendMessageToPartner(message);
             event.setCancelled(true);
             return;

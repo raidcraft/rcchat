@@ -35,7 +35,7 @@ public class PrivateChatMessage extends BungeeMessage {
     public void process() {
 
         Player player = Bukkit.getPlayer(recipient);
-        if(player == null) return;
+        if (player == null) return;
 
         ChatPlayer.sendPrivateMessage(player, sender, StringEncodingUtil.decode(message));
     }

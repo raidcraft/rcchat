@@ -32,7 +32,7 @@ public class ChannelChatMessage extends BungeeMessage {
     public void process() {
 
         Channel channel = ChannelManager.INST.getChannel(channelName);
-        if(channel != null) {
+        if (channel != null) {
             channel.sendMessage(StringEncodingUtil.decode(message));
         }
     }

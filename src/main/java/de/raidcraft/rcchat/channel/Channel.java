@@ -31,20 +31,19 @@ public class Channel {
 
         this.name = name;
         this.permission = permission;
-        if(prefix != null) {
+        if (prefix != null) {
             this.prefix = SignUtil.parseColor(prefix);
         } else {
             this.prefix = "";
         }
 
-        if(color != null) {
+        if (color != null) {
             this.color = SignUtil.parseColor(color);
-        }
-        else {
+        } else {
             this.color = "";
         }
 
-        for(String alias : aliases) {
+        for (String alias : aliases) {
             this.aliases.add(alias);
         }
         this.type = ChannelType.valueOf(type);
@@ -53,11 +52,11 @@ public class Channel {
 
     public void sendMessage(String message) {
 
-        for(Map.Entry<String, ChatPlayer> entry : members.entrySet()) {
+        for (Map.Entry<String, ChatPlayer> entry : members.entrySet()) {
 
             ChatPlayer chatPlayer = entry.getValue();
 
-            if(chatPlayer.getPlayer().isOnline()) {
+            if (chatPlayer.getPlayer().isOnline()) {
                 chatPlayer.getPlayer().sendMessage(message);
             }
         }
@@ -71,11 +70,11 @@ public class Channel {
 
     public void join(ChatPlayer chatPlayer) {
 
-        if(!members.containsKey(chatPlayer.getName())) {
+        if (!members.containsKey(chatPlayer.getName())) {
             members.put(chatPlayer.getName(), chatPlayer);
         }
         Channel main = chatPlayer.getMainChannel();
-        if(main == null || !main.getName().equalsIgnoreCase(name)) {
+        if (main == null || !main.getName().equalsIgnoreCase(name)) {
             chatPlayer.setMainChannel(this);
             RaidCraft.getTable(PlayersChannelTable.class).addChannel(chatPlayer.getPlayer(), this);
         }
@@ -93,10 +92,9 @@ public class Channel {
     }
 
     public boolean isMember(ChatPlayer chatPlayer) {
-        if(members.containsKey(chatPlayer.getName())) {
+        if (members.containsKey(chatPlayer.getName())) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

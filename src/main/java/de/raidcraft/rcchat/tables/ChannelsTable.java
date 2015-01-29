@@ -50,13 +50,13 @@ public class ChannelsTable extends Table {
                 String[] aliases = resultSet.getString("aliases").split(",");
 
                 Channel channel = new Channel(
-                    resultSet.getString("name"),
-                    resultSet.getString("permission"),
-                    resultSet.getString("prefix"),
-                    resultSet.getString("color"),
-                    aliases,
-                    resultSet.getString("type"),
-                    RaidCraft.getTable(ChannelWorldsTable.class).getWorlds(resultSet.getInt("id"))
+                        resultSet.getString("name"),
+                        resultSet.getString("permission"),
+                        resultSet.getString("prefix"),
+                        resultSet.getString("color"),
+                        aliases,
+                        resultSet.getString("type"),
+                        RaidCraft.getTable(ChannelWorldsTable.class).getWorlds(resultSet.getInt("id"))
                 );
                 channels.add(channel);
             }

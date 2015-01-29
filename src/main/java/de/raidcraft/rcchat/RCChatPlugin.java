@@ -15,7 +15,12 @@ import de.raidcraft.rcchat.listener.ChatListener;
 import de.raidcraft.rcchat.listener.PlayerListener;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
-import de.raidcraft.rcchat.tables.*;
+import de.raidcraft.rcchat.tables.ChannelWorldsTable;
+import de.raidcraft.rcchat.tables.ChannelsTable;
+import de.raidcraft.rcchat.tables.PlayerPrefixTable;
+import de.raidcraft.rcchat.tables.PlayersChannelTable;
+import de.raidcraft.rcchat.tables.PlayersPrefixTable;
+import de.raidcraft.rcchat.tables.WorldPrefixTable;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 

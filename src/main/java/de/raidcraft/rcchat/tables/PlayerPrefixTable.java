@@ -45,10 +45,10 @@ public class PlayerPrefixTable extends Table {
             while (resultSet.next()) {
 
                 PlayerPrefix playerPrefix = new PlayerPrefix(
-                    resultSet.getInt("id"),
-                    resultSet.getString("prefix"),
-                    resultSet.getString("permission"),
-                    resultSet.getInt("priority")
+                        resultSet.getInt("id"),
+                        resultSet.getString("prefix"),
+                        resultSet.getString("permission"),
+                        resultSet.getInt("priority")
                 );
                 playerPrefixes.add(playerPrefix);
             }

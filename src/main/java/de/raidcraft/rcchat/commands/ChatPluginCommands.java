@@ -10,7 +10,6 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
-import de.raidcraft.rcmultiworld.players.MultiWorldPlayer;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
 import de.raidcraft.util.SignUtil;
 import org.bukkit.Bukkit;
@@ -34,26 +33,25 @@ public class ChatPluginCommands {
     @Command(
             aliases = {"ch", "chat", "rcchat"},
             desc = "Main command"
-            )
+    )
     public void rcchat(CommandContext context, CommandSender sender) throws CommandException {
 
         // list channels
-        if(context.argsLength() == 0) {
-            if(sender instanceof ConsoleCommandSender) {
+        if (context.argsLength() == 0) {
+            if (sender instanceof ConsoleCommandSender) {
                 throw new CommandException("For non admin commands (e.g. channel changes) a player context is required!");
             }
-            ChatPlayer cp = ChatPlayerManager.INST.getPlayer((Player)sender);
+            ChatPlayer cp = ChatPlayerManager.INST.getPlayer((Player) sender);
             cp.getPlayer().sendMessage(ChatColor.YELLOW + "Du schreibst in folgenden Channeln:");
             String channelNames = "";
-            for(Channel ch : ChannelManager.INST.getChannels()) {
-                if(ch.isMember(cp)) {
+            for (Channel ch : ChannelManager.INST.getChannels()) {
+                if (ch.isMember(cp)) {
                     channelNames += ch.getName() + ", ";
                 }
             }
-            if(channelNames.length() == 0) {
+            if (channelNames.length() == 0) {
                 cp.getPlayer().sendMessage(ChatColor.YELLOW + "~ Keine Channel gefunden ~");
-            }
-            else {
+            } else {
                 cp.getPlayer().sendMessage(ChatColor.YELLOW + channelNames);
             }
             return;
@@ -64,38 +62,38 @@ public class ChatPluginCommands {
         /* check for control parameters */
 
         // reload plugin
-        if(arg.equalsIgnoreCase("reload")) {
+        if (arg.equalsIgnoreCase("reload")) {
             RaidCraft.getComponent(RCChatPlugin.class).reload();
             sender.sendMessage(ChatColor.GREEN + "RCChat wurde neugeladen!");
             return;
         }
 
-        if(sender instanceof ConsoleCommandSender) {
+        if (sender instanceof ConsoleCommandSender) {
             throw new CommandException("For non admin commands (e.g. channel changes) a player context is required!");
         }
 
-        Player player = (Player)sender;
+        Player player = (Player) sender;
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
 
-        if(context.getString(0).equalsIgnoreCase("leave")) {
+        if (context.getString(0).equalsIgnoreCase("leave")) {
             Channel channel = null;
-            if(context.argsLength() > 1) {
+            if (context.argsLength() > 1) {
                 channel = ChannelManager.INST.getChannel(context.getString(1));
             }
-            if(channel == null) {
+            if (channel == null) {
                 channel = chatPlayer.getMainChannel();
             }
             channel.leave(chatPlayer);
             player.sendMessage(ChatColor.GREEN + "Du hast den Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "' verlassen!");
-            if(channel == chatPlayer.getMainChannel()) {
+            if (channel == chatPlayer.getMainChannel()) {
                 chatPlayer.setMainChannel(null);
-                for(Channel ch : ChannelManager.INST.getChannels()) {
-                    if(ch.isMember(chatPlayer)) {
+                for (Channel ch : ChannelManager.INST.getChannels()) {
+                    if (ch.isMember(chatPlayer)) {
                         ch.join(chatPlayer);
                         player.sendMessage(ChatColor.GRAY + "Neuer Hauptchannel: " + chatPlayer.getMainChannel().getName());
                     }
                 }
-                if(chatPlayer.getMainChannel() == null) {
+                if (chatPlayer.getMainChannel() == null) {
                     player.sendMessage(ChatColor.GRAY + "Du schreibst nun in keinem Channel mehr!");
                 }
             }
@@ -105,26 +103,25 @@ public class ChatPluginCommands {
 
         // look if first argument is channel
         Channel channel = ChannelManager.INST.getChannel(context.getString(0));
-        if(channel == null) {
+        if (channel == null) {
             throw new CommandException("Unbekannter Channel '" + context.getString(0) + "' oder falscher Parameter!");
         }
 
-        if(!channel.isCorrectWorld(player)) {
+        if (!channel.isCorrectWorld(player)) {
             throw new CommandException("Der gewählte Channel ist auf dieser Welt nicht verfügbar!");
         }
 
-        if(channel.hasPermission() && !sender.hasPermission(channel.getPermission())) {
+        if (channel.hasPermission() && !sender.hasPermission(channel.getPermission())) {
             throw new CommandException("Du hast keine Rechte um diesen Channel zu betreten!");
         }
 
         chatPlayer.leavePrivateChat();
         Channel oldChannel = chatPlayer.getMainChannel();
         channel.join(player);
-        if(context.argsLength() > 1) {
+        if (context.argsLength() > 1) {
             chatPlayer.sendMessage(context.getJoinedStrings(1));
             oldChannel.join(player);
-        }
-        else {
+        } else {
             chatPlayer.setMainChannel(channel);
             sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" + ChatColor.YELLOW + channel.getName() + ChatColor.GREEN + "'");
         }
@@ -137,28 +134,27 @@ public class ChatPluginCommands {
     )
     public void tell(CommandContext context, CommandSender sender) throws CommandException {
 
-        if(sender instanceof BlockCommandSender) {
+        if (sender instanceof BlockCommandSender) {
 
-            if(context.argsLength() < 2) return;
-            BlockCommandSender commandBlock = (BlockCommandSender)sender;
+            if (context.argsLength() < 2) return;
+            BlockCommandSender commandBlock = (BlockCommandSender) sender;
             String senderName = commandBlock.getName();
-            if(senderName.equalsIgnoreCase("@")) {
+            if (senderName.equalsIgnoreCase("@")) {
                 senderName = ChatColor.LIGHT_PURPLE + "From Server:";
-            }
-            else {
+            } else {
                 senderName = SignUtil.parseColor(senderName);
             }
 
             Player player = Bukkit.getPlayer(context.getString(0));
-            if(player == null) return;
+            if (player == null) return;
 
             player.sendMessage(senderName + " " + SignUtil.parseColor(context.getJoinedStrings(1)));
             return;
         }
 
-        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player)sender);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player) sender);
 
-        if(context.argsLength() == 0) {
+        if (context.argsLength() == 0) {
             chatPlayer.leavePrivateChat();
             sender.sendMessage(ChatColor.GREEN + "Du schreibst nun im Channel '" +
                     ChatColor.YELLOW + chatPlayer.getMainChannel().getName() + ChatColor.GREEN + "'");
@@ -169,27 +165,28 @@ public class ChatPluginCommands {
         String recipient = context.getString(0);
 
         String recipientFullName = null;
-        if(Bukkit.getPlayer(recipient) != null) {
+        if (Bukkit.getPlayer(recipient) != null) {
             recipientFullName = Bukkit.getPlayer(recipient).getName();
         }
-        else if(playerManager.isOnline(recipient)) {
-            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(recipient);
-            if(multiWorldPlayer != null) {
-                recipientFullName = multiWorldPlayer.getName();
-            }
-        }
+        // TODO: implement multi server chat support
+        //        } else if (playerManager.isOnline(recipient)) {
+        //            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(recipient);
+        //            if (multiWorldPlayer != null) {
+        //                recipientFullName = multiWorldPlayer.getName();
+        //            }
+        //        }
 
-        if(recipientFullName == null) {
+        if (recipientFullName == null) {
             throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
         }
 
         chatPlayer.enterPrivateChat(recipientFullName);
 
-        if(context.argsLength() < 2) {
+        if (context.argsLength() < 2) {
             chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + recipientFullName + "'");
         }
 
-        if(context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
+        if (context.argsLength() > 1 && chatPlayer.hasPrivateChat()) {
             chatPlayer.sendMessageToPartner(context.getJoinedStrings(1));
             chatPlayer.leavePrivateChat();
         }
@@ -201,25 +198,25 @@ public class ChatPluginCommands {
     )
     public void answer(CommandContext context, CommandSender sender) throws CommandException {
 
-        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player)sender);
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player) sender);
 
         String lastPrivateSender = chatPlayer.getLastPrivateSender();
         PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
 
-        if(lastPrivateSender == null) {
+        if (lastPrivateSender == null) {
             throw new CommandException("Du hast keine Nachricht zum beantworten!");
         }
-        if(!playerManager.isOnline(lastPrivateSender)) {
-            throw new CommandException("Dein Chatpartner ist offline!");
-        }
+        // TODO: implement multi server chat support
+        //        if (!playerManager.isOnline(lastPrivateSender)) {
+        //            throw new CommandException("Dein Chatpartner ist offline!");
+        //        }
 
         chatPlayer.enterPrivateChat(lastPrivateSender);
 
-        if(context.argsLength() > 0) {
+        if (context.argsLength() > 0) {
             chatPlayer.sendMessageToPartner(context.getJoinedStrings(0));
             chatPlayer.leavePrivateChat();
-        }
-        else {
+        } else {
             chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + lastPrivateSender + "'");
         }
     }

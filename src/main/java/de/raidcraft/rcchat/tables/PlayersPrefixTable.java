@@ -27,6 +27,7 @@ public class PlayersPrefixTable extends Table {
                     "CREATE TABLE `" + getTableName() + "` (" +
                             "`id` INT NOT NULL AUTO_INCREMENT, " +
                             "`player` VARCHAR( 32 ) NOT NULL, " +
+                            "`player_id` VARCHAR( 40 ) NOT NULL, " +
                             "`prefix` INT( 11 ) NOT NULL, " +
                             "PRIMARY KEY ( `id` )" +
                             ")");
@@ -39,7 +40,7 @@ public class PlayersPrefixTable extends Table {
 
         try {
             ResultSet resultSet = executeQuery(
-                    "SELECT * FROM " + getTableName() + " WHERE player = '" + player.getName() + "';");
+                    "SELECT * FROM " + getTableName() + " WHERE player_id = '" + player.getUniqueId() + "';");
 
             while (resultSet.next()) {
                 return PrefixManager.INST.getPrefix(resultSet.getInt("prefix"));
@@ -55,9 +56,10 @@ public class PlayersPrefixTable extends Table {
 
         removePrefix(player);
         try {
-            executeUpdate("INSERT INTO " + getTableName() + " (player, prefix) " +
+            executeUpdate("INSERT INTO " + getTableName() + " (player, player_id, prefix) " +
                     "VALUES (" +
                     "'" + player.getName() + "'" + "," +
+                    "'" + player.getUniqueId() + "'" + "," +
                     "'" + playerPrefix.getId() + "'" +
                     ");");
         } catch (SQLException e) {
@@ -70,7 +72,7 @@ public class PlayersPrefixTable extends Table {
 
         try {
             executeUpdate(
-                    "DELETE FROM " + getTableName() + " WHERE player = '" + player.getName() + "';");
+                    "DELETE FROM " + getTableName() + " WHERE player_id = '" + player.getUniqueId() + "';");
         } catch (SQLException e) {
             RaidCraft.LOGGER.warning(e.getMessage());
             e.printStackTrace();

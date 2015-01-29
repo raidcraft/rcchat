@@ -24,7 +24,7 @@ public class ChatPlayerManager {
     public void reload() {
 
         players.clear();
-        for(Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             loadPlayer(player);
         }
     }
@@ -37,24 +37,23 @@ public class ChatPlayerManager {
         Channel mainChannel = null;
         List<Channel> playersChannel = new ArrayList<>();
         List<ChannelAssignment> channels = RaidCraft.getTable(PlayersChannelTable.class).getChannels(player);
-        for(ChannelAssignment assignment : channels) {
+        for (ChannelAssignment assignment : channels) {
 
             Channel channel = ChannelManager.INST.getChannel(assignment.getChannel());
-            if(channel == null) continue;
+            if (channel == null) continue;
             playersChannel.add(channel);
-            if(assignment.getType() == AssignmentType.MAIN) {
+            if (assignment.getType() == AssignmentType.MAIN) {
                 mainChannel = channel;
             }
         }
-        for(Channel channel : playersChannel) {
+        for (Channel channel : playersChannel) {
             channel.join(player);
         }
-        if(mainChannel != null) {
+        if (mainChannel != null) {
             mainChannel.join(player);
-        }
-        else {
+        } else {
             Channel defaultChannel = ChannelManager.INST.getDefaultChannel();
-            if(defaultChannel == null) {
+            if (defaultChannel == null) {
                 return;
             }
             defaultChannel.join(chatPlayer);
@@ -63,7 +62,7 @@ public class ChatPlayerManager {
 
     public void unloadPlayer(Player player) {
 
-        for(Channel channel : ChannelManager.INST.getChannels()) {
+        for (Channel channel : ChannelManager.INST.getChannels()) {
             channel.logout(player);
         }
         players.remove(player.getName());
@@ -77,7 +76,7 @@ public class ChatPlayerManager {
     public List<ChatPlayer> getPlayers() {
 
         List<ChatPlayer> playerList = new ArrayList<>();
-        for(Map.Entry<String, ChatPlayer> entry : players.entrySet()) {
+        for (Map.Entry<String, ChatPlayer> entry : players.entrySet()) {
             playerList.add(entry.getValue());
         }
         return playerList;

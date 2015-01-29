@@ -33,14 +33,14 @@ public class PrefixCommands {
     )
     public void prefix(CommandContext context, CommandSender sender) throws CommandException {
 
-        if(sender instanceof ConsoleCommandSender) {
+        if (sender instanceof ConsoleCommandSender) {
             throw new CommandException("Player context required!");
         }
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         player.sendMessage(ChatColor.GREEN + "Verfügbare Präfixe:");
         int i = 0;
-        for(PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
+        for (PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
             i++;
             player.sendMessage(ChatColor.YELLOW + String.valueOf(i) + ": " + ChatColor.WHITE + prefix.getParsedPrefix());
         }
@@ -63,14 +63,14 @@ public class PrefixCommands {
         )
         public void change(CommandContext context, CommandSender sender) throws CommandException {
 
-            if(sender instanceof ConsoleCommandSender) {
+            if (sender instanceof ConsoleCommandSender) {
                 throw new CommandException("Player context required!");
             }
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             int i = 0;
-            for(PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
+            for (PlayerPrefix prefix : PrefixManager.INST.getPossiblePrefixes(player)) {
                 i++;
-                if(i == context.getInteger(0)) {
+                if (i == context.getInteger(0)) {
                     PrefixManager.INST.setPlayerPrefix(player, prefix);
                     player.sendMessage(ChatColor.GREEN + "Präfix erfolgreich geändert! Neues Präfix: " + ChatColor.WHITE + prefix.getParsedPrefix());
                     return;
