@@ -78,7 +78,7 @@ public class ChatPlayer {
 
         if (suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
             try {
-                if (getPrefix().hasPermission() && Bukkit.getPluginManager().getPlugin("Skills") != null) {
+                if (getPrefix().hasPermission() && RaidCraft.getComponent(SkillsPlugin.class) != null) {
                     Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
                     // lets try to parse the profession from the prefix permission
                     String[] split = getPrefix().getPermission().split("\\.");
