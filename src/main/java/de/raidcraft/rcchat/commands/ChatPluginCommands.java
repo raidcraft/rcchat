@@ -91,6 +91,7 @@ public class ChatPluginCommands {
                     if (ch.isMember(chatPlayer)) {
                         ch.join(chatPlayer);
                         player.sendMessage(ChatColor.GRAY + "Neuer Hauptchannel: " + chatPlayer.getMainChannel().getName());
+                        break;
                     }
                 }
                 if (chatPlayer.getMainChannel() == null) {
