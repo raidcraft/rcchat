@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
-    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?(\\?)?\"([a-zA-ZüöäÜÖÄß\\s]+)\"(.*)");
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)(\\?){1,2}\"([a-zA-ZüöäÜÖÄß\\s]+)\"(.*)");
 
     private Player player;
     private Channel mainChannel;
@@ -238,15 +238,14 @@ public class ChatPlayer {
         return autocompleteItems;
     }
 
-    private FancyMessage matchAndReplaceItem(String message) {
+    private FancyMessage matchAndReplaceItem(FancyMessage msg, String message) {
 
         Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
-        FancyMessage msg = new FancyMessage("");
-        while (matcher.find()) {
+        if (matcher.matches()) {
             msg.text(matcher.group(1));
             if (matcher.group(3) != null) {
                 String itemName = matcher.group(3);
-                if (matcher.group(2) != null) {
+                if (matcher.group(2).length() > 1) {
                     Optional<CustomItem> first = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
                             .filter(i -> i.getName().equals(itemName))
                             .findFirst();
@@ -272,9 +271,20 @@ public class ChatPlayer {
             }
             if (matcher.group(4) != null) {
                 msg.then();
-                matcher = ITEM_COMPLETE_PATTERN.matcher(matcher.group(3));
+                return matchAndReplaceItem(msg, matcher.group(4));
             }
         }
         return msg;
+    }
+
+    private FancyMessage matchAndReplaceItem(String message) {
+
+        Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
+        FancyMessage msg = new FancyMessage("");
+        if (matcher.matches()) {
+            return matchAndReplaceItem(msg, message);
+        } else {
+            return new FancyMessage(message);
+        }
     }
 }
