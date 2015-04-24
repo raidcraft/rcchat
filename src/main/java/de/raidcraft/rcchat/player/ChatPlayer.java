@@ -239,9 +239,8 @@ public class ChatPlayer {
     private FancyMessage matchAndReplaceItem(String message) {
 
         Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
-        FancyMessage msg;
+        FancyMessage msg = new FancyMessage("");
         while (matcher.find()) {
-            msg = new FancyMessage("");
             msg.text(matcher.group(1));
             if (matcher.group(2) != null) {
                 String itemName = matcher.group(2);
