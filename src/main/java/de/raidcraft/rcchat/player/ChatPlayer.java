@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
-    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("\\?\"([a-zA-ZüöäÜÖÄß\\s]+)\"");
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?\"([a-zA-ZüöäÜÖÄß\\s]+)?\"");
 
     private Player player;
     private Channel mainChannel;
@@ -152,7 +152,6 @@ public class ChatPlayer {
             return;
         }
         Player recipient = Bukkit.getPlayer(chatPartner);
-        message = matchAndReplaceItem(message);
         if(recipient == null) {
             BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
             bungeeManager.sendMessage(player, new PrivateChatMessage(getName(), chatPartner, message));
@@ -204,13 +203,13 @@ public class ChatPlayer {
             channelColor = getMainChannel().getColor();
         }
 
-        message = matchAndReplaceItem(message);
-
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
+        FancyMessage result = matchAndReplaceItem(message);
+
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
-        getMainChannel().sendMessage(message);
+        getMainChannel().sendMessage(result);
 
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
         bungeeManager.sendMessage(player, new ChannelChatMessage(getMainChannel().getName(), message));
@@ -237,21 +236,27 @@ public class ChatPlayer {
         return autocompleteItems;
     }
 
-    private String matchAndReplaceItem(String message) {
+    private FancyMessage matchAndReplaceItem(String message) {
 
+        FancyMessage msg = new FancyMessage("");
         final Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
-        if (matcher.matches()) {
-            String itemName = matcher.group(1);
-            Optional<CustomItemStack> first = autocompleteItems.stream()
-                    .filter(i -> i.getItem().getName().equals(itemName))
-                    .findFirst();
-            if (first.isPresent()) {
-                CustomItemStack item = first.get();
-                message = message.replace("?\"" + itemName + "\"", new FancyMessage("[" + item.getItem().getName() + "]")
-                        .color(item.getItem().getQuality().getColor())
-                        .itemTooltip(item).toJSONString());
+        while (matcher.find()) {
+            msg.text(matcher.group(1));
+            if (matcher.group(2) != null) {
+                String itemName = matcher.group(2);
+                Optional<CustomItemStack> first = autocompleteItems.stream()
+                        .filter(i -> i.getItem().getName().equals(itemName))
+                        .findFirst();
+                if (first.isPresent()) {
+                    CustomItemStack item = first.get();
+                    msg.then()
+                            .text("[" + item.getItem().getName() + "]")
+                            .color(item.getItem().getQuality().getColor())
+                            .itemTooltip(item).then();
+                }
             }
+
         }
-        return message;
+        return msg;
     }
 }

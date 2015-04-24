@@ -5,6 +5,7 @@ import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.PlayersChannelTable;
 import de.raidcraft.util.SignUtil;
+import mkremins.fanciful.FancyMessage;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -48,6 +49,16 @@ public class Channel {
         }
         this.type = ChannelType.valueOf(type);
         this.worlds = worlds;
+    }
+
+    public void sendMessage(FancyMessage message) {
+
+        for (Map.Entry<String, ChatPlayer> entry : members.entrySet()) {
+            ChatPlayer chatPlayer = entry.getValue();
+            if (chatPlayer.getPlayer().isOnline()) {
+                message.send(chatPlayer.getPlayer());
+            }
+        }
     }
 
     public void sendMessage(String message) {
