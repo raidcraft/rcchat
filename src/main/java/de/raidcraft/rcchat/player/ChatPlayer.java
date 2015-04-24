@@ -269,7 +269,7 @@ public class ChatPlayer {
                     }
                 }
             }
-            if (matcher.group(4) != null) {
+            if (matcher.group(4) != null && !matcher.group(4).equals("")) {
                 msg.then();
                 return matchAndReplaceItem(msg, matcher.group(4));
             }
