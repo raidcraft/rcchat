@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
-    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?\"([a-zA-ZüöäÜÖÄß\\s]+)?\"");
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?\"([a-zA-ZüöäÜÖÄß\\s]+)?(.*)\"");
 
     private Player player;
     private Channel mainChannel;
@@ -253,16 +253,13 @@ public class ChatPlayer {
                             .text("[" + item.getItem().getName() + "]")
                             .color(item.getItem().getQuality().getColor())
                             .itemTooltip(item);
-                    if (!matcher.hitEnd()) {
-                        msg.then();
-                    } else {
-                        return msg;
-                    }
                 }
-            } else {
-                return msg;
+            }
+            if (matcher.group(3) != null) {
+                msg.then();
+                matcher = ITEM_COMPLETE_PATTERN.matcher(matcher.group(3));
             }
         }
-        return new FancyMessage(message);
+        return msg;
     }
 }
