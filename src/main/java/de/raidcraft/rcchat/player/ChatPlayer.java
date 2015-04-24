@@ -1,6 +1,8 @@
 package de.raidcraft.rcchat.player;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.items.CustomItem;
+import de.raidcraft.api.items.CustomItemManager;
 import de.raidcraft.api.items.CustomItemStack;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
@@ -32,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
-    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?\"([a-zA-ZüöäÜÖÄß\\s]+)?(.*)\"");
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?(\\?)?\"([a-zA-ZüöäÜÖÄß\\s]+)\"(.*)");
 
     private Player player;
     private Channel mainChannel;
@@ -242,20 +244,33 @@ public class ChatPlayer {
         FancyMessage msg = new FancyMessage("");
         while (matcher.find()) {
             msg.text(matcher.group(1));
-            if (matcher.group(2) != null) {
-                String itemName = matcher.group(2);
-                Optional<CustomItemStack> first = autocompleteItems.stream()
-                        .filter(i -> i.getItem().getName().equals(itemName))
-                        .findFirst();
-                if (first.isPresent()) {
-                    CustomItemStack item = first.get();
-                    msg.then()
-                            .text("[" + item.getItem().getName() + "]")
-                            .color(item.getItem().getQuality().getColor())
-                            .itemTooltip(item);
+            if (matcher.group(3) != null) {
+                String itemName = matcher.group(3);
+                if (matcher.group(2) != null) {
+                    Optional<CustomItem> first = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
+                            .filter(i -> i.getName().equals(itemName))
+                            .findFirst();
+                    if (first.isPresent()) {
+                        CustomItem item = first.get();
+                        msg.then()
+                                .text("[" + item.getName() + "]")
+                                .color(item.getQuality().getColor())
+                                .itemTooltip(item.createNewItem());
+                    }
+                } else {
+                    Optional<CustomItemStack> first = autocompleteItems.stream()
+                            .filter(i -> i.getItem().getName().equals(itemName))
+                            .findFirst();
+                    if (first.isPresent()) {
+                        CustomItemStack item = first.get();
+                        msg.then()
+                                .text("[" + item.getItem().getName() + "]")
+                                .color(item.getItem().getQuality().getColor())
+                                .itemTooltip(item);
+                    }
                 }
             }
-            if (matcher.group(3) != null) {
+            if (matcher.group(4) != null) {
                 msg.then();
                 matcher = ITEM_COMPLETE_PATTERN.matcher(matcher.group(3));
             }

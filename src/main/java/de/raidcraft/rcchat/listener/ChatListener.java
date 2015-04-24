@@ -1,6 +1,7 @@
 package de.raidcraft.rcchat.listener;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.items.CustomItemManager;
 import de.raidcraft.api.items.CustomItemStack;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
@@ -67,7 +68,13 @@ public class ChatListener implements Listener {
     public void onTabComplete(PlayerChatTabCompleteEvent event) {
 
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(event.getPlayer());
-        if (event.getLastToken().startsWith("?")) {
+        if (event.getLastToken().startsWith("??") && event.getLastToken().length() > 2) {
+            String token = event.getLastToken().substring(2).toLowerCase();
+            RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
+                    .filter(i -> i.getName().toLowerCase().startsWith(token))
+                    .map(i -> "??\"" + i.getName() + "\"")
+                    .collect(Collectors.toList());
+        } else if (event.getLastToken().startsWith("?")) {
             String token;
             if (event.getLastToken().length() > 1) {
                 token = event.getLastToken().substring(1).toLowerCase();
