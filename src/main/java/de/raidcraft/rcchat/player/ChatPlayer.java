@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
-    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("\\?\"([\\w\\s]+)\"");
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("\\?\"([a-zA-ZüöäÜÖÄß\\s]+)\"");
 
     private Player player;
     private Channel mainChannel;

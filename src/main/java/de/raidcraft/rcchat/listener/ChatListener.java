@@ -70,12 +70,12 @@ public class ChatListener implements Listener {
         if (event.getLastToken().startsWith("?")) {
             String token;
             if (event.getLastToken().length() > 1) {
-                token = event.getLastToken().substring(1);
+                token = event.getLastToken().substring(1).toLowerCase();
             } else {
                 token = null;
             }
             event.getTabCompletions().addAll(chatPlayer.getAutocompleteItems().stream()
-                    .filter(i -> token == null || i.getItem().getName().startsWith(token))
+                    .filter(i -> token == null || i.getItem().getName().toLowerCase().startsWith(token))
                     .map(i -> "?\"" + i.getItem().getName() + "\"")
                     .collect(Collectors.toList()));
         }
