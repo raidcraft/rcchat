@@ -1,6 +1,7 @@
 package de.raidcraft.rcchat.player;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.items.CustomItemStack;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
 import de.raidcraft.rcchat.bungeecord.messages.PrivateChatMessage;
@@ -15,14 +16,23 @@ import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.skills.api.hero.Hero;
 import de.raidcraft.skills.api.profession.Profession;
 import de.raidcraft.util.SignUtil;
+import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Philip
  */
 public class ChatPlayer {
+
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("\\?\"([\\w\\s]+)\"");
 
     private Player player;
     private Channel mainChannel;
@@ -31,6 +41,7 @@ public class ChatPlayer {
     private String nameColor;
     private String chatPartner = null;
     private String lastPrivateSender = null;
+    private final List<CustomItemStack> autocompleteItems = new ArrayList<>();
 
     public ChatPlayer(Player player) {
 
@@ -141,7 +152,8 @@ public class ChatPlayer {
             return;
         }
         Player recipient = Bukkit.getPlayer(chatPartner);
-        if (recipient == null) {
+        message = matchAndReplaceItem(message);
+        if(recipient == null) {
             BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
             bungeeManager.sendMessage(player, new PrivateChatMessage(getName(), chatPartner, message));
         } else {
@@ -192,7 +204,9 @@ public class ChatPlayer {
             channelColor = getMainChannel().getColor();
         }
 
-        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET + prefix + ChatColor.RESET + nameColor +
+        message = matchAndReplaceItem(message);
+
+        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
@@ -211,5 +225,33 @@ public class ChatPlayer {
         recipient.sendMessage(ChatColor.DARK_PURPLE + "Von " + sender + ": " + ChatColor.LIGHT_PURPLE + message);
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(recipient);
         chatPlayer.setLastPrivateSender(sender);
+    }
+
+    public void addAutoCompleteItem(CustomItemStack itemStack) {
+
+        autocompleteItems.add(itemStack);
+    }
+
+    public List<CustomItemStack> getAutocompleteItems() {
+
+        return autocompleteItems;
+    }
+
+    private String matchAndReplaceItem(String message) {
+
+        final Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
+        if (matcher.matches()) {
+            String itemName = matcher.group(1);
+            Optional<CustomItemStack> first = autocompleteItems.stream()
+                    .filter(i -> i.getItem().getName().equals(itemName))
+                    .findFirst();
+            if (first.isPresent()) {
+                CustomItemStack item = first.get();
+                message = message.replace("?\"" + itemName + "\"", new FancyMessage("[" + item.getItem().getName() + "]")
+                        .color(item.getItem().getQuality().getColor())
+                        .itemTooltip(item).toJSONString());
+            }
+        }
+        return message;
     }
 }
