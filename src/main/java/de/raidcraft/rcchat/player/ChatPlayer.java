@@ -238,24 +238,28 @@ public class ChatPlayer {
 
     private FancyMessage matchAndReplaceItem(String message) {
 
-        FancyMessage msg = new FancyMessage("");
         final Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
-        while (matcher.find()) {
-            msg.text(matcher.group(1));
-            if (matcher.group(2) != null) {
-                String itemName = matcher.group(2);
-                Optional<CustomItemStack> first = autocompleteItems.stream()
-                        .filter(i -> i.getItem().getName().equals(itemName))
-                        .findFirst();
-                if (first.isPresent()) {
-                    CustomItemStack item = first.get();
-                    msg.then()
-                            .text("[" + item.getItem().getName() + "]")
-                            .color(item.getItem().getQuality().getColor())
-                            .itemTooltip(item).then();
+        FancyMessage msg;
+        if (matcher.matches()) {
+            msg = new FancyMessage("");
+            while (matcher.find()) {
+                msg.text(matcher.group(1));
+                if (matcher.group(2) != null) {
+                    String itemName = matcher.group(2);
+                    Optional<CustomItemStack> first = autocompleteItems.stream()
+                            .filter(i -> i.getItem().getName().equals(itemName))
+                            .findFirst();
+                    if (first.isPresent()) {
+                        CustomItemStack item = first.get();
+                        msg.then()
+                                .text("[" + item.getItem().getName() + "]")
+                                .color(item.getItem().getQuality().getColor())
+                                .itemTooltip(item).then();
+                    }
                 }
             }
-
+        } else {
+            msg = new FancyMessage(message);
         }
         return msg;
     }
