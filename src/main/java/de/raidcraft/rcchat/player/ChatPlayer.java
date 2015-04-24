@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -241,32 +240,30 @@ public class ChatPlayer {
 
         Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
         FancyMessage msg;
-        if (matcher.find()) {
-            Scanner scanner = new Scanner(message).useDelimiter(ITEM_COMPLETE_PATTERN);
-            msg = new FancyMessage();
-            while (scanner.hasNext()) {
-                matcher = ITEM_COMPLETE_PATTERN.matcher(scanner.next());
-                msg.text(matcher.group(1));
-                if (matcher.group(2) != null) {
-                    String itemName = matcher.group(2);
-                    Optional<CustomItemStack> first = autocompleteItems.stream()
-                            .filter(i -> i.getItem().getName().equals(itemName))
-                            .findFirst();
-                    if (first.isPresent()) {
-                        CustomItemStack item = first.get();
-                        msg.then()
-                                .text("[" + item.getItem().getName() + "]")
-                                .color(item.getItem().getQuality().getColor())
-                                .itemTooltip(item);
-                        if (scanner.hasNext()) {
-                            msg.then();
-                        }
+        while (matcher.find()) {
+            msg = new FancyMessage("");
+            msg.text(matcher.group(1));
+            if (matcher.group(2) != null) {
+                String itemName = matcher.group(2);
+                Optional<CustomItemStack> first = autocompleteItems.stream()
+                        .filter(i -> i.getItem().getName().equals(itemName))
+                        .findFirst();
+                if (first.isPresent()) {
+                    CustomItemStack item = first.get();
+                    msg.then()
+                            .text("[" + item.getItem().getName() + "]")
+                            .color(item.getItem().getQuality().getColor())
+                            .itemTooltip(item);
+                    if (!matcher.hitEnd()) {
+                        msg.then();
+                    } else {
+                        return msg;
                     }
                 }
+            } else {
+                return msg;
             }
-        } else {
-            msg = new FancyMessage(message);
         }
-        return msg;
+        return new FancyMessage(message);
     }
 }
