@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -238,11 +239,13 @@ public class ChatPlayer {
 
     private FancyMessage matchAndReplaceItem(String message) {
 
-        final Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
+        Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
         FancyMessage msg;
-        if (matcher.matches()) {
-            msg = new FancyMessage("");
-            while (matcher.find()) {
+        if (matcher.find()) {
+            Scanner scanner = new Scanner(message).useDelimiter(ITEM_COMPLETE_PATTERN);
+            msg = new FancyMessage();
+            while (scanner.hasNext()) {
+                matcher = ITEM_COMPLETE_PATTERN.matcher(scanner.next());
                 msg.text(matcher.group(1));
                 if (matcher.group(2) != null) {
                     String itemName = matcher.group(2);
@@ -254,7 +257,10 @@ public class ChatPlayer {
                         msg.then()
                                 .text("[" + item.getItem().getName() + "]")
                                 .color(item.getItem().getQuality().getColor())
-                                .itemTooltip(item).then();
+                                .itemTooltip(item);
+                        if (scanner.hasNext()) {
+                            msg.then();
+                        }
                     }
                 }
             }
