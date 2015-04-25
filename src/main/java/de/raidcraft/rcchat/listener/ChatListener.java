@@ -76,7 +76,9 @@ public class ChatListener implements Listener {
         } else {
             message = event.getChatMessage();
         }
-        if (event.getLastToken().startsWith("?") || (event.getLastToken().startsWith(" ") && message.startsWith("?\""))) {
+        if (event.getLastToken().startsWith("?")
+                || ((event.getLastToken().startsWith(" ") || event.getLastToken().startsWith("\""))
+                && message.startsWith("?\""))) {
             String token;
             if (event.getLastToken().length() > 1) {
                 token = event.getLastToken().substring(1).toLowerCase().replace("\"", "");
