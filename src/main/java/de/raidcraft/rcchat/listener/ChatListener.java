@@ -83,8 +83,10 @@ public class ChatListener implements Listener {
                         .collect(Collectors.toList());
                 if (!items.isEmpty()) {
                     event.getTabCompletions().addAll(items);
+                    return;
                 }
-            } else if (token != null && token.length() > 2) {
+            }
+            if (token != null && token.length() > 2) {
                 event.getTabCompletions().addAll(RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
                         .filter(i -> i.getName().toLowerCase().startsWith(token))
                         .map(i -> "?\"" + i.getName() + "\"")

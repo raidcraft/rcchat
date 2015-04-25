@@ -260,7 +260,7 @@ public class ChatPlayer {
             // ?"itemName" foo bar
             if (Strings.isNullOrEmpty(matcher.group(1))) {
                 msg = getItemThumbnail(msg, matcher.group(2));
-                if (Strings.isNullOrEmpty(matcher.group(3))) {
+                if (!Strings.isNullOrEmpty(matcher.group(3))) {
                     msg.then().text(matcher.group(3));
                 }
                 return msg;
@@ -268,7 +268,7 @@ public class ChatPlayer {
             // lets recursivly match the text before the current match
             msg = matchAndReplaceItem(msg, matcher.group(1));
             msg = getItemThumbnail(msg, matcher.group(2));
-            if (Strings.isNullOrEmpty(matcher.group(3))) {
+            if (!Strings.isNullOrEmpty(matcher.group(3))) {
                 msg.then().text(matcher.group(3));
             }
             return msg;
