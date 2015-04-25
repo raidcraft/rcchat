@@ -18,6 +18,7 @@ import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
 import de.raidcraft.skills.api.hero.Hero;
 import de.raidcraft.skills.api.profession.Profession;
+import de.raidcraft.util.CustomItemUtil;
 import de.raidcraft.util.SignUtil;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
@@ -284,24 +285,14 @@ public class ChatPlayer {
                 .filter(i -> i.getItem().getName().equals(itemName))
                 .findFirst();
         if (first.isPresent()) {
-            CustomItemStack item = first.get();
-            msg.then("[").color(ChatColor.DARK_AQUA)
-                    .then(item.getItem().getName())
-                    .color(item.getItem().getQuality().getColor())
-                    .itemTooltip(item)
-                    .then("]").color(ChatColor.DARK_AQUA);
+            msg = CustomItemUtil.getFormattedItemTooltip(msg, first.get());
         } else {
             // if none is found ask our item cache
             Optional<CustomItem> match = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
                     .filter(i -> i.getName().equals(itemName))
                     .findFirst();
             if (match.isPresent()) {
-                CustomItem item = match.get();
-                msg.then("[").color(ChatColor.DARK_AQUA)
-                        .then(item.getName())
-                        .color(item.getQuality().getColor())
-                        .itemTooltip(item.createNewItem())
-                        .then("]").color(ChatColor.DARK_AQUA);
+                msg = CustomItemUtil.getFormattedItemTooltip(msg, match.get());
             }
         }
         return msg;
