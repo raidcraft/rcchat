@@ -297,8 +297,9 @@ public class ChatPlayer {
             if (match.isPresent()) {
                 CustomItem item = match.get();
                 msg.then()
-                        .text("[" + item.getName() + "]")
+                        .text("[").color(ChatColor.DARK_AQUA).text(item.getName())
                         .color(item.getQuality().getColor())
+                        .text("]").color(ChatColor.DARK_AQUA)
                         .itemTooltip(item.createNewItem());
             }
         }
