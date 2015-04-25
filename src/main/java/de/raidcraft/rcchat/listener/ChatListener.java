@@ -109,7 +109,7 @@ public class ChatListener implements Listener {
 
     private String formatAutocompleteName(String message, String token, String itemName) {
 
-        if (token.startsWith(" ") && message.startsWith("?\"")) {
+        if ((token.startsWith(" ") || token.startsWith("\"")) && message.startsWith("?\"")) {
             return ("?\"" + itemName + "\"").replace(message, "");
         }
         return "?\"" + itemName + "\"";
