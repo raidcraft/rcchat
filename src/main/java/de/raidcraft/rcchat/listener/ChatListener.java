@@ -69,7 +69,12 @@ public class ChatListener implements Listener {
     public void onTabComplete(PlayerChatTabCompleteEvent event) {
 
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(event.getPlayer());
-        if (event.getLastToken().startsWith("?")) {
+        String message = event.getChatMessage();
+        int index = message.lastIndexOf('?');
+        if (index > 0) {
+            message = message.substring(index);
+        }
+        if (event.getLastToken().startsWith("?") || (event.getLastToken().startsWith(" ") && message.startsWith("?\""))) {
             String token;
             if (event.getLastToken().length() > 1) {
                 token = event.getLastToken().substring(1).toLowerCase().replace("\"", "");
