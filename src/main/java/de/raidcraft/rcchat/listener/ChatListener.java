@@ -69,10 +69,12 @@ public class ChatListener implements Listener {
     public void onTabComplete(PlayerChatTabCompleteEvent event) {
 
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(event.getPlayer());
-        String message = event.getChatMessage();
-        int index = message.lastIndexOf('?');
+        String message;
+        int index = event.getChatMessage().lastIndexOf('?');
         if (index > 0) {
-            message = message.substring(index);
+            message = event.getChatMessage().substring(index);
+        } else {
+            message = event.getChatMessage();
         }
         if (event.getLastToken().startsWith("?") || (event.getLastToken().startsWith(" ") && message.startsWith("?\""))) {
             String token;
@@ -84,7 +86,7 @@ public class ChatListener implements Listener {
             if (!chatPlayer.getAutocompleteItems().isEmpty()) {
                 List<String> items = chatPlayer.getAutocompleteItems().stream()
                         .filter(i -> token == null || i.getItem().getName().toLowerCase().startsWith(token))
-                        .map(i -> "?\"" + i.getItem().getName() + "\"")
+                        .map(i -> formatAutocompleteName(message, token, i.getItem().getName()))
                         .collect(Collectors.toList());
                 if (!items.isEmpty()) {
                     event.getTabCompletions().addAll(items);
@@ -94,12 +96,20 @@ public class ChatListener implements Listener {
             if (token != null && token.length() > 2) {
                 event.getTabCompletions().addAll(RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
                         .filter(i -> i.getName().toLowerCase().startsWith(token))
-                        .map(i -> "?\"" + i.getName() + "\"")
+                        .map(i -> formatAutocompleteName(message, token, i.getName()))
                         .collect(Collectors.toList()));
             } else {
                 event.getPlayer().sendMessage(ChatColor.RED + "Wenn du Items mit ?[Tab] vervollständigen willst, " +
                         "dann klicke diese bitte zuerst mit der mittleren Maustaste an oder nutze mindestens 3 Buchstaben.");
             }
         }
+    }
+
+    private String formatAutocompleteName(String message, String token, String itemName) {
+
+        if (token.startsWith(" ") && message.startsWith("?\"")) {
+            return ("?\"" + itemName + "\"").replace(message, "");
+        }
+        return "?\"" + itemName + "\"";
     }
 }

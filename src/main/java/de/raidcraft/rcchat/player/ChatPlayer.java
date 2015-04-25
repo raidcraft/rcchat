@@ -232,9 +232,9 @@ public class ChatPlayer {
 
     public void addAutoCompleteItem(CustomItemStack itemStack) {
 
-        autocompleteItems.stream()
-                .filter(i -> i.getItem().getName().equals(itemStack.getItem().getName()))
-                .forEach(autocompleteItems::remove);
+        if (autocompleteItems.contains(itemStack)) {
+            autocompleteItems.remove(itemStack);
+        }
         autocompleteItems.add(itemStack);
     }
 
