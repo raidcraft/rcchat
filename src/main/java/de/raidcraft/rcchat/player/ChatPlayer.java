@@ -261,7 +261,7 @@ public class ChatPlayer {
             if (Strings.isNullOrEmpty(matcher.group(1))) {
                 msg = getItemThumbnail(msg, matcher.group(2));
                 if (!Strings.isNullOrEmpty(matcher.group(3))) {
-                    msg.then().text(matcher.group(3));
+                    msg.then(matcher.group(3));
                 }
                 return msg;
             }
@@ -269,11 +269,11 @@ public class ChatPlayer {
             msg = matchAndReplaceItem(msg, matcher.group(1));
             msg = getItemThumbnail(msg, matcher.group(2));
             if (!Strings.isNullOrEmpty(matcher.group(3))) {
-                msg.then().text(matcher.group(3));
+                msg.then(matcher.group(3));
             }
             return msg;
         } else {
-            return msg.then().text(message);
+            return msg.then(message);
         }
     }
 
@@ -285,10 +285,11 @@ public class ChatPlayer {
                 .findFirst();
         if (first.isPresent()) {
             CustomItemStack item = first.get();
-            msg.then()
-                    .text("[" + item.getItem().getName() + "]")
+            msg.then("[").color(ChatColor.DARK_AQUA)
+                    .then(item.getItem().getName())
                     .color(item.getItem().getQuality().getColor())
-                    .itemTooltip(item);
+                    .itemTooltip(item)
+                    .then("]").color(ChatColor.DARK_AQUA);
         } else {
             // if none is found ask our item cache
             Optional<CustomItem> match = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
@@ -296,11 +297,11 @@ public class ChatPlayer {
                     .findFirst();
             if (match.isPresent()) {
                 CustomItem item = match.get();
-                msg.then()
-                        .text("[").color(ChatColor.DARK_AQUA).text(item.getName())
+                msg.then("[").color(ChatColor.DARK_AQUA)
+                        .then(item.getName())
                         .color(item.getQuality().getColor())
-                        .text("]").color(ChatColor.DARK_AQUA)
-                        .itemTooltip(item.createNewItem());
+                        .itemTooltip(item.createNewItem())
+                        .then("]").color(ChatColor.DARK_AQUA);
             }
         }
         return msg;
