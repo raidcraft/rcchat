@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +52,7 @@ public class ChatListener implements Listener {
         if (event.getClick() == ClickType.MIDDLE && event.getWhoClicked() instanceof Player) {
             CustomItemStack customItem = RaidCraft.getCustomItem(event.getCurrentItem());
             if (customItem != null) {
-                new FancyMessage("Nutze während dem Chatten ? [Tab] um alle Items die du " +
+                new FancyMessage("Nutze während dem Chatten ?[Tab] um alle Items die du " +
                         "mit Mittelklick angeklickt hast zu vervollständigen. Folgendes Item wurde hinzugefügt: ")
                         .color(ChatColor.YELLOW)
                         .then("[" + customItem.getItem().getName() + "]")
@@ -68,23 +69,30 @@ public class ChatListener implements Listener {
     public void onTabComplete(PlayerChatTabCompleteEvent event) {
 
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(event.getPlayer());
-        if (event.getLastToken().startsWith("??") && event.getLastToken().length() > 2) {
-            String token = event.getLastToken().substring(2).toLowerCase();
-            RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
-                    .filter(i -> i.getName().toLowerCase().startsWith(token))
-                    .map(i -> "??\"" + i.getName() + "\"")
-                    .collect(Collectors.toList());
-        } else if (event.getLastToken().startsWith("?")) {
+        if (event.getLastToken().startsWith("?")) {
             String token;
             if (event.getLastToken().length() > 1) {
-                token = event.getLastToken().substring(1).toLowerCase();
+                token = event.getLastToken().substring(1).toLowerCase().replace("\"", "");
             } else {
                 token = null;
             }
-            event.getTabCompletions().addAll(chatPlayer.getAutocompleteItems().stream()
-                    .filter(i -> token == null || i.getItem().getName().toLowerCase().startsWith(token))
-                    .map(i -> "?\"" + i.getItem().getName() + "\"")
-                    .collect(Collectors.toList()));
+            if (!chatPlayer.getAutocompleteItems().isEmpty()) {
+                List<String> items = chatPlayer.getAutocompleteItems().stream()
+                        .filter(i -> token == null || i.getItem().getName().toLowerCase().startsWith(token))
+                        .map(i -> "?\"" + i.getItem().getName() + "\"")
+                        .collect(Collectors.toList());
+                if (!items.isEmpty()) {
+                    event.getTabCompletions().addAll(items);
+                }
+            } else if (token != null && token.length() > 2) {
+                event.getTabCompletions().addAll(RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
+                        .filter(i -> i.getName().toLowerCase().startsWith(token))
+                        .map(i -> "?\"" + i.getName() + "\"")
+                        .collect(Collectors.toList()));
+            } else {
+                event.getPlayer().sendMessage(ChatColor.RED + "Wenn du Items mit ?[Tab] vervollständigen willst, " +
+                        "dann klicke diese bitte zuerst mit der mittleren Maustaste an oder nutze mindestens 3 Buchstaben.");
+            }
         }
     }
 }

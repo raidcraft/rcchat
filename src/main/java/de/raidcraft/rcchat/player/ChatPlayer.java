@@ -1,5 +1,6 @@
 package de.raidcraft.rcchat.player;
 
+import com.google.common.base.Strings;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.items.CustomItem;
 import de.raidcraft.api.items.CustomItemManager;
@@ -34,7 +35,7 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
-    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)(\\?){1,2}\"([a-zA-ZüöäÜÖÄß\\s]+)\"(.*)");
+    private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?\"([a-zA-ZüöäÜÖÄß\\s\\d]+)\"(.*)");
 
     private Player player;
     private Channel mainChannel;
@@ -238,40 +239,67 @@ public class ChatPlayer {
         return autocompleteItems;
     }
 
+    /**
+     * Recursivly matches item names in the message and replaces them with nice thumbnails. For example:
+     * <code>foo bar ?"item1" bar foo ?"item2" foobar</code> will match the following groups:
+     * 0: [0,40] foo bar ?"item1" bar foo ?"item2" foobar
+     * 1: [0,25] foo bar ?"item1" bar foo
+     * 2: [27,32] item2
+     * 3: [33,40] foobar
+     *
+     * @param msg     object to populate
+     * @param message to replace
+     *
+     * @return same {@link mkremins.fanciful.FancyMessage} object with replaced items
+     */
     private FancyMessage matchAndReplaceItem(FancyMessage msg, String message) {
 
         Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
         if (matcher.matches()) {
-            msg.text(matcher.group(1));
-            if (matcher.group(3) != null) {
-                String itemName = matcher.group(3);
-                if (matcher.group(2).length() > 1) {
-                    Optional<CustomItem> first = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
-                            .filter(i -> i.getName().equals(itemName))
-                            .findFirst();
-                    if (first.isPresent()) {
-                        CustomItem item = first.get();
-                        msg.then()
-                                .text("[" + item.getName() + "]")
-                                .color(item.getQuality().getColor())
-                                .itemTooltip(item.createNewItem());
-                    }
-                } else {
-                    Optional<CustomItemStack> first = autocompleteItems.stream()
-                            .filter(i -> i.getItem().getName().equals(itemName))
-                            .findFirst();
-                    if (first.isPresent()) {
-                        CustomItemStack item = first.get();
-                        msg.then()
-                                .text("[" + item.getItem().getName() + "]")
-                                .color(item.getItem().getQuality().getColor())
-                                .itemTooltip(item);
-                    }
+            // check if the message starts directly with the item
+            // ?"itemName" foo bar
+            if (Strings.isNullOrEmpty(matcher.group(1))) {
+                msg = getItemThumbnail(msg, matcher.group(2));
+                if (Strings.isNullOrEmpty(matcher.group(3))) {
+                    msg.then().text(matcher.group(3));
                 }
+                return msg;
             }
-            if (matcher.group(4) != null && !matcher.group(4).equals("")) {
-                msg.then();
-                return matchAndReplaceItem(msg, matcher.group(4));
+            // lets recursivly match the text before the current match
+            msg = matchAndReplaceItem(msg, matcher.group(1));
+            msg = getItemThumbnail(msg, matcher.group(2));
+            if (Strings.isNullOrEmpty(matcher.group(3))) {
+                msg.then().text(matcher.group(3));
+            }
+            return msg;
+        } else {
+            return msg.then().text(message);
+        }
+    }
+
+    private FancyMessage getItemThumbnail(FancyMessage msg, String itemName) {
+
+        // lets first try to find a queued auto complete item
+        Optional<CustomItemStack> first = autocompleteItems.stream()
+                .filter(i -> i.getItem().getName().equals(itemName))
+                .findFirst();
+        if (first.isPresent()) {
+            CustomItemStack item = first.get();
+            msg.then()
+                    .text("[" + item.getItem().getName() + "]")
+                    .color(item.getItem().getQuality().getColor())
+                    .itemTooltip(item);
+        } else {
+            // if none is found ask our item cache
+            Optional<CustomItem> match = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
+                    .filter(i -> i.getName().equals(itemName))
+                    .findFirst();
+            if (match.isPresent()) {
+                CustomItem item = match.get();
+                msg.then()
+                        .text("[" + item.getName() + "]")
+                        .color(item.getQuality().getColor())
+                        .itemTooltip(item.createNewItem());
             }
         }
         return msg;
