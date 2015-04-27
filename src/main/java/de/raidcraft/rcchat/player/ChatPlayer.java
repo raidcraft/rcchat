@@ -16,6 +16,8 @@ import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.skills.SkillsPlugin;
+import de.raidcraft.skills.api.exceptions.UnknownProfessionException;
+import de.raidcraft.skills.api.exceptions.UnknownSkillException;
 import de.raidcraft.skills.api.hero.Hero;
 import de.raidcraft.skills.api.profession.Profession;
 import de.raidcraft.util.CustomItemUtil;
@@ -107,8 +109,7 @@ public class ChatPlayer {
                     }
                     suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
                 }
-            } catch (Throwable e) {
-                //                    e.printStackTrace();
+            } catch (UnknownSkillException | UnknownProfessionException ignored) {
             }
         }
         if (suffix == null) {
