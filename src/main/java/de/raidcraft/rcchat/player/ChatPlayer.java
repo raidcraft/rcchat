@@ -1,9 +1,7 @@
 package de.raidcraft.rcchat.player;
 
-import com.google.common.base.Strings;
 import de.raidcraft.RaidCraft;
-import de.raidcraft.api.items.CustomItem;
-import de.raidcraft.api.items.CustomItemManager;
+import de.raidcraft.api.chat.Chat;
 import de.raidcraft.api.items.CustomItemStack;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
@@ -20,7 +18,6 @@ import de.raidcraft.skills.api.exceptions.UnknownProfessionException;
 import de.raidcraft.skills.api.exceptions.UnknownSkillException;
 import de.raidcraft.skills.api.hero.Hero;
 import de.raidcraft.skills.api.profession.Profession;
-import de.raidcraft.util.CustomItemUtil;
 import de.raidcraft.util.SignUtil;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
@@ -29,8 +26,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -38,7 +33,10 @@ import java.util.regex.Pattern;
  */
 public class ChatPlayer {
 
+    public static final char ITEM_COMPLETE_CHAR = '#';
     private static final Pattern ITEM_COMPLETE_PATTERN = Pattern.compile("(.*)\\?\"([a-zA-ZüöäÜÖÄß\\s\\d]+)\"(.*)");
+    public static final char QUEST_COMPLETE_CHAR = '?';
+    public static final char ACHIEVEMENT_COMPLETE_CHAR = '!';
 
     private Player player;
     private Channel mainChannel;
@@ -211,7 +209,7 @@ public class ChatPlayer {
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
-        FancyMessage result = matchAndReplaceItem(message);
+        FancyMessage result = Chat.replaceMatchingAutoCompleteItems(player, message);
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
         getMainChannel().sendMessage(result);
@@ -242,74 +240,5 @@ public class ChatPlayer {
     public List<CustomItemStack> getAutocompleteItems() {
 
         return autocompleteItems;
-    }
-
-    /**
-     * Recursivly matches item names in the message and replaces them with nice thumbnails. For example:
-     * <code>foo bar ?"item1" bar foo ?"item2" foobar</code> will match the following groups:
-     * 0: [0,40] foo bar ?"item1" bar foo ?"item2" foobar
-     * 1: [0,25] foo bar ?"item1" bar foo
-     * 2: [27,32] item2
-     * 3: [33,40] foobar
-     *
-     * @param msg     object to populate
-     * @param message to replace
-     *
-     * @return same {@link mkremins.fanciful.FancyMessage} object with replaced items
-     */
-    private FancyMessage matchAndReplaceItem(FancyMessage msg, String message) {
-
-        Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
-        if (matcher.matches()) {
-            // check if the message starts directly with the item
-            // ?"itemName" foo bar
-            if (Strings.isNullOrEmpty(matcher.group(1))) {
-                msg = getItemThumbnail(msg, matcher.group(2));
-                if (!Strings.isNullOrEmpty(matcher.group(3))) {
-                    msg.then(matcher.group(3));
-                }
-                return msg;
-            }
-            // lets recursivly match the text before the current match
-            msg = matchAndReplaceItem(msg, matcher.group(1));
-            msg = getItemThumbnail(msg, matcher.group(2));
-            if (!Strings.isNullOrEmpty(matcher.group(3))) {
-                msg.then(matcher.group(3));
-            }
-            return msg;
-        } else {
-            return msg.then(message);
-        }
-    }
-
-    private FancyMessage getItemThumbnail(FancyMessage msg, String itemName) {
-
-        // lets first try to find a queued auto complete item
-        Optional<CustomItemStack> first = autocompleteItems.stream()
-                .filter(i -> i.getItem().getName().equals(itemName))
-                .findFirst();
-        if (first.isPresent()) {
-            msg = CustomItemUtil.getFormattedItemTooltip(msg, first.get());
-        } else {
-            // if none is found ask our item cache
-            Optional<CustomItem> match = RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
-                    .filter(i -> i.getName().equals(itemName))
-                    .findFirst();
-            if (match.isPresent()) {
-                msg = CustomItemUtil.getFormattedItemTooltip(msg, match.get());
-            }
-        }
-        return msg;
-    }
-
-    private FancyMessage matchAndReplaceItem(String message) {
-
-        Matcher matcher = ITEM_COMPLETE_PATTERN.matcher(message);
-        FancyMessage msg = new FancyMessage("");
-        if (matcher.matches()) {
-            return matchAndReplaceItem(msg, message);
-        } else {
-            return new FancyMessage(message);
-        }
     }
 }

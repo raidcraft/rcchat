@@ -1,24 +1,17 @@
 package de.raidcraft.rcchat.listener;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.items.CustomItemManager;
-import de.raidcraft.api.items.CustomItemStack;
+import de.raidcraft.api.chat.AutoCompletionProvider;
+import de.raidcraft.api.chat.Chat;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.util.SignUtil;
-import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Philip
@@ -47,71 +40,25 @@ public class ChatListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void sendItemText(InventoryClickEvent event) {
-
-        if (event.getClick() == ClickType.MIDDLE && event.getWhoClicked() instanceof Player) {
-            CustomItemStack customItem = RaidCraft.getCustomItem(event.getCurrentItem());
-            if (customItem != null) {
-                new FancyMessage("Nutze während dem Chatten ?[Tab] um alle Items die du " +
-                        "mit Mittelklick angeklickt hast zu vervollständigen. Folgendes Item wurde hinzugefügt: ")
-                        .color(ChatColor.YELLOW)
-                        .then("[" + customItem.getItem().getName() + "]")
-                        .color(customItem.getItem().getQuality().getColor())
-                        .itemTooltip(customItem)
-                        .send((Player) event.getWhoClicked());
-                ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player) event.getWhoClicked());
-                chatPlayer.addAutoCompleteItem(customItem);
-            }
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
     public void onTabComplete(PlayerChatTabCompleteEvent event) {
 
+        Character token = null;
+        if (event.getLastToken().length() > 0) {
+            token = event.getLastToken().charAt(0);
+        }
+        if (!Chat.getAutoCompletionProviders().containsKey(token)) {
+            return;
+        }
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(event.getPlayer());
-        String message;
-        int index = event.getChatMessage().lastIndexOf('?');
-        if (index > 0) {
-            message = event.getChatMessage().substring(index);
+        AutoCompletionProvider provider = Chat.getAutoCompletionProviders().get(token);
+        String message = null;
+        if (event.getLastToken().length() > 1) {
+            message = event.getLastToken().substring(1);
+        }
+        if (provider.getMinLength() == 0 || (message != null && message.length() < provider.getMinLength())) {
+            event.getTabCompletions().addAll(provider.getAutoCompleteItems(event.getPlayer(), message));
         } else {
-            message = event.getChatMessage();
+            chatPlayer.sendMessage(ChatColor.RED + provider.getErrorMessage());
         }
-        if (event.getLastToken().startsWith("?")
-                || ((event.getLastToken().startsWith(" ") || event.getLastToken().startsWith("\""))
-                && message.startsWith("?\""))) {
-            String token;
-            if (event.getLastToken().length() > 1) {
-                token = event.getLastToken().substring(1).toLowerCase().replace("\"", "");
-            } else {
-                token = null;
-            }
-            if (!chatPlayer.getAutocompleteItems().isEmpty()) {
-                List<String> items = chatPlayer.getAutocompleteItems().stream()
-                        .filter(i -> token == null || i.getItem().getName().toLowerCase().startsWith(token))
-                        .map(i -> formatAutocompleteName(message, token, i.getItem().getName()))
-                        .collect(Collectors.toList());
-                if (!items.isEmpty()) {
-                    event.getTabCompletions().addAll(items);
-                    return;
-                }
-            }
-            if (token != null && token.length() > 2) {
-                event.getTabCompletions().addAll(RaidCraft.getComponent(CustomItemManager.class).getLoadedCustomItems().stream()
-                        .filter(i -> i.getName().toLowerCase().startsWith(token))
-                        .map(i -> formatAutocompleteName(message, token, i.getName()))
-                        .collect(Collectors.toList()));
-            } else {
-                event.getPlayer().sendMessage(ChatColor.RED + "Wenn du Items mit ?[Tab] vervollständigen willst, " +
-                        "dann klicke diese bitte zuerst mit der mittleren Maustaste an oder nutze mindestens 3 Buchstaben.");
-            }
-        }
-    }
-
-    private String formatAutocompleteName(String message, String token, String itemName) {
-
-        if ((token.startsWith(" ") || token.startsWith("\"")) && message.startsWith("?\"")) {
-            return ("?\"" + itemName + "\"").replace(message, "");
-        }
-        return "?\"" + itemName + "\"";
     }
 }
