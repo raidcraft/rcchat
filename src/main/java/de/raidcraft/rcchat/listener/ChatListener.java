@@ -55,10 +55,10 @@ public class ChatListener implements Listener {
         if (event.getLastToken().length() > 1) {
             message = event.getLastToken().substring(1);
         }
-        if (provider.getMinLength() == 0 || (message != null && message.length() < provider.getMinLength())) {
+        if (provider.getMinLength() == 0 || (message != null && provider.getMinLength() < message.length())) {
             event.getTabCompletions().addAll(provider.getAutoCompleteItems(event.getPlayer(), message));
         } else {
-            chatPlayer.sendMessage(ChatColor.RED + provider.getErrorMessage());
+            chatPlayer.getPlayer().sendMessage(ChatColor.RED + provider.getErrorMessage());
         }
     }
 }
