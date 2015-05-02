@@ -55,7 +55,7 @@ public class ChatListener implements Listener {
         if (event.getLastToken().length() > 1) {
             message = event.getLastToken().substring(1);
         }
-        if (provider.getMinLength() == 0 || (message != null && provider.getMinLength() < message.length())) {
+        if (provider.getMinLength() == 0 || (message != null && provider.getMinLength() <= message.length())) {
             event.getTabCompletions().addAll(provider.getAutoCompleteItems(event.getPlayer(), message));
         } else {
             chatPlayer.getPlayer().sendMessage(ChatColor.RED + provider.getErrorMessage());
