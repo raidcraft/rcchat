@@ -207,9 +207,6 @@ public class ChatPlayer {
             channelColor = getMainChannel().getColor();
         }
 
-        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
-                player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
-
         FancyMessage result = new FancyMessage(worldPrefix)
                 .then(channelPrefix)
                 .command("/ch " + getMainChannel().getName())
@@ -219,6 +216,9 @@ public class ChatPlayer {
                 .then(suffix).then(": ").then(channelColor);
 
         result = Chat.replaceMatchingAutoCompleteItems(player, message, result);
+
+        message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET + prefix + ChatColor.RESET + nameColor +
+                player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
         getMainChannel().sendMessage(result);
