@@ -18,6 +18,7 @@ import de.raidcraft.skills.api.exceptions.UnknownProfessionException;
 import de.raidcraft.skills.api.exceptions.UnknownSkillException;
 import de.raidcraft.skills.api.hero.Hero;
 import de.raidcraft.skills.api.profession.Profession;
+import de.raidcraft.skills.util.HeroUtil;
 import de.raidcraft.util.SignUtil;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
@@ -209,7 +210,15 @@ public class ChatPlayer {
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET  + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
-        FancyMessage result = Chat.replaceMatchingAutoCompleteItems(player, message);
+        FancyMessage result = new FancyMessage(worldPrefix)
+                .then(channelPrefix)
+                .command("/ch " + getMainChannel().getName())
+                .tooltip("Klicke hier um in den Channel " + getMainChannel().getName() + " zu wechseln.")
+                .then(prefix).then(nameColor + player.getName())
+                .formattedTooltip(HeroUtil.getHeroTooltip(player, null, true))
+                .then(suffix).then(": ").then(channelColor);
+
+        result = Chat.replaceMatchingAutoCompleteItems(player, message, result);
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
         getMainChannel().sendMessage(result);
