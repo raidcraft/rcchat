@@ -212,7 +212,7 @@ public class ChatPlayer {
                 .command("/ch " + getMainChannel().getName())
                 .tooltip("Klicke hier um in den Channel " + getMainChannel().getName() + " zu wechseln.")
                 .then(prefix).then(nameColor + player.getName())
-                .suggest("/tell " + player.getName())
+                .suggest("/tell " + player.getName() + " ")
                 .formattedTooltip(HeroUtil.getHeroTooltip(player, null, true))
                 .then(suffix).then(": ").then(channelColor);
 
