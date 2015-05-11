@@ -207,22 +207,31 @@ public class ChatPlayer {
             channelColor = getMainChannel().getColor();
         }
 
-        FancyMessage result = new FancyMessage(worldPrefix)
-                .then(channelPrefix)
-                .command("/ch " + getMainChannel().getName())
-                .tooltip("Klicke hier um in den Channel " + getMainChannel().getName() + " zu wechseln.")
-                .then(prefix).then(nameColor + player.getName())
-                .suggest("/tell " + player.getName() + " ")
-                .formattedTooltip(HeroUtil.getHeroTooltip(player, null, true))
-                .then(suffix).then(": ").then(channelColor);
+        // check if the hero is cached to prevent async scoreboard creation
+        boolean cached = HeroUtil.isCachedHero(player.getUniqueId());
 
-        result = Chat.replaceMatchingAutoCompleteItems(player, message, result);
+        if (cached) {
+            FancyMessage result = new FancyMessage(worldPrefix)
+                    .then(channelPrefix)
+                    .command("/ch " + getMainChannel().getName())
+                    .tooltip("Klicke hier um in den Channel " + getMainChannel().getName() + " zu wechseln.")
+                    .then(prefix).then(nameColor + player.getName())
+                    .suggest("/tell " + player.getName() + " ")
+                    .formattedTooltip(HeroUtil.getHeroTooltip(player, null, true))
+                    .then(suffix).then(": ").then(channelColor);
+
+            result = Chat.replaceMatchingAutoCompleteItems(player, message, result);
+            getMainChannel().sendMessage(result);
+        }
 
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
 
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
-        getMainChannel().sendMessage(result);
+
+        if (!cached) {
+            getMainChannel().sendMessage(message);
+        }
 
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
         bungeeManager.sendMessage(player, new ChannelChatMessage(getMainChannel().getName(), message));
