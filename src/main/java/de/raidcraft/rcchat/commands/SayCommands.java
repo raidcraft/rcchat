@@ -35,15 +35,15 @@ public class SayCommands {
             BlockCommandSender commandBlock = (BlockCommandSender) sender;
             String senderName = commandBlock.getName();
             if (senderName.equalsIgnoreCase("@")) {
-                senderName = ChatColor.LIGHT_PURPLE + "**SERVER**";
+                senderName = ChatColor.DARK_RED + "**SERVER**";
             } else {
                 senderName = SignUtil.parseColor(senderName);
             }
 
-            Bukkit.broadcastMessage(senderName + " " + SignUtil.parseColor(context.getJoinedStrings(0)));
+            Bukkit.broadcastMessage(senderName + " " + ChatColor.GOLD + SignUtil.parseColor(context.getJoinedStrings(0)));
             return;
         }
 
-        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "**SERVER** " + context.getString(0));
+        Bukkit.broadcastMessage(ChatColor.DARK_RED + "**SERVER** " + ChatColor.GOLD + context.getJoinedStrings(0));
     }
 }
