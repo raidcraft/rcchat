@@ -13,12 +13,6 @@ import de.raidcraft.rcchat.prefix.PlayerPrefix;
 import de.raidcraft.rcchat.prefix.PrefixManager;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
-import de.raidcraft.skills.SkillsPlugin;
-import de.raidcraft.skills.api.exceptions.UnknownProfessionException;
-import de.raidcraft.skills.api.exceptions.UnknownSkillException;
-import de.raidcraft.skills.api.hero.Hero;
-import de.raidcraft.skills.api.profession.Profession;
-import de.raidcraft.skills.util.HeroUtil;
 import de.raidcraft.util.SignUtil;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
@@ -93,7 +87,7 @@ public class ChatPlayer {
     public String getSuffix() {
 
         if (suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
-            try {
+/*            try {
                 if (getPrefix().hasPermission() && RaidCraft.getComponent(SkillsPlugin.class) != null) {
                     Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
                     // lets try to parse the profession from the prefix permission
@@ -109,7 +103,7 @@ public class ChatPlayer {
                     suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
                 }
             } catch (UnknownSkillException | UnknownProfessionException ignored) {
-            }
+            }*/
         }
         if (suffix == null) {
             suffix = ChatColor.GREEN + "#";
@@ -208,7 +202,8 @@ public class ChatPlayer {
         }
 
         // check if the hero is cached to prevent async scoreboard creation
-        boolean cached = HeroUtil.isCachedHero(player.getUniqueId());
+        boolean cached = false;
+/*      cached = HeroUtil.isCachedHero(player.getUniqueId());
 
         if (cached) {
             FancyMessage result = new FancyMessage(worldPrefix)
@@ -222,7 +217,7 @@ public class ChatPlayer {
 
             result = Chat.replaceMatchingAutoCompleteItems(player, message, result);
             getMainChannel().sendMessage(result);
-        }
+        }*/
 
         message = worldPrefix + ChatColor.RESET + channelPrefix + ChatColor.RESET + prefix + ChatColor.RESET + nameColor +
                 player.getName() + ChatColor.RESET + suffix + ChatColor.RESET + ": " + channelColor + message;
