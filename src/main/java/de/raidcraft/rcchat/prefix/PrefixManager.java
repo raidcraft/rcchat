@@ -19,7 +19,7 @@ import java.util.Map;
 public class PrefixManager {
 
     public final static PrefixManager INST = new PrefixManager();
-    public final static PlayerPrefix GUEST_PREFIX = new PlayerPrefix(0, "&8[&7Gast&f]", null, -1);
+    public final static PlayerPrefix GUEST_PREFIX = new PlayerPrefix(0, "&8[&7Gast&8]&f", null, -1);
 
     private Map<Integer, PlayerPrefix> playerPrefixes = new HashMap<>();
     private Map<String, WorldPrefix> worldPrefixes = new HashMap<>();
