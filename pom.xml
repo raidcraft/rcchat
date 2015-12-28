@@ -27,7 +27,6 @@
         <developerConnection>scm:git:ssh://git@git.raid-craft.de:2222/raid-craft-de/rcchat.git</developerConnection>
     </scm>
 
-
     <parent>
         <groupId>de.raidcraft</groupId>
         <artifactId>masterpom</artifactId>
