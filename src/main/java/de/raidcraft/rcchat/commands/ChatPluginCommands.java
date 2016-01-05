@@ -130,7 +130,7 @@ public class ChatPluginCommands {
     }
 
     @Command(
-            aliases = {"tell"},
+            aliases = {"tell", "msg"},
             desc = "Private chat command"
     )
     public void tell(CommandContext context, CommandSender sender) throws CommandException {
