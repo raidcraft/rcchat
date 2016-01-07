@@ -87,23 +87,8 @@ public class ChatPlayer {
     public String getSuffix() {
 
         if (suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
-/*            try {
-                if (getPrefix().hasPermission() && RaidCraft.getComponent(SkillsPlugin.class) != null) {
-                    Hero hero = RaidCraft.getComponent(SkillsPlugin.class).getCharacterManager().getHero(player);
-                    // lets try to parse the profession from the prefix permission
-                    String[] split = getPrefix().getPermission().split("\\.");
-                    String last = split[split.length - 1];
-                    Profession profession = hero.getProfession(last);
-                    int level;
-                    if (profession != null) {
-                        level = profession.getPath().getTotalPathLevel(hero);
-                    } else {
-                        level = hero.getPlayerLevel();
-                    }
-                    suffix = "[" + ChatColor.YELLOW + level + ChatColor.RESET + "]";
-                }
-            } catch (UnknownSkillException | UnknownProfessionException ignored) {
-            }*/
+
+            suffix = "[" + ChatColor.YELLOW + RaidCraft.getHeroProvider().getLevel() + ChatColor.RESET + "]";
         }
         if (suffix == null) {
             suffix = ChatColor.GREEN + "#";
