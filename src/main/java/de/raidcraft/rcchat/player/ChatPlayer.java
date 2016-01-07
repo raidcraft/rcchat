@@ -88,7 +88,7 @@ public class ChatPlayer {
 
         if (suffix == null && !player.hasPermission("rcchat.suffix.admin")) {
 
-            suffix = "[" + ChatColor.YELLOW + RaidCraft.getHeroProvider().getLevel() + ChatColor.RESET + "]";
+            suffix = "[" + ChatColor.YELLOW + RaidCraft.getHeroProvider().getLevel(player.getUniqueId()) + ChatColor.RESET + "]";
         }
         if (suffix == null) {
             suffix = ChatColor.GREEN + "#";
