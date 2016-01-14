@@ -160,7 +160,7 @@ public class ChatPlayer {
         //            message = WeblinkUtil.obfuscateWeblinks(message);
         //        }
 
-        if (player.hasPermission("rcchat.message.colorized")) {
+        if (player.hasPermission("rcchat.colorize")) {
             message = SignUtil.parseColor(message);
         }
 
