@@ -253,8 +253,12 @@ public class ChatPluginCommands {
 
         if(context.argsLength() == 0) {
             List<String> mutedPlayerNames = chatPlayer.getMutedNames();
-            sender.sendMessage(ChatColor.GOLD + "Deine geblockten Spieler:");
-            sender.sendMessage(ChatColor.YELLOW + StringUtils.join(mutedPlayerNames, ChatColor.WHITE + ", " + ChatColor.YELLOW));
+            if(mutedPlayerNames.size() == 0) {
+                sender.sendMessage(ChatColor.GOLD + "Du hast keine Spieler auf der geblockt.");
+            } else {
+                sender.sendMessage(ChatColor.GOLD + "Deine geblockten Spieler:");
+                sender.sendMessage(ChatColor.YELLOW + StringUtils.join(mutedPlayerNames, ChatColor.WHITE + ", " + ChatColor.YELLOW));
+            }
         } else {
             if(chatPlayer.mute(context.getString(0))) {
                 sender.sendMessage(ChatColor.GREEN + "Du erhälst in Zukunft keine Nachrichten mehr von '" + context.getString(0) + "'!");
