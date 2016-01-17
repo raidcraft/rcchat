@@ -322,7 +322,7 @@ public class ChatPlayer {
 
         plugin.getDatabase().delete(tMute);
 
-        return false;
+        return true;
     }
 
     public void unmuteAll() {
