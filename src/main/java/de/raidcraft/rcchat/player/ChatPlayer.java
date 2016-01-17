@@ -292,7 +292,7 @@ public class ChatPlayer {
         tMute.setMutedPlayer(uuid);
         RaidCraft.getComponent(RCChatPlugin.class).getDatabase().save(tMute);
 
-        return false;
+        return true;
     }
 
     public boolean unmute(String player) {
