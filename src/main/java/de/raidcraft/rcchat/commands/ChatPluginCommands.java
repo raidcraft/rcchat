@@ -10,9 +10,11 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
+import de.raidcraft.rcmultiworld.players.MultiWorldPlayer;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
 import de.raidcraft.util.PlayerUtil;
 import de.raidcraft.util.SignUtil;
+import de.raidcraft.util.UUIDUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Author: Philip
@@ -170,20 +173,25 @@ public class ChatPluginCommands {
         PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
         String recipient = context.getString(0);
 
+        UUID uuid = UUIDUtil.convertPlayer(recipient);
+
+        if(uuid == null) {
+            throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
+        }
+
         String recipientFullName = null;
         if (Bukkit.getPlayer(recipient) != null) {
             recipientFullName = Bukkit.getPlayer(recipient).getName();
         }
-        // TODO: implement multi server chat support
-        //        } else if (playerManager.isOnline(recipient)) {
-        //            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(recipient);
-        //            if (multiWorldPlayer != null) {
-        //                recipientFullName = multiWorldPlayer.getName();
-        //            }
-        //        }
+        else {
+            MultiWorldPlayer multiWorldPlayer = playerManager.getPlayer(uuid);
+            if (multiWorldPlayer != null) {
+                recipientFullName = UUIDUtil.getNameFromUUID(multiWorldPlayer.getPlayer());
+            }
+        }
 
         if (recipientFullName == null) {
-            throw new CommandException("Spieler '" + context.getString(0) + "' nicht gefunden!");
+            throw new CommandException("Spieler '" + context.getString(0) + "' ist nicht online!");
         }
 
         chatPlayer.enterPrivateChat(recipientFullName);
@@ -209,13 +217,18 @@ public class ChatPluginCommands {
         String lastPrivateSender = chatPlayer.getLastPrivateSender();
         PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
 
+        UUID uuid = UUIDUtil.convertPlayer(lastPrivateSender);
+        if(uuid == null) {
+            chatPlayer.setLastPrivateSender(null);
+            throw new CommandException("Dein Chatpartner existiert nicht!");
+        }
+
         if (lastPrivateSender == null) {
             throw new CommandException("Du hast keine Nachricht zum beantworten!");
         }
-        // TODO: implement multi server chat support
-        //        if (!playerManager.isOnline(lastPrivateSender)) {
-        //            throw new CommandException("Dein Chatpartner ist offline!");
-        //        }
+        if (playerManager.getPlayer(uuid) == null) {
+            throw new CommandException("Dein Chatpartner ist offline!");
+        }
 
         chatPlayer.enterPrivateChat(lastPrivateSender);
 

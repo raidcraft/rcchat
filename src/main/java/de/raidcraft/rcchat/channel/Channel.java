@@ -68,7 +68,6 @@ public class Channel {
             ChatPlayer chatPlayer = entry.getValue();
 
             if (chatPlayer.getPlayer().isOnline() && !chatPlayer.isMuted(senderName)) {
-                //TODO: check if muted
                 chatPlayer.getPlayer().sendMessage(message);
             }
         }
