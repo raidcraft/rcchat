@@ -1,7 +1,6 @@
 package de.raidcraft.rcchat.player;
 
 import de.raidcraft.RaidCraft;
-import de.raidcraft.api.chat.Chat;
 import de.raidcraft.api.items.CustomItemStack;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.bungeecord.messages.ChannelChatMessage;
@@ -11,16 +10,19 @@ import de.raidcraft.rcchat.channel.ChannelManager;
 import de.raidcraft.rcchat.namecolor.NameColorManager;
 import de.raidcraft.rcchat.prefix.PlayerPrefix;
 import de.raidcraft.rcchat.prefix.PrefixManager;
+import de.raidcraft.rcchat.tables.TMute;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.util.SignUtil;
-import mkremins.fanciful.FancyMessage;
+import de.raidcraft.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -41,6 +43,7 @@ public class ChatPlayer {
     private String chatPartner = null;
     private String lastPrivateSender = null;
     private final List<CustomItemStack> autocompleteItems = new ArrayList<>();
+    private List<UUID> mutedPlayers = null;
 
     public ChatPlayer(Player player) {
 
@@ -210,11 +213,11 @@ public class ChatPlayer {
         RaidCraft.LOGGER.info(ChatColor.stripColor(message));
 
         if (!cached) {
-            getMainChannel().sendMessage(message);
+            getMainChannel().sendMessage(getName(), message);
         }
 
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
-        bungeeManager.sendMessage(player, new ChannelChatMessage(getMainChannel().getName(), message));
+        bungeeManager.sendMessage(player, new ChannelChatMessage(getMainChannel().getName(), getName(), message));
     }
 
     /*
@@ -239,5 +242,115 @@ public class ChatPlayer {
     public List<CustomItemStack> getAutocompleteItems() {
 
         return autocompleteItems;
+    }
+
+
+    // MUTES
+
+    private void loadMutes() {
+
+        RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
+
+        mutedPlayers.clear();
+
+        List<TMute> tMutes = plugin.getDatabase().find(TMute.class).where()
+                .eq("player_id", getPlayer().getUniqueId()).findList();
+        if(tMutes == null) {
+            return;
+        }
+
+        for(TMute tMute : tMutes) {
+            mutedPlayers.add(tMute.getMutedPlayer());
+        }
+    }
+
+    public boolean mute(String player) {
+
+        if(mutedPlayers == null) loadMutes();
+
+        UUID uuid = UUIDUtil.convertPlayer(player);
+
+        if(uuid == null) {
+            return false;
+        }
+
+        // check if already muted
+        if(mutedPlayers.contains(uuid)) {
+            return true;
+        }
+
+        // add to cache
+        mutedPlayers.add(uuid);
+
+        // add to database
+        TMute tMute = new TMute();
+        tMute.setPlayerId(getPlayer().getUniqueId());
+        tMute.setCreated(new Date(System.currentTimeMillis()));
+        tMute.setMutedPlayer(uuid);
+        RaidCraft.getComponent(RCChatPlugin.class).getDatabase().save(tMute);
+
+        return false;
+    }
+
+    public boolean unmute(String player) {
+
+        return unmute(UUIDUtil.convertPlayer(player));
+    }
+
+    public boolean unmute(UUID uuid) {
+
+        RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
+
+        if(mutedPlayers == null) loadMutes();
+
+        if(uuid == null) {
+            return false;
+        }
+
+        // remove from cache
+        mutedPlayers.remove(uuid);
+
+        // remove from database
+        TMute tMute = plugin.getDatabase().find(TMute.class).where()
+                .eq("player_id", getPlayer().getUniqueId()).eq("muted_player", uuid).findUnique();
+        if(tMute == null) {
+            return true;
+        }
+
+        plugin.getDatabase().delete(tMute);
+
+        return false;
+    }
+
+    public void unmuteAll() {
+
+        if(mutedPlayers == null) loadMutes();
+
+        for(UUID uuid : mutedPlayers) {
+            unmute(uuid);
+        }
+    }
+
+    public boolean isMuted(String sender) {
+
+        if(mutedPlayers == null) loadMutes();
+
+        if(mutedPlayers.contains(UUIDUtil.convertPlayer(sender))) {
+            return true;
+        }
+        return false;
+    }
+
+    public List<String> getMutedNames() {
+
+        if(mutedPlayers == null) loadMutes();
+
+        List<String> mutedNames = new ArrayList<>();
+
+        for(UUID uuid : mutedPlayers) {
+            mutedNames.add(UUIDUtil.getNameFromUUID(uuid));
+        }
+
+        return mutedNames;
     }
 }

@@ -14,18 +14,20 @@ import de.raidcraft.util.StringEncodingUtil;
 public class ChannelChatMessage extends BungeeMessage {
 
     private String channelName;
+    private String sender;
     private String message;
 
-    public ChannelChatMessage(String channelName, String message) {
+    public ChannelChatMessage(String channelName, String sender, String message) {
 
         this.channelName = channelName;
+        this.sender = sender;
         this.message = message;
     }
 
     @Override
     protected String encode() {
 
-        return channelName + BungeeManager.DELIMITER + StringEncodingUtil.encode(message);
+        return channelName + BungeeManager.DELIMITER + sender + BungeeManager.DELIMITER + StringEncodingUtil.encode(message);
     }
 
     @Override
@@ -33,7 +35,7 @@ public class ChannelChatMessage extends BungeeMessage {
 
         Channel channel = ChannelManager.INST.getChannel(channelName);
         if (channel != null) {
-            channel.sendMessage(StringEncodingUtil.decode(message));
+            channel.sendMessage(sender, StringEncodingUtil.decode(message));
         }
     }
 }

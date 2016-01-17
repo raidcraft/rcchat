@@ -15,14 +15,12 @@ import de.raidcraft.rcchat.listener.ChatListener;
 import de.raidcraft.rcchat.listener.PlayerListener;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.prefix.PrefixManager;
-import de.raidcraft.rcchat.tables.ChannelWorldsTable;
-import de.raidcraft.rcchat.tables.ChannelsTable;
-import de.raidcraft.rcchat.tables.PlayerPrefixTable;
-import de.raidcraft.rcchat.tables.PlayersChannelTable;
-import de.raidcraft.rcchat.tables.PlayersPrefixTable;
-import de.raidcraft.rcchat.tables.WorldPrefixTable;
+import de.raidcraft.rcchat.tables.*;
 import de.raidcraft.rcmultiworld.BungeeManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Philip
@@ -69,6 +67,13 @@ public class RCChatPlugin extends BasePlugin {
         ChannelManager.INST.reload();
         PrefixManager.INST.reload();
         ChatPlayerManager.INST.reload();
+    }
+
+    @Override
+    public List<Class<?>> getDatabaseClasses() {
+        List<Class<?>> classes = new ArrayList<>();
+        classes.add(TMute.class);
+        return classes;
     }
 
     public class LocalConfiguration extends ConfigurationBase<RCChatPlugin> {

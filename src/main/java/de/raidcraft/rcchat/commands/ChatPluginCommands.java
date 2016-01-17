@@ -11,13 +11,18 @@ import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
+import de.raidcraft.util.PlayerUtil;
 import de.raidcraft.util.SignUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Philip
@@ -219,6 +224,63 @@ public class ChatPluginCommands {
             chatPlayer.leavePrivateChat();
         } else {
             chatPlayer.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Du chattest nun mit '" + lastPrivateSender + "'");
+        }
+    }
+
+    @Command(
+            aliases = {"mute"},
+            desc = "Mute other players"
+    )
+    public void mute(CommandContext context, CommandSender sender) throws CommandException {
+
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player) sender);
+
+        String lastPrivateSender = chatPlayer.getLastPrivateSender();
+        PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
+
+        if(context.argsLength() == 0) {
+            List<String> mutedPlayerNames = chatPlayer.getMutedNames();
+            sender.sendMessage(ChatColor.GOLD + "Deine geblockten Spieler:");
+            sender.sendMessage(ChatColor.YELLOW + StringUtils.join(mutedPlayerNames, ChatColor.WHITE + ", " + ChatColor.YELLOW));
+        } else {
+            if(chatPlayer.mute(context.getString(0))) {
+                sender.sendMessage(ChatColor.GREEN + "Du erhälst in Zukunft keine Nachrichten mehr von '" + context.getString(0) + "'!");
+            } else {
+                sender.sendMessage(ChatColor.RED + "Der Spieler '" + context.getString(0) + "' ist unbekannt!");
+            }
+        }
+
+    }
+
+    @Command(
+            aliases = {"unmute"},
+            desc = "Unmute other players"
+    )
+    public void unmute(CommandContext context, CommandSender sender) throws CommandException {
+
+        ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer((Player) sender);
+
+        String lastPrivateSender = chatPlayer.getLastPrivateSender();
+        PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
+
+        if(context.argsLength() == 0) {
+            sender.sendMessage(ChatColor.RED + "Gebe den Spielernamen an den du Unmuten möchtest!");
+            sender.sendMessage(ChatColor.RED + "Mit '/unmute all' werden alle Mutes entfernt.");
+            return;
+        }
+
+        String unmutePlayer = context.getString(0);
+
+        if(unmutePlayer.equals("all")) {
+            chatPlayer.unmuteAll();
+            sender.sendMessage(ChatColor.GREEN + "Es werden wieder von allen Spielern Nachrichten empfangen.");
+            return;
+        }
+
+        if(chatPlayer.unmute(context.getString(0))) {
+            sender.sendMessage(ChatColor.GREEN + "Du erhälst in Zukunft wieder Nachrichten von '" + context.getString(0) + "'!");
+        } else {
+            sender.sendMessage(ChatColor.RED + "Der Spieler '" + context.getString(0) + "' ist unbekannt!");
         }
     }
 }

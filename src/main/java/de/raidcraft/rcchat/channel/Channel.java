@@ -61,13 +61,14 @@ public class Channel {
         }
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String senderName, String message) {
 
         for (Map.Entry<String, ChatPlayer> entry : members.entrySet()) {
 
             ChatPlayer chatPlayer = entry.getValue();
 
-            if (chatPlayer.getPlayer().isOnline()) {
+            if (chatPlayer.getPlayer().isOnline() && !chatPlayer.isMuted(senderName)) {
+                //TODO: check if muted
                 chatPlayer.getPlayer().sendMessage(message);
             }
         }
