@@ -251,6 +251,9 @@ public class ChatPlayer {
 
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
 
+        if(mutedPlayers == null) {
+            mutedPlayers = new ArrayList<>();
+        }
         mutedPlayers.clear();
 
         List<TMute> tMutes = plugin.getDatabase().find(TMute.class).where()
