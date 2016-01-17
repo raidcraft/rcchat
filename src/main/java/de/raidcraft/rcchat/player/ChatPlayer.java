@@ -329,7 +329,8 @@ public class ChatPlayer {
 
         if(mutedPlayers == null) loadMutes();
 
-        for(UUID uuid : mutedPlayers) {
+        List<UUID> mutedCopy = new ArrayList<>(mutedPlayers);
+        for(UUID uuid : mutedCopy) {
             unmute(uuid);
         }
     }
