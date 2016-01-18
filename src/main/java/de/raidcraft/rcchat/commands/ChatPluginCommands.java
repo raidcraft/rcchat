@@ -254,7 +254,7 @@ public class ChatPluginCommands {
         if(context.argsLength() == 0) {
             List<String> mutedPlayerNames = chatPlayer.getMutedNames();
             if(mutedPlayerNames.size() == 0) {
-                sender.sendMessage(ChatColor.GOLD + "Du hast keine Spieler auf der geblockt.");
+                sender.sendMessage(ChatColor.GOLD + "Du hast keine Spieler geblockt.");
             } else {
                 sender.sendMessage(ChatColor.GOLD + "Deine geblockten Spieler:");
                 sender.sendMessage(ChatColor.YELLOW + StringUtils.join(mutedPlayerNames, ChatColor.WHITE + ", " + ChatColor.YELLOW));
