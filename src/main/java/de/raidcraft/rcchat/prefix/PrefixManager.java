@@ -1,11 +1,10 @@
 package de.raidcraft.rcchat.prefix;
 
-import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
-import de.raidcraft.rcchat.tables.PlayerPrefixTable;
-import de.raidcraft.rcchat.tables.PlayersPrefixTable;
-import de.raidcraft.rcchat.tables.WorldPrefixTable;
+import de.raidcraft.rcchat.tables.TPlayerPrefix;
+import de.raidcraft.rcchat.tables.TPlayersPrefix;
+import de.raidcraft.rcchat.tables.TWorldPrefix;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -27,13 +26,13 @@ public class PrefixManager {
     public void reload() {
 
         playerPrefixes.clear();
-        List<PlayerPrefix> playerPrefixList = RaidCraft.getTable(PlayerPrefixTable.class).getPrefixes();
+        List<PlayerPrefix> playerPrefixList = TPlayerPrefix.getPrefixes();
         for (PlayerPrefix playerPrefix : playerPrefixList) {
             playerPrefixes.put(playerPrefix.getId(), playerPrefix);
         }
 
         worldPrefixes.clear();
-        List<WorldPrefix> worldPrefixList = RaidCraft.getTable(WorldPrefixTable.class).getPrefixes();
+        List<WorldPrefix> worldPrefixList = TWorldPrefix.getPrefixes();
         for (WorldPrefix worldPrefix : worldPrefixList) {
             worldPrefixes.put(worldPrefix.getWorld().toLowerCase(), worldPrefix);
         }
@@ -46,7 +45,7 @@ public class PrefixManager {
 
     public PlayerPrefix getPrefix(Player player) {
 
-        PlayerPrefix savedPlayerPrefix = RaidCraft.getTable(PlayersPrefixTable.class).getPrefix(player);
+        PlayerPrefix savedPlayerPrefix = TPlayersPrefix.getPrefix(player);
 
         if (savedPlayerPrefix != null && player.hasPermission(savedPlayerPrefix.getPermission())) {
             return savedPlayerPrefix;
@@ -66,7 +65,7 @@ public class PrefixManager {
         if (newPlayerPrefix == null) {
             return null;
         }
-        RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, newPlayerPrefix);
+        TPlayersPrefix.savePrefix(player, newPlayerPrefix);
         return newPlayerPrefix;
     }
 
@@ -84,7 +83,7 @@ public class PrefixManager {
 
     public void setPlayerPrefix(Player player, PlayerPrefix prefix) {
 
-        RaidCraft.getTable(PlayersPrefixTable.class).savePrefix(player, prefix);
+        TPlayersPrefix.savePrefix(player, prefix);
         ChatPlayer chatPlayer = ChatPlayerManager.INST.getPlayer(player);
         chatPlayer.setPrefix(prefix);
         chatPlayer.setSuffix(null); // delete old prefix

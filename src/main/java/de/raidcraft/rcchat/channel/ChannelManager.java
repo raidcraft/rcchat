@@ -3,7 +3,7 @@ package de.raidcraft.rcchat.channel;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
-import de.raidcraft.rcchat.tables.ChannelsTable;
+import de.raidcraft.rcchat.tables.TChannel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class ChannelManager {
 
         channels.clear();
 
-        List<Channel> databaseChannels = RaidCraft.getTable(ChannelsTable.class).getChannels();
+        List<Channel> databaseChannels = TChannel.getChannels();
 
         for (Channel channel : databaseChannels) {
             registerChannel(channel);

@@ -3,7 +3,7 @@ package de.raidcraft.rcchat.channel;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
-import de.raidcraft.rcchat.tables.PlayersChannelTable;
+import de.raidcraft.rcchat.tables.TPlayersChannel;
 import de.raidcraft.util.SignUtil;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.entity.Player;
@@ -87,14 +87,14 @@ public class Channel {
         Channel main = chatPlayer.getMainChannel();
         if (main == null || !main.getName().equalsIgnoreCase(name)) {
             chatPlayer.setMainChannel(this);
-            RaidCraft.getTable(PlayersChannelTable.class).addChannel(chatPlayer.getPlayer(), this);
+            TPlayersChannel.addChannel(chatPlayer.getPlayer(), this);
         }
     }
 
     public void leave(ChatPlayer chatPlayer) {
 
         logout(chatPlayer.getPlayer());
-        RaidCraft.getTable(PlayersChannelTable.class).removeChannel(chatPlayer.getPlayer(), this);
+        TPlayersChannel.removeChannel(chatPlayer.getPlayer(), this);
     }
 
     public void logout(Player player) {

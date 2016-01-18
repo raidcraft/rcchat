@@ -42,13 +42,6 @@ public class RCChatPlugin extends BasePlugin {
         registerCommands(PrefixCommands.class);
         registerCommands(SayCommands.class);
 
-        registerTable(ChannelsTable.class, new ChannelsTable());
-        registerTable(PlayersChannelTable.class, new PlayersChannelTable());
-        registerTable(PlayerPrefixTable.class, new PlayerPrefixTable());
-        registerTable(WorldPrefixTable.class, new WorldPrefixTable());
-        registerTable(PlayersPrefixTable.class, new PlayersPrefixTable());
-        registerTable(ChannelWorldsTable.class, new ChannelWorldsTable());
-
         BungeeManager bungeeManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getBungeeManager();
         bungeeManager.registerBungeeMessage(ChannelChatMessage.class);
         bungeeManager.registerBungeeMessage(PrivateChatMessage.class);
@@ -73,6 +66,12 @@ public class RCChatPlugin extends BasePlugin {
     public List<Class<?>> getDatabaseClasses() {
         List<Class<?>> classes = new ArrayList<>();
         classes.add(TMute.class);
+        classes.add(TPlayersChannel.class);
+        classes.add(TWorldPrefix.class);
+        classes.add(TChannel.class);
+        classes.add(TChannelWorld.class);
+        classes.add(TPlayerPrefix.class);
+        classes.add(TPlayersPrefix.class);
         return classes;
     }
 

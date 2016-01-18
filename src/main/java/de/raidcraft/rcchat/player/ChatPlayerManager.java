@@ -3,7 +3,7 @@ package de.raidcraft.rcchat.player;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.channel.Channel;
 import de.raidcraft.rcchat.channel.ChannelManager;
-import de.raidcraft.rcchat.tables.PlayersChannelTable;
+import de.raidcraft.rcchat.tables.TPlayersChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -36,7 +36,7 @@ public class ChatPlayerManager {
 
         Channel mainChannel = null;
         List<Channel> playersChannel = new ArrayList<>();
-        List<ChannelAssignment> channels = RaidCraft.getTable(PlayersChannelTable.class).getChannels(player);
+        List<ChannelAssignment> channels = TPlayersChannel.getChannels(player);
         for (ChannelAssignment assignment : channels) {
 
             Channel channel = ChannelManager.INST.getChannel(assignment.getChannel());
