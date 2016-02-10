@@ -217,7 +217,10 @@ public class ChatPluginCommands {
         String lastPrivateSender = chatPlayer.getLastPrivateSender();
         PlayerManager playerManager = RaidCraft.getComponent(RCMultiWorldPlugin.class).getPlayerManager();
 
-        UUID uuid = UUIDUtil.convertPlayer(lastPrivateSender);
+        UUID uuid = null;
+        if(lastPrivateSender != null) {
+            uuid = UUIDUtil.convertPlayer(lastPrivateSender);
+        }
         if(uuid == null) {
             chatPlayer.setLastPrivateSender(null);
             throw new CommandException("Dein Chatpartner existiert nicht!");
