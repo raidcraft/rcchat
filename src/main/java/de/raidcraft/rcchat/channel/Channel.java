@@ -1,11 +1,10 @@
 package de.raidcraft.rcchat.channel;
 
-import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.player.ChatPlayer;
 import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcchat.tables.TPlayersChannel;
 import de.raidcraft.util.SignUtil;
-import mkremins.fanciful.FancyMessage;
+import de.raidcraft.util.fanciful.FancyMessage;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -103,11 +102,7 @@ public class Channel {
     }
 
     public boolean isMember(ChatPlayer chatPlayer) {
-        if (members.containsKey(chatPlayer.getName())) {
-            return true;
-        } else {
-            return false;
-        }
+        return members.containsKey(chatPlayer.getName());
     }
 
     public boolean hasPermission() {
