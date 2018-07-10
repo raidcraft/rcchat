@@ -3,6 +3,7 @@ package de.raidcraft.rcchat.commands;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcchat.RCChatPlugin;
 import de.raidcraft.rcchat.channel.Channel;
@@ -12,7 +13,6 @@ import de.raidcraft.rcchat.player.ChatPlayerManager;
 import de.raidcraft.rcmultiworld.RCMultiWorldPlugin;
 import de.raidcraft.rcmultiworld.players.MultiWorldPlayer;
 import de.raidcraft.rcmultiworld.players.PlayerManager;
-import de.raidcraft.util.PlayerUtil;
 import de.raidcraft.util.SignUtil;
 import de.raidcraft.util.UUIDUtil;
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -302,5 +301,16 @@ public class ChatPluginCommands {
         } else {
             sender.sendMessage(ChatColor.RED + "Der Spieler '" + context.getString(0) + "' ist unbekannt!");
         }
+    }
+
+    @Command(
+            aliases = {"rcca", "rcchatadmin", "chatadmin"},
+            desc = "Reloads all channels"
+    )
+    @CommandPermissions("rcchat.admin")
+    public void reload(CommandContext context, CommandSender sender) throws CommandException {
+
+        RaidCraft.getComponent(RCChatPlugin.class).reload();
+        sender.sendMessage(ChatColor.GREEN + "RCChat Plugin erfolgreich neu geladen.");
     }
 }
