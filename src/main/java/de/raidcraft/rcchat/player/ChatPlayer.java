@@ -315,7 +315,7 @@ public class ChatPlayer {
 
         // remove from database
         TMute tMute = plugin.getDatabase().find(TMute.class).where()
-                .eq("player_id", getPlayer().getUniqueId()).eq("muted_player", uuid).findUnique();
+                .eq("player_id", getPlayer().getUniqueId()).eq("muted_player", uuid).findOne();
         if(tMute == null) {
             return true;
         }
