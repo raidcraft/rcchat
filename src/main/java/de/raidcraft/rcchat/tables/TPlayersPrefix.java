@@ -11,8 +11,6 @@ import org.bukkit.entity.Player;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +33,7 @@ public class TPlayersPrefix {
 
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
 
-        List<TPlayersPrefix> tPlayersPrefixes = plugin.getDatabase().find(TPlayersPrefix.class)
+        List<TPlayersPrefix> tPlayersPrefixes = plugin.getRcDatabase().find(TPlayersPrefix.class)
                 .where().eq("player_id", player.getUniqueId()).findList();
         if(tPlayersPrefixes == null) {
             return null;
@@ -58,18 +56,18 @@ public class TPlayersPrefix {
         tPlayersPrefix.setPlayer(player.getName());
         tPlayersPrefix.setPlayerId(player.getUniqueId());
         tPlayersPrefix.setPrefix(playerPrefix.getId());
-        plugin.getDatabase().save(tPlayersPrefix);
+        plugin.getRcDatabase().save(tPlayersPrefix);
     }
 
     public static void removePrefix(Player player) {
 
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
 
-        List<TPlayersPrefix> tPlayersPrefixes = plugin.getDatabase().find(TPlayersPrefix.class)
+        List<TPlayersPrefix> tPlayersPrefixes = plugin.getRcDatabase().find(TPlayersPrefix.class)
                 .where().eq("player_id", player.getUniqueId()).findList();
         if(tPlayersPrefixes != null) {
             for(TPlayersPrefix tPlayersPrefix : tPlayersPrefixes) {
-                plugin.getDatabase().delete(tPlayersPrefix);
+                plugin.getRcDatabase().delete(tPlayersPrefix);
             }
         }
     }

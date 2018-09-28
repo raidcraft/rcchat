@@ -256,7 +256,7 @@ public class ChatPlayer {
         }
         mutedPlayers.clear();
 
-        List<TMute> tMutes = plugin.getDatabase().find(TMute.class).where()
+        List<TMute> tMutes = plugin.getRcDatabase().find(TMute.class).where()
                 .eq("player_id", getPlayer().getUniqueId()).findList();
         if(tMutes == null) {
             return;
@@ -290,7 +290,7 @@ public class ChatPlayer {
         tMute.setPlayerId(getPlayer().getUniqueId());
         tMute.setCreated(new Date(System.currentTimeMillis()));
         tMute.setMutedPlayer(uuid);
-        RaidCraft.getComponent(RCChatPlugin.class).getDatabase().save(tMute);
+        RaidCraft.getComponent(RCChatPlugin.class).getRcDatabase().save(tMute);
 
         return true;
     }
@@ -314,13 +314,13 @@ public class ChatPlayer {
         mutedPlayers.remove(uuid);
 
         // remove from database
-        TMute tMute = plugin.getDatabase().find(TMute.class).where()
+        TMute tMute = plugin.getRcDatabase().find(TMute.class).where()
                 .eq("player_id", getPlayer().getUniqueId()).eq("muted_player", uuid).findOne();
         if(tMute == null) {
             return true;
         }
 
-        plugin.getDatabase().delete(tMute);
+        plugin.getRcDatabase().delete(tMute);
 
         return true;
     }

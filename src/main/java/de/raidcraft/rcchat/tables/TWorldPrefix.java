@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class TWorldPrefix {
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
         List<WorldPrefix> worldPrefixes = new ArrayList<>();
 
-        List<TWorldPrefix> tWorldPrefixes = plugin.getDatabase().find(TWorldPrefix.class).findList();
+        List<TWorldPrefix> tWorldPrefixes = plugin.getRcDatabase().find(TWorldPrefix.class).findList();
         if(tWorldPrefixes != null) {
             for (TWorldPrefix tWorldPrefix : tWorldPrefixes) {
                 worldPrefixes.add(new WorldPrefix(tWorldPrefix.getPrefix(), tWorldPrefix.getWorld()));

@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class TChannel {
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
         List<Channel> channels = new ArrayList<>();
 
-        List<TChannel> tChannels = plugin.getDatabase().find(TChannel.class).findList();
+        List<TChannel> tChannels = plugin.getRcDatabase().find(TChannel.class).findList();
         for(TChannel tChannel : tChannels) {
             String[] aliases = tChannel.getAliases().split(",");
 

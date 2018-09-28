@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +39,7 @@ public class TPlayersChannel {
 
 
         List<TPlayersChannel> tPlayersChannels =
-                plugin.getDatabase().find(TPlayersChannel.class).where().eq("player_id", player.getUniqueId()).findList();
+                plugin.getRcDatabase().find(TPlayersChannel.class).where().eq("player_id", player.getUniqueId()).findList();
         if(tPlayersChannels != null) {
             for (TPlayersChannel tPlayersChannel : tPlayersChannels) {
                 channels.add(new ChannelAssignment(tPlayersChannel.getChannel(), tPlayersChannel.getType()));
@@ -61,7 +59,7 @@ public class TPlayersChannel {
         tPlayersChannel.setPlayer(player.getName());
         tPlayersChannel.setType(AssignmentType.MAIN.name());
         tPlayersChannel.setChannel(channel.getName());
-        plugin.getDatabase().save(tPlayersChannel);
+        plugin.getRcDatabase().save(tPlayersChannel);
     }
 
     public static void removeChannel(Player player, Channel channel) {
@@ -69,11 +67,11 @@ public class TPlayersChannel {
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
 
         List<TPlayersChannel> tPlayersChannels =
-                plugin.getDatabase().find(TPlayersChannel.class).where()
+                plugin.getRcDatabase().find(TPlayersChannel.class).where()
                         .eq("player_id", player.getUniqueId()).eq("channel", channel.getName()).findList();
         if(tPlayersChannels != null) {
             for (TPlayersChannel tPlayersChannel : tPlayersChannels) {
-                plugin.getDatabase().delete(tPlayersChannel);
+                plugin.getRcDatabase().delete(tPlayersChannel);
             }
         }
     }
@@ -83,12 +81,12 @@ public class TPlayersChannel {
         RCChatPlugin plugin = RaidCraft.getComponent(RCChatPlugin.class);
 
         List<TPlayersChannel> tPlayersChannels =
-                plugin.getDatabase().find(TPlayersChannel.class).where()
+                plugin.getRcDatabase().find(TPlayersChannel.class).where()
                         .eq("player_id", player.getUniqueId()).eq("type", AssignmentType.MAIN.name()).findList();
         if(tPlayersChannels != null) {
             for (TPlayersChannel tPlayersChannel : tPlayersChannels) {
                 tPlayersChannel.setType(AssignmentType.NORMAL.name());
-                plugin.getDatabase().update(tPlayersChannel);
+                plugin.getRcDatabase().update(tPlayersChannel);
             }
         }
     }
