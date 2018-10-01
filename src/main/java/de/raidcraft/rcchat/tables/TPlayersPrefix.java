@@ -20,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "rcchat_players_prefix")
+@Table(name = "rc_chat_players_prefix")
 public class TPlayersPrefix {
 
     @Id

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "rcchat_mutes")
+@Table(name = "rc_chat_mutes")
 public class TMute {
 
     @Id

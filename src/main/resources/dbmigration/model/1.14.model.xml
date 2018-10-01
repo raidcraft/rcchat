@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="rc_chat_channels" pkName="pk_rc_chat_channels">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="name" type="varchar"/>
+            <column name="permission" type="varchar"/>
+            <column name="prefix" type="varchar"/>
+            <column name="color" type="varchar"/>
+            <column name="aliases" type="varchar"/>
+            <column name="type" type="varchar"/>
+        </createTable>
+        <createTable name="rc_chat_channel_worlds" pkName="pk_rc_chat_channel_worlds">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="channel" type="integer" notnull="true"/>
+            <column name="world" type="varchar"/>
+        </createTable>
+        <createTable name="rc_chat_mutes" pkName="pk_rc_chat_mutes">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="player_id" type="uuid"/>
+            <column name="muted_player" type="uuid"/>
+            <column name="created" type="timestamp"/>
+        </createTable>
+        <createTable name="rc_chat_player_prefixes" pkName="pk_rc_chat_player_prefixes">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="prefix" type="varchar"/>
+            <column name="permission" type="varchar"/>
+            <column name="priority" type="integer" notnull="true"/>
+        </createTable>
+        <createTable name="rc_chat_players_channel" pkName="pk_rc_chat_players_channel">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="player" type="varchar"/>
+            <column name="player_id" type="uuid"/>
+            <column name="channel" type="varchar"/>
+            <column name="type" type="varchar"/>
+        </createTable>
+        <createTable name="rc_chat_players_prefix" pkName="pk_rc_chat_players_prefix">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="player" type="varchar"/>
+            <column name="player_id" type="uuid"/>
+            <column name="prefix" type="integer" notnull="true"/>
+        </createTable>
+        <createTable name="rc_chat_world_prefixes" pkName="pk_rc_chat_world_prefixes">
+            <column name="id" type="integer" primaryKey="true"/>
+            <column name="world" type="varchar"/>
+            <column name="prefix" type="varchar"/>
+        </createTable>
+    </changeSet>
+</migration>

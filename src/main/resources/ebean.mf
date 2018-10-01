@@ -1,0 +1,3 @@
+entity-packages: de.raidcraft.rcchat
+transactional-packages: de.raidcraft.rcchat
+querybean-packages: de.raidcraft.rcchat

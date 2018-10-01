@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "rcchat_player_prefixes")
+@Table(name = "rc_chat_player_prefixes")
 public class TPlayerPrefix {
 
     @Id
