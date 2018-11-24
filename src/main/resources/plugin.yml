@@ -5,3 +5,4 @@ description: Prefix, Suffix and Channel handling.
 author: Strasse36
 website: http://www.raid-craft.de
 depend: [RaidCraft-API, RCMultiWorld]
+api-version: 1.13
